@@ -1,0 +1,44 @@
+{
+	"[svelte]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always"
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.quickSuggestions": {
+		"strings": "on"
+	},
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	// "i18n-ally.displayLanguage": "de",
+	// "i18n-ally.enabledFrameworks": ["svelte"],
+	// "i18n-ally.extract.keygenStrategy": "random",
+	// "i18n-ally.indent": 4,
+	// "i18n-ally.keystyle": "flat",
+	// "i18n-ally.localesPaths": ["./src/lib/i18n/translations"],
+	// "i18n-ally.pathMatcher": "{locale}.json",
+	// "i18n-ally.refactor.templates": [
+	//     {
+	//         "template": "{t('{key}')}"
+	//     },
+	//     {
+	//         "template": "t('{key}')"
+	//     }
+	// ],
+	// "i18n-ally.regex.usageMatch": ["t\\(['\"`]({key})['\"`]\\)"],
+	// "i18n-ally.sortKeys": true,
+	// "i18n-ally.sourceLanguage": "de",
+	// "i18n-ally.tabStyle": "space",
+	"scss.lint.unknownAtRules": "ignore",
+	"svelte.enable-ts-plugin": true,
+	"svelte.plugin.svelte.compilerWarnings": {
+		"a11y-click-events-have-key-events": "ignore"
+	},
+	// "tailwindCSS.experimental.classRegex": [
+	//     ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+	// ],
+	"typescript.preferences.importModuleSpecifier": "shortest"
+}

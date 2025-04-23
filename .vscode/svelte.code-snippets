@@ -1,0 +1,24 @@
+{
+    "props": {
+        "prefix": "$props",
+        "body": [
+            "interface Props {",
+            "    $1",
+            "};",
+            "",
+            "let {",
+            "    $2",
+            "}: Props = \\$props();",
+        ],
+    },
+    "form": {
+        "prefix": "$form",
+        "body": [
+            "const { form, errors, message, delayed, enhance } = imsForm({",
+            "  get form() {",
+            "    return data.form;",
+            "  }",
+            "  });",
+        ],
+    },
+}
