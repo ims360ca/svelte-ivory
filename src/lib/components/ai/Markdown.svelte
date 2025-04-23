@@ -45,7 +45,10 @@
 
 <div
 	class={twMerge(
-		clsx('text-surface-950-50 prose prose-strong:text-surface-950-50 prose-p:my-1', clazz)
+		clsx(
+			'text-surface-950-50 prose prose-strong:text-surface-950-50 prose-p:my-1 flex flex-col items-start gap-1',
+			clazz
+		)
 	)}
 >
 	{#await html then html}
