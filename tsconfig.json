@@ -9,9 +9,8 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"module": "NodeNext",
-		"target": "ESNext",
-		"moduleResolution": "node",
-		"allowImportingTsExtensions": true
+		"allowArbitraryExtensions": true,
+		"moduleResolution": "bundler",
+		"module": "Preserve"
 	}
 }

@@ -5,18 +5,22 @@
 -->
 
 <script lang="ts">
+	import clsx from 'clsx';
 	import DomPurify from 'dompurify';
 	import { marked } from 'marked';
+	import type { ClassValue } from 'svelte/elements';
+	import { twMerge } from 'tailwind-merge';
 
 	interface Props {
 		source: string;
+		class?: ClassValue;
 		replace?: {
 			regex: RegExp;
 			replacerFactory: () => Promise<(match: string) => string> | ((match: string) => string);
 		};
 	}
 
-	let { source, replace }: Props = $props();
+	let { source, replace, class: clazz }: Props = $props();
 
 	const html = $derived.by(async () => {
 		// replace 0 width characters
@@ -39,8 +43,14 @@
 	});
 </script>
 
-{#await html then html}
-	<!-- this is fine since we purify the string -->
-	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	{@html html}
-{/await}
+<div
+	class={twMerge(
+		clsx('text-surface-950-50 prose prose-strong:text-surface-950-50 prose-p:my-1', clazz)
+	)}
+>
+	{#await html then html}
+		<!-- this is fine since we purify the string -->
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		{@html html}
+	{/await}
+</div>

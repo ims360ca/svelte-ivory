@@ -13,7 +13,7 @@
 		/** How attached files should be rendered */
 		attachedFile?: Snippet<[file: File]>;
 		/** How the message string should be rendered */
-		messageText?: Snippet<[message: string]>;
+		messageText?: Snippet<[{ message: AiChatMessage }]>;
 	}
 
 	let {
@@ -25,7 +25,7 @@
 </script>
 
 <div class={twMerge(clsx('flex w-full flex-col items-end gap-1', clazz))}>
-	{@render messageText(message.message)}
+	{@render messageText({ message })}
 	{#if message.files}
 		<div class="flex flex-row items-center gap-2">
 			{#each message.files as file}
@@ -46,8 +46,8 @@
 	<AttachedFile {file} />
 {/snippet}
 
-{#snippet defaultMessageText(message: string)}
-	<div class="bg-primary-300-700 text-primary-contrast-300-700 rounded p-2">
-		<Markdown source={message} />
+{#snippet defaultMessageText({ message }: { message: AiChatMessage })}
+	<div class="bg-surface-200-800 text-surface-contrast-200-800 rounded px-2 py-0.5">
+		<Markdown source={message.message} />
 	</div>
 {/snippet}

@@ -59,6 +59,10 @@
 			"types": "./dist/components/toast/index.d.ts",
 			"svelte": "./dist/components/toast/index.js"
 		},
+		"./components/ai": {
+			"types": "./dist/components/ai/index.d.ts",
+			"svelte": "./dist/components/ai/index.js"
+		},
 		"./utils/functions": {
 			"types": "./dist/utils/functions/index.d.ts",
 			"svelte": "./dist/utils/functions/index.js"

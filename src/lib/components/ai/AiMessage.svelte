@@ -16,11 +16,17 @@
 
 	interface Props {
 		b_message: AiChatMessage;
-		loading?: Snippet;
+		messageText?: Snippet<[{ message: AiChatMessage }]>;
 		class?: ClassValue;
+		minHeight?: number;
 	}
 
-	let { b_message = $bindable(), loading = defaultLoading, class: clazz }: Props = $props();
+	let {
+		b_message = $bindable(),
+		class: clazz,
+		messageText = defaultMessage,
+		minHeight
+	}: Props = $props();
 
 	// const uuidRegex =
 	//     /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g;
@@ -41,20 +47,13 @@
 	// }
 </script>
 
-<div class={twMerge(clsx('group flex w-full flex-col items-start', clazz))}>
-	<img src="/images/bot.webp" alt="bot" class="h-auto w-12 object-cover" />
-	<div class="text-surface-950-50 prose prose-strong:text-surface-950-50 prose-p:my-1 pt-2.5">
-		<div
-			class="border-b-primary-500/80 ml-4 h-0 w-0 border-r-8 border-b-8 border-l-8 border-r-transparent border-l-transparent"
-		></div>
-		<div class="bg-primary-500/80 shrink-0 overflow-hidden rounded-sm px-2">
-			{#if b_message.message}
-				<Markdown source={b_message.message} />
-			{:else}
-				{@render loading()}
-			{/if}
-		</div>
-	</div>
+<div
+	class={twMerge(clsx('group flex w-full flex-col items-start', clazz))}
+	style={minHeight ? `min-height: ${minHeight}px;` : undefined}
+>
+	{@render messageText({
+		message: b_message
+	})}
 	<div
 		class={[
 			'text-surface-500 flex -translate-x-3 flex-row items-center transition-all group-hover:opacity-100',
@@ -93,14 +92,18 @@
 	</div>
 </div>
 
-{#snippet defaultLoading()}
-	<p class="flex flex-row">
-		<span class="h-4 animate-bounce rounded-full pl-1">.</span>
-		<span class="h-4 animate-bounce rounded-full" style="animation-delay: 125ms !important;">
-			.
-		</span>
-		<span class="h-4 animate-bounce rounded-full" style="animation-delay: 250ms !important;">
-			.
-		</span>
-	</p>
+{#snippet defaultMessage({ message }: { message: AiChatMessage })}
+	{#if message}
+		<Markdown source={message.message} />
+	{:else}
+		<p class="flex flex-row">
+			<span class="h-4 animate-bounce rounded-full pl-1">.</span>
+			<span class="h-4 animate-bounce rounded-full" style="animation-delay: 125ms !important;">
+				.
+			</span>
+			<span class="h-4 animate-bounce rounded-full" style="animation-delay: 250ms !important;">
+				.
+			</span>
+		</p>
+	{/if}
 {/snippet}
