@@ -24,9 +24,10 @@
     type Props = {
         class?: ClassValue;
         children: Snippet;
+        b_index?: number;
     };
 
-    let { class: clazz = '', children }: Props = $props();
+    let { class: clazz = '', children, b_index = $bindable() }: Props = $props();
 
     let index = $state(0);
     let allTabs: string[] = $state([]);
