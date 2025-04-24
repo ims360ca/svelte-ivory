@@ -9,4 +9,6 @@
     let { children }: Props = $props();
 </script>
 
-{@render children()}
+<main class="flex flex-col items-center gap-4">
+    {@render children()}
+</main>
