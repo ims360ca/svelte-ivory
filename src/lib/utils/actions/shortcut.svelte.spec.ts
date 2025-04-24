@@ -5,17 +5,17 @@ import { describe, expect, it } from 'vitest';
 import { shortcut } from './shortcut';
 
 describe('shortcut', () => {
-	it('should call the callback when the key is pressed', async () => {
-		const node = document.createElement('div');
-		const keyCode = 'Enter';
-		const callback = fn();
-		shortcut(node, {
-			callback,
-			code: keyCode
-		});
+    it('should call the callback when the key is pressed', async () => {
+        const node = document.createElement('div');
+        const keyCode = 'Enter';
+        const callback = fn();
+        shortcut(node, {
+            callback,
+            code: keyCode
+        });
 
-		await fireEvent(window, new KeyboardEvent('keydown', { code: keyCode }));
+        await fireEvent(window, new KeyboardEvent('keydown', { code: keyCode }));
 
-		expect(callback).toHaveBeenCalledOnce();
-	});
+        expect(callback).toHaveBeenCalledOnce();
+    });
 });

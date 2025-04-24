@@ -6,18 +6,18 @@ Use the following structure for your components:
 
 ```html
 <script lang="ts" module>
-	// Imports if a module script exists
-	// Module exports (functions / interfaces)
-	// Module-level code
+    // Imports if a module script exists
+    // Module exports (functions / interfaces)
+    // Module-level code
 </script>
 
 <script lang="ts">
-	// Imports if no module script exists
-	// Props interface
-	// Props
-	// State
-	// Derived state
-	// Functions
+    // Imports if no module script exists
+    // Props interface
+    // Props
+    // State
+    // Derived state
+    // Functions
 </script>
 
 <!-- Markup -->

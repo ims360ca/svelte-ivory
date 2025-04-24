@@ -1,88 +1,88 @@
 import type { Icon } from '@lucide/svelte';
 
 export type ToastSettings = {
-	message: string;
-	autohide?: boolean;
-	timeout?: number;
-	hideDismiss?: boolean;
-	icon?: typeof Icon;
-	variant: 'info' | 'success' | 'warning' | 'error';
+    message: string;
+    autohide?: boolean;
+    timeout?: number;
+    hideDismiss?: boolean;
+    icon?: typeof Icon;
+    variant: 'info' | 'success' | 'warning' | 'error';
 };
 
 type Toast = ToastSettings & {
-	id: string;
-	timeoutId?: ReturnType<typeof setTimeout>;
+    id: string;
+    timeoutId?: ReturnType<typeof setTimeout>;
 };
 
 const TOAST_DEFAULTS: ToastSettings = {
-	message: 'Missing Toast Message',
-	autohide: true,
-	timeout: 3000,
-	variant: 'info'
+    message: 'Missing Toast Message',
+    autohide: true,
+    timeout: 3000,
+    variant: 'info'
 };
 
 class ToastStore {
-	toasts = $state<Toast[]>([]);
+    toasts = $state<Toast[]>([]);
 
-	trigger(toast: ToastSettings, id = crypto.randomUUID() as string) {
-		const mergedToasts: Toast = { ...TOAST_DEFAULTS, ...toast, id };
+    trigger(toast: ToastSettings, id = crypto.randomUUID() as string) {
+        const mergedToasts: Toast = { ...TOAST_DEFAULTS, ...toast, id };
 
-		// start the autohide timeout
-		this.startAutoHide(mergedToasts);
+        // start the autohide timeout
+        this.startAutoHide(mergedToasts);
 
-		// add the toasts to the list
-		this.toasts.push(mergedToasts);
-		return id;
-	}
+        // add the toasts to the list
+        this.toasts.push(mergedToasts);
+        return id;
+    }
 
-	close(id: string) {
-		const toast = this.toasts.find((t) => t.id === id);
-		if (!toast) return;
-		this.stopAutoHide(toast);
-		this.toasts = this.toasts.filter((t) => t.id !== id);
-	}
+    close(id: string) {
+        const toast = this.toasts.find((t) => t.id === id);
+        if (!toast) return;
+        this.stopAutoHide(toast);
+        this.toasts = this.toasts.filter((t) => t.id !== id);
+    }
 
-	update(id: string, toast: ToastSettings) {
-		const existingToast = this.toasts.find((t) => t.id === id);
-		if (!existingToast) {
-			this.trigger(toast, id);
-			return;
-		}
-		const mergedToast: Toast = {
-			...TOAST_DEFAULTS,
-			...existingToast,
-			...toast
-		};
-		// clear the existing timeout and restart the autohide
-		this.stopAutoHide(existingToast);
-		this.startAutoHide(mergedToast);
-		this.toasts.splice(this.toasts.indexOf(existingToast), 1, mergedToast);
-	}
+    update(id: string, toast: ToastSettings) {
+        const existingToast = this.toasts.find((t) => t.id === id);
+        if (!existingToast) {
+            this.trigger(toast, id);
+            return;
+        }
+        const mergedToast: Toast = {
+            ...TOAST_DEFAULTS,
+            ...existingToast,
+            ...toast
+        };
+        // clear the existing timeout and restart the autohide
+        this.stopAutoHide(existingToast);
+        this.startAutoHide(mergedToast);
+        this.toasts.splice(this.toasts.indexOf(existingToast), 1, mergedToast);
+    }
 
-	freeze(id: string) {
-		const toast = this.toasts.find((t) => t.id === id);
-		if (!toast) return;
-		this.stopAutoHide(toast);
-	}
+    freeze(id: string) {
+        const toast = this.toasts.find((t) => t.id === id);
+        if (!toast) return;
+        this.stopAutoHide(toast);
+    }
 
-	unfreeze(id: string) {
-		const toast = this.toasts.find((t) => t.id === id);
-		if (!toast) return;
-		this.startAutoHide(toast);
-	}
+    unfreeze(id: string) {
+        const toast = this.toasts.find((t) => t.id === id);
+        if (!toast) return;
+        this.startAutoHide(toast);
+    }
 
-	private startAutoHide(toast: Toast) {
-		if (!toast.autohide) return;
-		toast.timeoutId = setTimeout(() => {
-			this.close(toast.id);
-		}, toast.timeout);
-	}
+    private startAutoHide(toast: Toast) {
+        if (!toast.autohide) return;
+        toast.timeoutId = setTimeout(() => {
+            this.close(toast.id);
+        }, toast.timeout);
+    }
 
-	private stopAutoHide(toast: Toast) {
-		if (!toast.timeoutId) return;
-		clearTimeout(toast.timeoutId);
-		delete toast.timeoutId;
-	}
+    private stopAutoHide(toast: Toast) {
+        if (!toast.timeoutId) return;
+        clearTimeout(toast.timeoutId);
+        delete toast.timeoutId;
+    }
 }
 
 /** Exposes functions to manage toasts, contains currently active toasts */

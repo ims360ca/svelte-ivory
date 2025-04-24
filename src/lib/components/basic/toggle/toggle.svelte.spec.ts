@@ -7,13 +7,13 @@ import Toggle from './Toggle.svelte';
 const testId = 'toggle';
 
 describe('Basic/Toggle', () => {
-	it('fires click event when clicked', async () => {
-		const callback = fn();
-		render(Toggle, { testId, onclick: callback });
+    it('fires click event when clicked', async () => {
+        const callback = fn();
+        render(Toggle, { testId, onclick: callback });
 
-		const toggle = screen.getByTestId(testId);
-		expect(toggle).toBeVisible();
-		toggle.click();
-		expect(callback).toHaveBeenCalledOnce();
-	});
+        const toggle = screen.getByTestId(testId);
+        expect(toggle).toBeVisible();
+        toggle.click();
+        expect(callback).toHaveBeenCalledOnce();
+    });
 });

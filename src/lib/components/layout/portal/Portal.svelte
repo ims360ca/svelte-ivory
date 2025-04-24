@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import { portal } from '../../../utils/actions/index';
+    import type { Snippet } from 'svelte';
+    import { portal } from '../../../utils/actions/index';
 
-	interface Props {
-		children: Snippet;
-		target?: string | HTMLElement;
-	}
+    interface Props {
+        children: Snippet;
+        target?: string | HTMLElement;
+    }
 
-	let { children, target = 'body' }: Props = $props();
+    let { children, target = 'body' }: Props = $props();
 </script>
 
 <!-- 
@@ -19,5 +19,5 @@
     **Use sparingy as it can make the DOM structure confusing**
 -->
 <div use:portal={target} hidden>
-	{@render children()}
+    {@render children()}
 </div>

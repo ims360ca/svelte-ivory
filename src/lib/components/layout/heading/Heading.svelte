@@ -1,23 +1,23 @@
 <script lang="ts" module>
-	import clsx from 'clsx';
-	import type { Snippet } from 'svelte';
-	import type { ClassValue } from 'svelte/elements';
-	import { twMerge } from 'tailwind-merge';
+    import clsx from 'clsx';
+    import type { Snippet } from 'svelte';
+    import type { ClassValue } from 'svelte/elements';
+    import { twMerge } from 'tailwind-merge';
 
-	export interface Props {
-		children: Snippet;
-		class?: ClassValue;
-	}
+    export interface Props {
+        children: Snippet;
+        class?: ClassValue;
+    }
 
-	export function setClasses(c: ClassValue) {
-		defaultClasses = c;
-	}
+    export function setClasses(c: ClassValue) {
+        defaultClasses = c;
+    }
 
-	let defaultClasses = $state<ClassValue>('');
+    let defaultClasses = $state<ClassValue>('');
 </script>
 
 <script lang="ts">
-	let { children, class: clazz }: Props = $props();
+    let { children, class: clazz }: Props = $props();
 </script>
 
 <!-- 
@@ -29,5 +29,5 @@
 -->
 
 <h2 class={twMerge(clsx('truncate text-lg font-bold select-none', defaultClasses, clazz))}>
-	{@render children()}
+    {@render children()}
 </h2>

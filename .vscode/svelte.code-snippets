@@ -8,8 +8,8 @@
             "",
             "let {",
             "    $2",
-            "}: Props = \\$props();",
-        ],
+            "}: Props = \\$props();"
+        ]
     },
     "form": {
         "prefix": "$form",
@@ -18,7 +18,7 @@
             "  get form() {",
             "    return data.form;",
             "  }",
-            "  });",
-        ],
-    },
+            "  });"
+        ]
+    }
 }

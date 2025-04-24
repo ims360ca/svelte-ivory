@@ -7,32 +7,32 @@ import { Checkbox } from '../index';
 const testId = 'checkbox';
 
 describe('Basic/Checkbox', () => {
-	it('renders the checked icon', async () => {
-		render(Checkbox, { testId, checked: true });
+    it('renders the checked icon', async () => {
+        render(Checkbox, { testId, checked: true });
 
-		const checkbox = screen.getByTestId(testId);
-		expect(checkbox).toBeVisible();
-		const icon = checkbox.querySelector('svg');
-		expect(icon).toBeVisible();
-	});
+        const checkbox = screen.getByTestId(testId);
+        expect(checkbox).toBeVisible();
+        const icon = checkbox.querySelector('svg');
+        expect(icon).toBeVisible();
+    });
 
-	it('fires click event when clicked', async () => {
-		const callback = fn();
-		render(Checkbox, { testId, onclick: callback });
+    it('fires click event when clicked', async () => {
+        const callback = fn();
+        render(Checkbox, { testId, onclick: callback });
 
-		const checkbox = screen.getByTestId(testId);
-		expect(checkbox).toBeVisible();
-		checkbox.click();
-		expect(callback).toHaveBeenCalledOnce();
-	});
+        const checkbox = screen.getByTestId(testId);
+        expect(checkbox).toBeVisible();
+        checkbox.click();
+        expect(callback).toHaveBeenCalledOnce();
+    });
 
-	it("doesn't fire click event when disabled", async () => {
-		const callback = fn();
-		render(Checkbox, { testId, onclick: callback, disabled: true });
+    it("doesn't fire click event when disabled", async () => {
+        const callback = fn();
+        render(Checkbox, { testId, onclick: callback, disabled: true });
 
-		const checkbox = screen.getByTestId(testId);
-		expect(checkbox).toBeVisible();
-		await fireEvent(checkbox, new MouseEvent('click'));
-		expect(callback).not.toHaveBeenCalled();
-	});
+        const checkbox = screen.getByTestId(testId);
+        expect(checkbox).toBeVisible();
+        await fireEvent(checkbox, new MouseEvent('click'));
+        expect(callback).not.toHaveBeenCalled();
+    });
 });
