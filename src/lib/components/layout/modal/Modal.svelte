@@ -98,12 +98,12 @@
                         <Heading>{title}</Heading>
                     {/if}
                     <button class="group ml-auto flex justify-end" type="button" onclick={close}>
-                        <X size={20} class="transition-[stroke-width] group-hover:stroke-3" />
+                        <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
                     </button>
                 </div>
                 <div
                     class={twMerge(
-                        clsx('flex flex-col gap-4 overflow-hidden p-4 pt-2', innerClass)
+                        clsx('flex flex-col gap-4 overflow-hidden bg-inherit p-4 pt-2', innerClass)
                     )}
                 >
                     {@render children?.()}
