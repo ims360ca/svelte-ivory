@@ -1,4 +1,4 @@
-export * as Heading from './heading/Heading.svelte';
+export { default as Heading } from './heading/index';
 export { default as Modal } from './modal/Modal.svelte';
 export { default as Popover } from './popover/Popover.svelte';
 export { default as Portal } from './portal/Portal.svelte';

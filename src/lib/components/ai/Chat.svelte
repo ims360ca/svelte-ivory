@@ -29,8 +29,6 @@
 </script>
 
 <script lang="ts">
-    const AUTOSCROLL_PADDING = 200;
-
     interface Props {
         class?: ClassValue;
         b_chat: AiChat;

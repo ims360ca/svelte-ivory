@@ -27,25 +27,24 @@
         b_index?: number;
     };
 
-    let { class: clazz = '', children, b_index = $bindable() }: Props = $props();
+    let { class: clazz = '', children, b_index = $bindable(0) }: Props = $props();
 
-    let index = $state(0);
     let allTabs: string[] = $state([]);
     let panels: string[] = $state([]);
 
     export const forward = () => {
-        if (index >= panels.length - 1) {
-            index = 0;
+        if (b_index >= panels.length - 1) {
+            b_index = 0;
         } else {
-            index++;
+            b_index++;
         }
     };
 
     export const back = () => {
-        if (index === 0) {
-            index = panels.length - 1;
+        if (b_index === 0) {
+            b_index = panels.length - 1;
         } else {
-            index--;
+            b_index--;
         }
     };
 
@@ -60,23 +59,23 @@
 
         registerPanel: (panel: string) => {
             panels.push(panel);
-            index = index;
+            b_index = b_index;
             onDestroy(() => {
                 panels.filter((p) => p !== panel);
             });
         },
 
         get selectedTab() {
-            return allTabs[index];
+            return allTabs[b_index];
         },
         set selectedTab(tab: string) {
-            index = allTabs.indexOf(tab);
+            b_index = allTabs.indexOf(tab);
         },
         get selectedPanel() {
-            return panels[index];
+            return panels[b_index];
         },
         set selectedPanel(panel: string) {
-            index = panels.indexOf(panel);
+            b_index = panels.indexOf(panel);
         },
         tabs: allTabs
     });
