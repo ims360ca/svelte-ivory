@@ -86,7 +86,7 @@
             >
                 <div
                     class={[
-                        'flex flex-row items-center justify-between gap-8 px-4 py-2',
+                        'flex flex-row items-center justify-between gap-4 px-4 py-3',
                         // !variant && 'pt-3',
                         variant === 'success' && 'preset-tonal-success',
                         variant === 'warning' && 'preset-tonal-warning',
@@ -98,10 +98,14 @@
                         <Heading>{title}</Heading>
                     {/if}
                     <button class="group ml-auto flex justify-end" type="button" onclick={close}>
-                        <X size={20} class=" transition-[stroke-width] group-hover:stroke-3" />
+                        <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
                     </button>
                 </div>
-                <div class={twMerge(clsx('flex flex-col gap-4 p-4 pt-2', innerClass))}>
+                <div
+                    class={twMerge(
+                        clsx('flex flex-col gap-4 overflow-hidden bg-inherit p-4 pt-2', innerClass)
+                    )}
+                >
                     {@render children?.()}
                 </div>
             </div>

@@ -15,7 +15,7 @@
 </script>
 
 <dialog
-    class={['bg-surface-950-50/40 absolute top-0 left-0 m-0 h-full w-full p-0', clazz]}
+    class={['bg-surface-950-50/40 absolute top-0 left-0 z-40 m-0 h-full w-full p-0', clazz]}
     open
     use:focusTrap={true}
     use:shortcut={{

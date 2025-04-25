@@ -1,7 +1,10 @@
 <script lang="ts">
+    import { page } from '$app/state';
     import { pseudoRandomId } from '$lib/utils/functions/index';
-    import { type Snippet } from 'svelte';
+    import clsx from 'clsx';
+    import { onMount, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
+    import { twMerge } from 'tailwind-merge';
     import { getTabContext } from './Tabs.svelte';
 
     type Props = {
@@ -13,19 +16,19 @@
          * This is useful if your tabs are in a `+layout.svelte` and the Panels are seperate pages.
          */
         href?: string | undefined;
-        children: Snippet<[{ selected: boolean; nextSelected: boolean }]>;
+        children: Snippet<[{ selected: boolean }]>;
         testId?: string;
+        /** If `href` is set, this can be used to highlight an active tab */
+        active?: boolean;
     };
 
     let {
-        class: clazz = (selected: boolean) => [
-            'btn px-0 flex h-fit w-fit items-center justify-center text-xl font-bold',
-            selected && 'text-primary-500 underline'
-        ],
+        class: clazz = (selected: boolean) => [selected && 'text-primary-500 underline'],
         id,
         href,
         children,
-        testId
+        testId,
+        active
     }: Props = $props();
 
     const tab = pseudoRandomId('tab-');
@@ -33,27 +36,32 @@
 
     const tabId = id || tab;
 
-    tabs.registerTab(tabId);
-
-    const selected = $derived(tabs.selectedTab === tabId);
-
-    const nextSelected = $derived.by(() => {
-        for (let i = tabs.tabs.length - 1; i >= 0; i--) {
-            const otherTab = tabs.tabs[i];
-            if (otherTab === tabId) {
-                return false;
-            }
-            if (otherTab === tabs.selectedTab) {
-                return true;
-            }
+    const selected = $derived.by(() => {
+        if (typeof active === 'boolean') {
+            return active;
+        } else if (href) {
+            return page.url.pathname.startsWith(href);
+        } else if (tabs && tabs.selectedTab === tabId) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
+    });
+
+    onMount(() => {
+        if (href) return;
+        tabs.registerTab(tabId);
     });
 </script>
 
 <svelte:element
     this={href ? 'a' : 'button'}
-    class={clazz(selected)}
+    class={twMerge(
+        clsx(
+            'btn flex h-fit w-fit items-center justify-center px-0 text-xl font-bold',
+            clazz(selected)
+        )
+    )}
     onclick={href
         ? undefined
         : () => {
@@ -67,7 +75,6 @@
     aria-selected={selected}
 >
     {@render children({
-        selected: tabs.selectedTab === tabId,
-        nextSelected
+        selected
     })}
 </svelte:element>
