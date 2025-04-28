@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import { fireEvent } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
 import { fn } from '@vitest/spy';
 import { describe, expect, it } from 'vitest';
 import { shortcut } from './shortcut';
@@ -13,9 +13,7 @@ describe('shortcut', () => {
             callback,
             code: keyCode
         });
-
-        await fireEvent(window, new KeyboardEvent('keydown', { code: keyCode }));
-
+        await userEvent.keyboard(`{${keyCode}}`);
         expect(callback).toHaveBeenCalledOnce();
     });
 });

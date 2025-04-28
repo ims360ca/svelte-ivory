@@ -5,7 +5,7 @@
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
     import Heading from '../heading/Heading.svelte';
-    import HiddenBackground from '../HiddenBackground.svelte';
+    import HiddenBackground from '../hiddenBackground/HiddenBackground.svelte';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
     export interface ModalProps {
@@ -43,7 +43,7 @@
         b_open = $bindable(),
         children,
         modal,
-        preventClosing,
+        preventClosing = false,
         variant,
         innerClass,
         testId

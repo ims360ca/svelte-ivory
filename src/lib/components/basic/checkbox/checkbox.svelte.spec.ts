@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
-import { fireEvent, render, screen } from '@testing-library/svelte';
+import { render, screen } from '@testing-library/svelte';
+import { userEvent } from '@testing-library/user-event';
 import { fn } from '@vitest/spy';
 import { describe, expect, it } from 'vitest';
 import { Checkbox } from '../index';
@@ -32,7 +33,7 @@ describe('Basic/Checkbox', () => {
 
         const checkbox = screen.getByTestId(testId);
         expect(checkbox).toBeVisible();
-        await fireEvent(checkbox, new MouseEvent('click'));
+        await userEvent.click(checkbox);
         expect(callback).not.toHaveBeenCalled();
     });
 });

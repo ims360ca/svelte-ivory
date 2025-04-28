@@ -16,3 +16,17 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // add more mocks here if you need them
+// resizeObserver
+global.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+};
+
+// Mock element.animate
+Element.prototype.animate = function () {
+    return {
+        finished: Promise.resolve(),
+        cancel: () => {}
+    };
+};
