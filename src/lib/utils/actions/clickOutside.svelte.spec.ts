@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import { fireEvent } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
 import { fn } from '@vitest/spy';
 import { describe, expect, it } from 'vitest';
 import { clickOutside } from './clickOutside';
@@ -14,7 +14,7 @@ describe('clickOutside', () => {
         const callback = fn();
         clickOutside(node, callback);
 
-        await fireEvent(otherNode, new MouseEvent('click'));
+        await userEvent.click(otherNode);
 
         expect(callback).toHaveBeenCalledOnce();
     });
@@ -29,7 +29,7 @@ describe('clickOutside', () => {
         const callback = fn();
         clickOutside(node, callback);
 
-        await fireEvent(nestedNode, new MouseEvent('click'));
+        await userEvent.click(nestedNode);
 
         expect(callback).not.toHaveBeenCalled();
     });
@@ -43,7 +43,7 @@ describe('clickOutside', () => {
         const callback = fn();
         clickOutside(node, { callback });
 
-        await fireEvent(otherNode, new MouseEvent('click'));
+        await userEvent.click(otherNode);
 
         expect(callback).toHaveBeenCalledOnce();
     });
@@ -59,8 +59,8 @@ describe('clickOutside', () => {
         const callback = fn();
         clickOutside(node, { callback, target: otherNode });
 
-        await fireEvent(nestedNode, new MouseEvent('click'));
-        await fireEvent(otherNode, new MouseEvent('click'));
+        await userEvent.click(nestedNode);
+        await userEvent.click(otherNode);
 
         expect(callback).not.toHaveBeenCalled();
     });
