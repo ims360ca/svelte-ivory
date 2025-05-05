@@ -1,3 +1,4 @@
+export { default as Drawer } from './drawer/Drawer.svelte';
 export { default as Heading } from './heading/index';
 export { default as HiddenBackground } from './hiddenBackground/index';
 export { default as Modal } from './modal/Modal.svelte';
