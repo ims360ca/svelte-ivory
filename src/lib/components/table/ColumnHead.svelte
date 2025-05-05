@@ -1,0 +1,108 @@
+<script lang="ts" module>
+    import { resize } from '$lib/utils/actions';
+    import { getContext, setContext, type Snippet } from 'svelte';
+    import { Popover } from '../layout';
+    import type { Column } from './column.svelte';
+
+    const COLUMN_HEAD_CONTEXT = {};
+
+    function setColumnContext(column: Column) {
+        setContext(COLUMN_HEAD_CONTEXT, column);
+    }
+
+    export function getColumnContext() {
+        return getContext<Column>(COLUMN_HEAD_CONTEXT);
+    }
+</script>
+
+<script lang="ts">
+    let target = $state<HTMLElement | undefined>();
+
+    type Props = {
+        column: Column;
+        children: Snippet;
+    };
+
+    let { column, children }: Props = $props();
+
+    setColumnContext(column);
+
+    let dragging = $state(false);
+    let open = $state(false);
+
+    const onHoverStart = () => {
+        column.hovering = true;
+    };
+
+    const onHoverEnd = () => {
+        column.hovering = false;
+    };
+
+    const onResize = (mouseX: number) => {
+        if (!target) return;
+        let newWidth = mouseX - target.getBoundingClientRect().left;
+        column.resize(newWidth + 7);
+    };
+
+    const onDragging = (d: boolean) => {
+        dragging = d;
+        column.dragging = d;
+    };
+</script>
+
+<div
+    class={[
+        'group border-primary-500 flex shrink-0 flex-row justify-start overflow-hidden bg-inherit'
+    ]}
+    bind:this={target}
+    style="width: {column.width}px;"
+>
+    <svelte:element
+        this={column.filter ? 'button' : 'div'}
+        class={[
+            'text-surface-600-400 flex grow flex-row items-center justify-start gap-4 py-2 text-start font-bold select-none'
+        ]}
+        type={column.filter ? 'button' : undefined}
+        onclick={column.filter
+            ? (e: MouseEvent) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  open = !open;
+              }
+            : undefined}
+    >
+        {@render children()}
+    </svelte:element>
+    {#if column.resizable}
+        <button
+            type="button"
+            class="flex h-full w-4 shrink-0 cursor-col-resize justify-center bg-inherit"
+            use:resize={{ resized: onResize, dragging: onDragging }}
+            onmouseenter={onHoverStart}
+            onmouseleave={onHoverEnd}
+            onfocusin={onHoverStart}
+            onfocusout={onHoverEnd}
+            tabindex="-1"
+            aria-label="Resize column"
+        >
+            <div
+                class={[
+                    'h-full w-px group-hover:block',
+                    dragging ? 'bg-primary-400-600 block' : 'group-hover:bg-surface-300-700 hidden'
+                ]}
+            ></div>
+        </button>
+    {/if}
+</div>
+
+{#if column.filter}
+    <Popover
+        {target}
+        bind:b_open={open}
+        placement="bottom-start"
+        class="bg-surface-50-950 flex flex-col gap-2 rounded p-4 shadow transition-shadow hover:shadow-lg"
+        keepMounted
+    >
+        {@render column.filter()}
+    </Popover>
+{/if}

@@ -9,7 +9,14 @@ Eventually we will add more documentation and examples to make it easier for dev
 Include this line in your `app.css` file, so the TW classes used in the lib are included:
 
 ```css
-@source "../node_modules/@ims360/svelte-lib";
+@source "../node_modules/@ims360/svelte-ivory";
 ```
 
 _You may need to adjust the path if your `app.css` is not located in `/src`_
+
+## Roadmap
+
+- [x] Basic components (checkbox, toggle)
+- [x] Basic layout components (modal, tabs, popover, etc.)
+- [ ] Table
+- [ ] Input components
