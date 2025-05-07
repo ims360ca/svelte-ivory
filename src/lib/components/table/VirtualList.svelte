@@ -26,7 +26,6 @@
     let start = $state(0);
     let end = $state(0);
     let height_map: number[] = [];
-    let rows: HTMLCollectionOf<HTMLElement>;
     let viewport = $state<HTMLElement>();
     let contents = $state<HTMLElement>();
     let viewport_height = $state(0);
@@ -43,18 +42,10 @@
     let average_height: number;
     let scroll_left = $state(0);
 
-    function updateRows() {
-        if (!contents) return;
+    const rows = $derived.by<HTMLElement[]>(() => {
+        if (!contents) return [];
         const elements = contents.getElementsByTagName('virtual-list-row');
-        console.log('elements', elements);
-
-        rows = elements as HTMLCollectionOf<HTMLElement>;
-    }
-
-    $effect(() => {
-        console.log('updates');
-
-        updateRows();
+        return elements as unknown as HTMLElement[];
     });
 
     async function refresh(items: T[], viewport_height: number, itemHeight?: number) {

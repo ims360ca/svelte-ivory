@@ -3,7 +3,7 @@ import type { Snippet } from 'svelte';
 const DEFAULT_WIDTH = 250;
 const MINIMAL_WIDTH_MULTIPLIER = 0.5;
 
-interface ColumnConfig {
+export interface ColumnConfig {
     label: string;
     id: string;
     width?: number;
@@ -27,6 +27,8 @@ export class Column {
     filter?: Snippet = $state();
 
     constructor(conf: ColumnConfig) {
+        console.log('creating column', conf);
+
         this.updateConfig(conf);
 
         $effect(() => {
@@ -34,7 +36,7 @@ export class Column {
         });
     }
 
-    private updateConfig(conf: ColumnConfig) {
+    updateConfig(conf: ColumnConfig) {
         this.label = conf.label;
         this.id = conf.id;
         this.width = Math.max(

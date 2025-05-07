@@ -16,13 +16,7 @@
         children?: Snippet<[{ row: T; nestingLevel?: number }]>;
     }
 
-    export interface GroupableRow {
-        tableGroup?: string;
-        tableGroupingKey?: string | number;
-    }
-
     const TABLE_CONTEXT = {};
-
     function setTableContext<T extends { id: string; children?: T[] | undefined }>(
         table: Table<T>
     ) {
@@ -36,7 +30,7 @@
     }
 </script>
 
-<script lang="ts" generics="T extends { id: string } & GroupableRow & {children?: T[] }">
+<script lang="ts" generics="T extends { id: string, children?: T[] }">
     interface Props<TI extends { id: string }> extends TableProps<TI> {
         children: Snippet<[{ row: TI; nestingLevel?: number }]>;
         firstColumn?: Snippet<[{ row: TI }]>;
@@ -60,6 +54,7 @@
     });
 
     setTableContext(table);
+    const treeIndicatorId = crypto.randomUUID();
 </script>
 
 <div class={['flex flex-col overflow-hidden', clazz]}>
@@ -69,21 +64,19 @@
         bind:scrollTop={table.scrollTop}
     >
         {#snippet header()}
-            {#if table.columns.length > 1}
-                <div class={['flex w-fit min-w-full flex-row gap-4 pr-4']}>
-                    {#each table.columns as column (column.id)}
-                        <ColumnHead {column}>
-                            {column.label}
-                        </ColumnHead>
-                    {/each}
-                </div>
-            {/if}
+            <div class={['flex w-fit min-w-full flex-row gap-4 pr-4']}>
+                {#each table.columns as column (column.id)}
+                    <ColumnHead {column}>
+                        {column.label}
+                    </ColumnHead>
+                {/each}
+            </div>
         {/snippet}
         {#snippet children({ row: { node, id, nestingLevel } })}
             <TableRow {onclick} {href} row={node} {table} class={rowClass}>
                 {@render firstColumn?.({ row: node })}
                 <Column
-                    id="tree-indicator"
+                    id={treeIndicatorId}
                     label=""
                     row={node}
                     resizable={false}

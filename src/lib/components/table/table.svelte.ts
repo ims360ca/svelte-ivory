@@ -1,5 +1,5 @@
 import { SvelteSet } from 'svelte/reactivity';
-import type { Column } from './column.svelte';
+import { Column, type ColumnConfig } from './column.svelte';
 
 export type TableRow<T> = { id: string; children?: T[] };
 
@@ -27,7 +27,6 @@ export class Table<T extends { id: string } & { children?: T[] }> {
     results = $derived(treeWalker(this.data, this.expanded));
 
     constructor(conf: TableConfig<T>) {
-        // TODO check if this is redundant
         this.updateConfig(conf);
 
         $effect(() => {
@@ -40,10 +39,17 @@ export class Table<T extends { id: string } & { children?: T[] }> {
         this.expanded = conf.expanded ?? new SvelteSet<string>();
     }
 
-    registerColumn(col: Column): Column {
+    registerColumn(config: ColumnConfig): Column {
         // only register a column once
-        const existingColumn = this.columns.find((c) => c.id === col.id);
+        let existingColumn: Column | undefined = undefined;
+        for (const column of this.columns) {
+            if (column.id === config.id) {
+                existingColumn = column;
+                break;
+            }
+        }
         if (existingColumn) return existingColumn;
+        const col = new Column(config);
         this.columns.push(col);
         return col;
     }

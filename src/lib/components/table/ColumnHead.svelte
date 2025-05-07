@@ -4,15 +4,14 @@
     import { Popover } from '../layout';
     import type { Column } from './column.svelte';
 
-    let target = $state<HTMLElement | undefined>();
-
     type Props = {
         column: Column;
         children: Snippet;
     };
 
-    let { column, children }: Props = $props();
+    let { column = $bindable(), children }: Props = $props();
 
+    let target = $state<HTMLElement | undefined>();
     let dragging = $state(false);
     let open = $state(false);
 
@@ -34,8 +33,6 @@
         dragging = d;
         column.dragging = d;
     };
-
-    $inspect(column);
 </script>
 
 <div
