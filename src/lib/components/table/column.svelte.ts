@@ -27,7 +27,6 @@ export class Column {
     filter?: Snippet = $state();
 
     constructor(conf: ColumnConfig) {
-        // TODO check if this is redundant
         this.updateConfig(conf);
 
         $effect(() => {
@@ -38,7 +37,10 @@ export class Column {
     private updateConfig(conf: ColumnConfig) {
         this.label = conf.label;
         this.id = conf.id;
-        this.width = Math.max(conf.width ?? DEFAULT_WIDTH, conf.minWidth ?? 0);
+        this.width = Math.max(
+            typeof conf.width !== 'undefined' ? conf.width : DEFAULT_WIDTH,
+            conf.minWidth ?? 0
+        );
         if (conf.minWidth) {
             this.minimalWidth = conf.minWidth;
         } else {

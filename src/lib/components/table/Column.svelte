@@ -40,7 +40,25 @@
     // Register the new column if this is the first table row that was rendered
     const table = getTableContext();
     const column = table.registerColumn(
-        new Column({ label, id, width, resizable, filter, minWidth })
+        // getters so the values are reactive
+        new Column({
+            id,
+            get label() {
+                return label;
+            },
+            get width() {
+                return width;
+            },
+            get resizable() {
+                return resizable;
+            },
+            get filter() {
+                return filter;
+            },
+            get minWidth() {
+                return minWidth;
+            }
+        })
     );
 
     const allowClicking = $derived(!!onclick);
@@ -57,12 +75,15 @@
           }
         : undefined}
     type={onclick ? 'button' : undefined}
-    style={ignoreWidth ? '' : `width: ${column.width}px;`}
+    style={ignoreWidth ? '' : `width: ${column.width}px !important;`}
     class={twMerge(
         clsx(
-            'mr-[7px] flex shrink-0 flex-row items-stretch justify-start truncate border-r',
-            column.dragging && 'border-primary-400-600',
-            !column.dragging && column.hovering && 'border-surface-300-700',
+            'flex shrink-0 flex-row items-stretch justify-start truncate',
+            !ignoreWidth && [
+                'border-r border-transparent',
+                column.dragging && 'border-primary-400-600',
+                !column.dragging && column.hovering && 'border-surface-300-700'
+            ],
             clazz
         )
     )}

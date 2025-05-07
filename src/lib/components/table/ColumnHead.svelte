@@ -1,21 +1,9 @@
-<script lang="ts" module>
+<script lang="ts">
     import { resize } from '$lib/utils/actions';
-    import { getContext, setContext, type Snippet } from 'svelte';
+    import { type Snippet } from 'svelte';
     import { Popover } from '../layout';
     import type { Column } from './column.svelte';
 
-    const COLUMN_HEAD_CONTEXT = {};
-
-    function setColumnContext(column: Column) {
-        setContext(COLUMN_HEAD_CONTEXT, column);
-    }
-
-    export function getColumnContext() {
-        return getContext<Column>(COLUMN_HEAD_CONTEXT);
-    }
-</script>
-
-<script lang="ts">
     let target = $state<HTMLElement | undefined>();
 
     type Props = {
@@ -24,8 +12,6 @@
     };
 
     let { column, children }: Props = $props();
-
-    setColumnContext(column);
 
     let dragging = $state(false);
     let open = $state(false);
@@ -41,13 +27,15 @@
     const onResize = (mouseX: number) => {
         if (!target) return;
         let newWidth = mouseX - target.getBoundingClientRect().left;
-        column.resize(newWidth + 7);
+        column.resize(newWidth + 2);
     };
 
     const onDragging = (d: boolean) => {
         dragging = d;
         column.dragging = d;
     };
+
+    $inspect(column);
 </script>
 
 <div
@@ -76,7 +64,12 @@
     {#if column.resizable}
         <button
             type="button"
-            class="flex h-full w-4 shrink-0 cursor-col-resize justify-center bg-inherit"
+            class={[
+                'flex h-full w-4 shrink-0 cursor-col-resize justify-center border-r bg-inherit',
+                dragging
+                    ? 'border-primary-400-600 block'
+                    : 'hover:border-surface-300-700 border-transparent'
+            ]}
             use:resize={{ resized: onResize, dragging: onDragging }}
             onmouseenter={onHoverStart}
             onmouseleave={onHoverEnd}
@@ -85,12 +78,6 @@
             tabindex="-1"
             aria-label="Resize column"
         >
-            <div
-                class={[
-                    'h-full w-px group-hover:block',
-                    dragging ? 'bg-primary-400-600 block' : 'group-hover:bg-surface-300-700 hidden'
-                ]}
-            ></div>
         </button>
     {/if}
 </div>

@@ -72,7 +72,7 @@
     type={elementProps.type}
     href={elementProps.href}
     onclick={elementProps.onclick}
-    class={['flex min-w-full shrink-0 flex-row items-stretch gap-4 overflow-hidden px-4', clazz]}
+    class={['flex min-w-full shrink-0 flex-row items-stretch gap-4 overflow-hidden pr-4', clazz]}
 >
     {@render children()}
 </svelte:element>

@@ -62,16 +62,15 @@
     setTableContext(table);
 </script>
 
-<div class={['flex flex-col overflow-hidden border', clazz]}>
+<div class={['flex flex-col overflow-hidden', clazz]}>
     <VirtualList
         data={table.results.entries}
         class="w-full min-w-full"
-        loadPreScan={2}
         bind:scrollTop={table.scrollTop}
     >
         {#snippet header()}
             {#if table.columns.length > 1}
-                <div class={['flex w-fit min-w-full flex-row gap-4 border-b px-4']}>
+                <div class={['flex w-fit min-w-full flex-row gap-4 pr-4']}>
                     {#each table.columns as column (column.id)}
                         <ColumnHead {column}>
                             {column.label}
@@ -93,10 +92,10 @@
                         else table.expanded.add(id);
                     }}
                     ignoreWidth={table.results.someHaveChildren}
-                    width={table.results.someHaveChildren ? 24 : 0}
+                    width={table.results.someHaveChildren ? 20 : 0}
                     class="h-full"
                 >
-                    <div style="width: {nestingLevel * 1.5 + 1.25}rem">
+                    <div style="width: calc(var(--spacing) * {nestingLevel * 4} + 20px);">
                         {#if node.children}
                             <ChevronRight
                                 class={[
