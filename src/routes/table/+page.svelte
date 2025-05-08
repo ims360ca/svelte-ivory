@@ -2,6 +2,7 @@
     import Toggle from '$lib/components/basic/toggle/Toggle.svelte';
     import Column from '$lib/components/table/Column.svelte';
     import Table from '$lib/components/table/Table.svelte';
+    import { Toasts } from '$lib/components/toast';
     import { pseudoRandomId } from '$lib/utils/functions';
 
     interface Row {
@@ -60,7 +61,7 @@
             { id: '7', name: 'Carol', age: 34, email: 'carol@example.com' }
         ];
 
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1_000; i++) {
             rows.push({
                 id: crypto.randomUUID(),
                 name: pseudoRandomId('Name'),
@@ -77,15 +78,24 @@
     <Toggle value={children} />
     Toggle children
 </button>
-<Table data={rows} class="border-surface-300-700 w-full grow rounded border">
+<Table
+    data={rows}
+    class="border-surface-300-700 w-full grow rounded border"
+    onclick={() => {
+        Toasts.trigger({
+            variant: 'success',
+            message: 'Clicked on a row'
+        });
+    }}
+>
     {#snippet children({ row })}
-        <Column id="name" label="Name" {row}>
+        <Column id="name" header="Name">
             {row.name}
         </Column>
-        <Column id="age" label="Age" {row}>
+        <Column id="age" header="Age">
             {row.age}
         </Column>
-        <Column id="email" label="Email" {row}>
+        <Column id="email" header="Email">
             {row.email}
         </Column>
     {/snippet}

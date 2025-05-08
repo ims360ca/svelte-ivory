@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { ToastUI } from '$lib/components/toast';
     import type { Snippet } from 'svelte';
     import '../app.css';
     import NavBar from './NavBar.svelte';
@@ -23,3 +24,5 @@
         {@render children()}
     </main>
 </div>
+
+<ToastUI />

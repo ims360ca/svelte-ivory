@@ -9,7 +9,7 @@
         data: T[];
         children: Snippet<[{ row: T; domIndex: number; index: number }]>;
         header?: Snippet;
-        scrollTop?: number;
+        b_scrollTop?: number;
         itemHeight?: number;
     };
 
@@ -18,7 +18,7 @@
         data,
         children,
         header,
-        scrollTop = $bindable(0),
+        b_scrollTop = $bindable(0),
         itemHeight
     }: Props<T> = $props();
 
@@ -29,7 +29,6 @@
     let viewport = $state<HTMLElement>();
     let contents = $state<HTMLElement>();
     let viewport_height = $state(0);
-    let mounted = $state();
 
     const visible = $derived(
         data.slice(start, end).map((data, i) => {
@@ -48,8 +47,16 @@
         return elements as unknown as HTMLElement[];
     });
 
+    let mounted = false;
+
     async function refresh(items: T[], viewport_height: number, itemHeight?: number) {
         if (!viewport) return;
+
+        if (!mounted) {
+            mounted = true;
+            viewport.scrollTop = b_scrollTop;
+        }
+
         const { scrollTop } = viewport;
 
         await tick(); // wait until the DOM is up to date
@@ -83,6 +90,7 @@
     async function handle_scroll() {
         if (!viewport) return;
         const { scrollTop } = viewport;
+        b_scrollTop = scrollTop;
 
         const old_start = start;
 
@@ -146,21 +154,23 @@
     }
 
     // trigger initial refresh
-    onMount(() => {
-        mounted = true;
-        if (!contents) return;
+    onMount(async () => {
+        if (viewport) {
+            viewport.scrollTop = b_scrollTop;
+        }
+        await tick();
     });
 
     // whenever `items` changes, invalidate the current heightmap
     $effect(() => {
-        if (mounted) refresh(data, viewport_height, itemHeight);
+        refresh(data, viewport_height, itemHeight);
     });
 </script>
 
-<div class={twMerge(clsx(['relative flex grow flex-col overflow-hidden', clazz]))}>
+<div class={twMerge(clsx(['relative flex grow flex-col overflow-hidden border-inherit', clazz]))}>
     {#if header}
-        <div class="h-fit w-full">
-            <div class="min-w-full" style="transform: translateX(-{scroll_left}px);">
+        <div class="h-fit w-full border-inherit">
+            <div class="min-w-full border-inherit" style="transform: translateX(-{scroll_left}px);">
                 {@render header?.()}
             </div>
         </div>
@@ -173,7 +183,7 @@
     >
         <div
             bind:this={contents}
-            class="flex flex-col"
+            class="flex min-w-full flex-col"
             style="padding-top: {top}px; padding-bottom: {bottom}px;"
         >
             {#each visible as row, i (row.data.id + row.index)}

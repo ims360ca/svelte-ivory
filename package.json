@@ -59,6 +59,10 @@
             "types": "./dist/components/toast/index.d.ts",
             "svelte": "./dist/components/toast/index.js"
         },
+        "./components/table": {
+            "types": "./dist/components/table/index.d.ts",
+            "svelte": "./dist/components/table/index.js"
+        },
         "./utils/actions": {
             "types": "./dist/utils/actions/index.d.ts",
             "svelte": "./dist/utils/actions/index.js"
@@ -103,5 +107,5 @@
     "svelte": "./dist/index.js",
     "type": "module",
     "types": "./dist/index.d.ts",
-    "version": "0.0.2"
+    "version": "0.0.4"
 }

@@ -13,16 +13,16 @@
     }
 
     export const TEST_ID = 'background';
-</script>
 
-<script lang="ts">
-    interface Props {
+    export interface Props {
         class?: ClassValue;
         /** Gets called when the dialog is clicked */
         onclose?: () => void;
         children: Snippet;
     }
+</script>
 
+<script lang="ts">
     let { class: clazz, onclose, children }: Props = $props();
 </script>
 

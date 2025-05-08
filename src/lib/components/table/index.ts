@@ -1,10 +1,8 @@
-// import Tab from './Tab.svelte';
-// import TabPanel from './TabPanel.svelte';
-// import { default as Table } from './Table.svelte';
+import Column from './Column.svelte';
+import Row from './Row.svelte';
+import { default as TableComponent } from './Table.svelte';
 
-// const Tabs = Object.assign(Table, {
-//     Tab: Tab,
-//     Panel: TabPanel
-// });
-
-// export default Tabs;
+export const Table = Object.assign(TableComponent, {
+    Column: Column,
+    Row: Row
+});
