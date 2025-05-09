@@ -1,6 +1,8 @@
 <script lang="ts" generics="T extends  {children?: T[], id: string}">
+    import clsx from 'clsx';
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
+    import { twMerge } from 'tailwind-merge';
 
     interface Props<TI> {
         class?: ClassValue;
@@ -49,7 +51,12 @@
 <svelte:element
     this={elementProps.this}
     {...elementProps}
-    class={['flex min-w-full shrink-0 flex-row items-stretch gap-4 overflow-hidden pr-4', clazz]}
+    class={twMerge(
+        clsx(
+            'flex min-w-full shrink-0 flex-row items-stretch gap-2 overflow-hidden pr-4 pl-2',
+            clazz
+        )
+    )}
 >
     {@render children()}
 </svelte:element>

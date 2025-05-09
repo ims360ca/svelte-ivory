@@ -25,7 +25,7 @@
     }
 
     let {
-        class: clazz = 'py-2',
+        class: clazz = 'py-2 flex flex-row items-center',
         children,
         onclick,
         ignoreWidth = false,

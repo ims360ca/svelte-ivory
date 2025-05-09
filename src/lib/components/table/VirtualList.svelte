@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends { id: string }">
     import clsx from 'clsx';
-    import { onMount, tick, type Snippet } from 'svelte';
+    import { tick, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
 
@@ -47,16 +47,8 @@
         return elements as unknown as HTMLElement[];
     });
 
-    let mounted = false;
-
     async function refresh(items: T[], viewport_height: number, itemHeight?: number) {
         if (!viewport) return;
-
-        if (!mounted) {
-            mounted = true;
-            viewport.scrollTop = b_scrollTop;
-        }
-
         const { scrollTop } = viewport;
 
         await tick(); // wait until the DOM is up to date
@@ -89,8 +81,9 @@
 
     async function handle_scroll() {
         if (!viewport) return;
-        const { scrollTop } = viewport;
+        const { scrollTop, scrollLeft } = viewport;
         b_scrollTop = scrollTop;
+        scroll_left = scrollLeft;
 
         const old_start = start;
 
@@ -153,17 +146,12 @@
         // more. maybe we can just call handle_scroll again?
     }
 
-    // trigger initial refresh
-    onMount(async () => {
-        if (viewport) {
-            viewport.scrollTop = b_scrollTop;
-        }
-        await tick();
-    });
-
-    // whenever `items` changes, invalidate the current heightmap
+    // whenever `data` changes, invalidate the current heightmap
     $effect(() => {
         refresh(data, viewport_height, itemHeight);
+        if (!viewport) return;
+        // no idea why it only works the first time, but that's what i want anyway
+        viewport.scrollTop = b_scrollTop;
     });
 </script>
 

@@ -64,13 +64,13 @@
 <VirtualList
     data={table.results.entries}
     class={twMerge(clsx('border-transparent', clazz, 'flex flex-col overflow-hidden'))}
-    b_scrollTop={50}
+    bind:b_scrollTop={table.scrollTop}
 >
     {#snippet header()}
         <div
             class={twMerge(
                 clsx(
-                    'flex w-fit min-w-full flex-row gap-4 border-b border-inherit pr-4',
+                    'flex w-fit min-w-full flex-row gap-2 border-b border-inherit pr-4 pl-2',
                     headerClass
                 )
             )}
@@ -102,11 +102,13 @@
                     else table.expanded.add(id);
                 }}
                 ignoreWidth={table.results.someHaveChildren}
-                width={table.results.someHaveChildren ? 20 : 0}
+                width={table.results.someHaveChildren ? 24 : 0}
                 minWidth={0}
-                class="h-full"
             >
-                <div style="width: calc(var(--spacing) * {nestingLevel * 4} + 20px);">
+                <div
+                    class="flex h-full items-center justify-end"
+                    style="width: calc(var(--spacing) * {nestingLevel * 4} + 24px);"
+                >
                     {#if node.children}
                         <ChevronRight
                             class={[
