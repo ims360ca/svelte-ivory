@@ -103,7 +103,10 @@
                 </div>
                 <div
                     class={twMerge(
-                        clsx('flex flex-col gap-4 overflow-hidden bg-inherit p-4 pt-2', innerClass)
+                        clsx(
+                            'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-2',
+                            innerClass
+                        )
                     )}
                 >
                     {@render children?.()}
