@@ -1,9 +1,11 @@
 <script lang="ts">
     import Toggle from '$lib/components/basic/toggle/Toggle.svelte';
-    import Column from '$lib/components/table/Column.svelte';
-    import Table from '$lib/components/table/Table.svelte';
+    import { searchPlugin } from '$lib/components/table/plugins/search.svelte';
+    import Column from '$lib/components/table/table/Column.svelte';
+    import Table from '$lib/components/table/table/Table.svelte';
     import { Toasts } from '$lib/components/toast';
     import { pseudoRandomId } from '$lib/utils/functions';
+    import { Mail } from '@lucide/svelte';
 
     interface Row {
         id: string;
@@ -14,6 +16,8 @@
     }
 
     let children = $state(false);
+    let rowHeight = $state(64);
+    let search = $state('');
 
     let rows: Row[] = $derived.by(() => {
         const rows = [
@@ -74,10 +78,14 @@
     });
 </script>
 
-<button onclick={() => (children = !children)} class="flex flex-row items-center gap-2">
-    <Toggle value={children} />
-    Toggle children
-</button>
+<div class="flex flex-row items-center gap-2">
+    <button onclick={() => (children = !children)} class="flex flex-row items-center gap-2">
+        <Toggle value={children} />
+        Toggle children
+    </button>
+    <input type="number" bind:value={rowHeight} />
+    <input type="text" bind:value={search} placeholder="Search" />
+</div>
 <Table
     data={rows}
     class="border-surface-300-700 w-full grow rounded border"
@@ -87,6 +95,17 @@
             message: 'Clicked on a row'
         });
     }}
+    {rowHeight}
+    plugins={[
+        searchPlugin({
+            get search() {
+                return search;
+            },
+            matches(row) {
+                return row.name.includes(search);
+            }
+        })
+    ]}
 >
     {#snippet children({ row })}
         <Column id="name" header="Name">
@@ -95,7 +114,13 @@
         <Column id="age" header="Age">
             {row.age}
         </Column>
-        <Column id="email" header="Email">
+        <Column id="email">
+            {#snippet header()}
+                <div class="flex flex-row items-center gap-2">
+                    <Mail size={20} />
+                    <p>Email</p>
+                </div>
+            {/snippet}
             {row.email}
         </Column>
     {/snippet}

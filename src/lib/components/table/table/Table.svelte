@@ -6,8 +6,8 @@
     import { twMerge } from 'tailwind-merge';
     import Column from './Column.svelte';
     import ColumnHead from './ColumnHead.svelte';
-    import TableRow from './Row.svelte';
-    import { Table } from './table.svelte';
+    import Row from './Row.svelte';
+    import { Table, type TablePlugin, type TableRow } from './table.svelte';
     import VirtualList from './VirtualList.svelte';
 
     export interface TableProps<T extends { id: string }> {
@@ -15,6 +15,7 @@
         data: T[];
         onclick?: (row: T) => void;
         href?: (row: T) => string;
+        rowHeight?: number;
     }
 
     const TABLE_CONTEXT = {};
@@ -31,7 +32,7 @@
     }
 </script>
 
-<script lang="ts" generics="T extends { id: string, children?: T[] }">
+<script lang="ts" generics="T extends TableRow<T>">
     interface Props<TI extends { id: string }> extends TableProps<TI> {
         /** Renders the rows */
         children: Snippet<[{ row: TI; nestingLevel?: number }]>;
@@ -39,6 +40,7 @@
         firstColumn?: Snippet<[{ row: TI }]>;
         rowClass?: ClassValue;
         headerClass?: ClassValue;
+        plugins?: TablePlugin<TI>[];
     }
 
     let {
@@ -48,12 +50,18 @@
         firstColumn,
         rowClass,
         headerClass,
-        ...props
+        rowHeight = 64,
+        onclick,
+        href,
+        plugins = []
     }: Props<T> = $props();
 
     let table: Table<T> = new Table({
         get data() {
             return data;
+        },
+        get plugins() {
+            return plugins;
         }
     });
 
@@ -63,8 +71,9 @@
 
 <VirtualList
     data={table.results.entries}
-    class={twMerge(clsx('border-transparent', clazz, 'flex flex-col overflow-hidden'))}
+    class={['border-transparent', clazz, 'flex flex-col overflow-hidden']}
     bind:b_scrollTop={table.scrollTop}
+    {rowHeight}
 >
     {#snippet header()}
         <div
@@ -91,15 +100,18 @@
         </div>
     {/snippet}
     {#snippet children({ row: { node, id, nestingLevel } })}
-        <TableRow {...props} row={node} class={rowClass}>
+        <Row
+            onclick={onclick ? () => onclick(node) : undefined}
+            href={href ? () => href(node) : undefined}
+            class={rowClass}
+        >
             {@render firstColumn?.({ row: node })}
             <Column
                 id={treeIndicatorId}
                 resizable={false}
                 header=""
                 onclick={() => {
-                    if (table.expanded.has(id)) table.expanded.delete(id);
-                    else table.expanded.add(id);
+                    table.toggleExpansion(node.id);
                 }}
                 ignoreWidth={table.results.someHaveChildren}
                 width={table.results.someHaveChildren ? 24 : 0}
@@ -120,6 +132,6 @@
                 </div>
             </Column>
             {@render passedChildren?.({ row: node, nestingLevel })}
-        </TableRow>
+        </Row>
     {/snippet}
 </VirtualList>

@@ -2,14 +2,12 @@ import { SvelteSet } from 'svelte/reactivity';
 import { Column, type ColumnConfig } from './column.svelte';
 
 export type TableRow<T> = { id: string; children?: T[] };
+export type TablePlugin<T extends TableRow<T>> = (conf: Table<T>) => void;
 
 export interface TableConfig<T extends TableRow<T>> {
     data: T[];
-    expanded?: Set<string>;
-    scrollTop?: number;
+    plugins?: TablePlugin<T>[];
 }
-
-export type TableMiddleware<T extends TableRow<T>> = (conf: TableConfig<T>) => TableConfig<T>;
 
 interface TreeRow<T> {
     node: T;
@@ -17,26 +15,28 @@ interface TreeRow<T> {
     id: string;
 }
 
-export class Table<T extends { id: string } & { children?: T[] }> {
-    data = $state<T[]>([]);
+export class Table<T extends TableRow<T>> {
     columns = $state<Column[]>([]);
-    expanded: Set<string> = new SvelteSet<string>();
-
+    data = $state<T[]>([]);
+    filteredData = $state<T[]>();
+    expanded: Set<string> = $state(new SvelteSet<string>());
     scrollTop = $state(0);
 
-    results = $derived(treeWalker(this.data, this.expanded));
+    readonly results = $derived(treeWalker(this.filteredData ?? this.data, this.expanded));
 
-    constructor(conf: TableConfig<T>) {
-        this.updateConfig(conf);
-
+    constructor(config: TableConfig<T>) {
+        this.update(config);
         $effect(() => {
-            this.updateConfig(conf);
+            this.update(config);
         });
     }
 
-    private updateConfig(conf: TableConfig<T>) {
+    private update(conf: TableConfig<T>) {
         this.data = conf.data;
-        this.expanded = conf.expanded ?? new SvelteSet<string>();
+
+        for (const plugin of conf.plugins ?? []) {
+            plugin(this);
+        }
     }
 
     registerColumn(config: ColumnConfig): Column {
@@ -53,10 +53,15 @@ export class Table<T extends { id: string } & { children?: T[] }> {
         this.columns.push(col);
         return col;
     }
+
+    toggleExpansion(id: string) {
+        if (this.expanded.has(id)) this.expanded.delete(id);
+        else this.expanded.add(id);
+    }
 }
 
 /** Walks though a tree strucure and turns it into a flat list, needed since the `VirtualList` needs a list, not a tree */
-function treeWalker<T extends { children?: T[]; id: string }>(data: T[], expanded: Set<string>) {
+function treeWalker<T extends TableRow<T>>(data: T[], expanded: Set<string>) {
     const stack: { node: T; nestingLevel: number }[] = [];
 
     // push the root nodes of the trees onto the stack

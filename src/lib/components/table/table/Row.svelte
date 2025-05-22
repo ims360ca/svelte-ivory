@@ -1,24 +1,30 @@
-<script lang="ts" generics="T extends  {children?: T[], id: string}">
+<script lang="ts" module>
+    let defaultClasses = $state<ClassValue>();
+
+    export function setClasses(c: ClassValue) {
+        defaultClasses = c;
+    }
+</script>
+
+<script lang="ts">
     import clsx from 'clsx';
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
 
-    interface Props<TI> {
+    interface Props {
         class?: ClassValue;
-        row: TI;
-        onclick?: (row: TI) => void;
-        href?: (row: TI) => string;
+        onclick?: () => void;
+        href?: () => string;
         children: Snippet;
     }
 
     let {
         class: clazz = 'hover:bg-surface-950-50/10 transition-colors',
-        row,
         onclick,
         href,
         children
-    }: Props<T> = $props();
+    }: Props = $props();
 
     const elementProps: {
         this: 'button' | 'a' | 'div';
@@ -30,14 +36,12 @@
             return {
                 this: 'button',
                 type: 'button',
-                onclick: () => {
-                    onclick(row);
-                }
+                onclick
             };
         } else if (href) {
             return {
                 this: 'a',
-                href: href(row)
+                href: href()
             };
         } else {
             return {
@@ -53,7 +57,8 @@
     {...elementProps}
     class={twMerge(
         clsx(
-            'flex min-w-full shrink-0 flex-row items-stretch gap-2 overflow-hidden pr-4 pl-2',
+            'flex h-full min-w-full flex-row items-stretch gap-2 overflow-hidden pr-4 pl-2',
+            defaultClasses,
             clazz
         )
     )}

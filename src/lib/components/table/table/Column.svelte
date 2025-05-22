@@ -4,7 +4,6 @@
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
     import type { ColumnConfig } from './column.svelte';
-    import { type TableRow } from './table.svelte';
     import { getTableContext } from './Table.svelte';
 
     let defaultClasses = $state<ClassValue>();
@@ -14,7 +13,7 @@
     }
 </script>
 
-<script lang="ts" generics="T extends TableRow<T>">
+<script lang="ts">
     interface Props extends ColumnConfig {
         class?: ClassValue;
         /** If the type is incorrect pass the "row" property with the right type */
@@ -29,7 +28,7 @@
         children,
         onclick,
         ignoreWidth = false,
-        // ColummnConfig
+        // ColumnConfig
         resizable = true,
         width,
         ...props
@@ -45,7 +44,7 @@
         column.updateConfig({ resizable, ...props });
     });
 
-    // this must be seperate to the above effect, since otherwise the width would be reset on every scroll
+    // this must be separate to the above effect, since otherwise the width would be reset on every scroll
     $effect(() => {
         column.resize(width);
     });

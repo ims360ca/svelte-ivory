@@ -16,8 +16,9 @@
     <NavBar>
         <NavLink href="/">Svelte-ivory</NavLink>
         <NavLink href="/basic">Basic</NavLink>
-        <NavLink href="/modal">modal</NavLink>
-        <NavLink href="/drawer">drawer</NavLink>
+        <NavLink href="/layout/modal">Modal</NavLink>
+        <NavLink href="/layout/tooltip">Tooltip</NavLink>
+        <NavLink href="/drawer">Drawer</NavLink>
         <NavLink href="/table">Table</NavLink>
     </NavBar>
     <main class="flex h-full grow flex-col gap-4 overflow-hidden p-4">
