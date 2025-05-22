@@ -91,7 +91,7 @@
                 >
                     <div
                         class={[
-                            'flex flex-row items-center justify-between gap-4 p-4',
+                            'flex flex-row items-center justify-between gap-4 px-4 py-3',
                             !variant && 'pb-0',
                             variant === 'success' && 'preset-tonal-success',
                             variant === 'warning' && 'preset-tonal-warning',
@@ -114,7 +114,10 @@
                     </div>
                     <div
                         class={twMerge(
-                            clsx('flex flex-col gap-4 overflow-hidden bg-inherit p-4', innerClass)
+                            clsx(
+                                'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                                innerClass
+                            )
                         )}
                     >
                         {@render children?.()}
