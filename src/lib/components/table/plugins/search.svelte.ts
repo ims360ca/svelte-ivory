@@ -6,34 +6,33 @@ interface SearchConfig<T extends TableRow<T>> {
     matches: (row: T) => boolean;
 }
 
-
 export function searchPlugin<T extends TableRow<T>>(conf: SearchConfig<T>): TablePlugin<T> {
     let prevSearch: string | undefined = undefined;
     let expandedBeforeSearch: Set<string> | undefined = undefined;
 
-    const middleware = $derived<TablePlugin<T>>((table) => {
-        console.log('searching', conf.search);
-
+    const middleware: TablePlugin<T> = (state) => {
         // ensure that the state before the search is saved and restored when the user types
         if (prevSearch && !conf.search && expandedBeforeSearch) {
-            console.log('restoring', prevSearch, conf.search);
             prevSearch = conf.search;
-            table.expanded = expandedBeforeSearch;
-            return;
+            return {
+                ...state,
+                expanded: expandedBeforeSearch
+            };
         }
         // ensure we store the state before the we started searching
         if (conf.search && !prevSearch) {
-            console.log('storing', conf.search, table.expanded);
-            expandedBeforeSearch = table.expanded;
+            expandedBeforeSearch = state.expanded;
         }
 
         // figure out which nodes to expand and hide
-        const { expanded, hidden } = summarizeByString(table.data, conf.search, conf.matches);
+        const { expanded, hidden } = summarizeByString(state.data, conf.search, conf.matches);
 
         prevSearch = conf.search;
-        table.filteredData = table.data.filter((d) => !hidden.has(d.id));
-        table.expanded = new SvelteSet(expanded);
-    });
+        return {
+            data: state.data.filter((d) => !hidden.has(d.id)),
+            expanded: new SvelteSet(expanded)
+        };
+    };
     return middleware;
 }
 
@@ -50,8 +49,8 @@ export const summarizeByString = <T extends TableRow<T>>(
     const expanded = new Set<string>();
 
     const recursor = (node: T, childOfMatch = false): boolean => {
-        const MATCHES = stringsMatch(node, search);
-        if (MATCHES && !firstSearchMatch) firstSearchMatch = node;
+        const matches = stringsMatch(node, search);
+        if (matches && !firstSearchMatch) firstSearchMatch = node;
 
         let intermediateNode = false;
 
@@ -59,12 +58,12 @@ export const summarizeByString = <T extends TableRow<T>>(
 
         if (children) {
             for (const child of children) {
-                const childMatches = recursor(child, MATCHES || childOfMatch);
+                const childMatches = recursor(child, matches || childOfMatch);
                 if (childMatches) intermediateNode = true;
             }
         }
 
-        if (MATCHES || intermediateNode) {
+        if (matches || intermediateNode) {
             if (intermediateNode) expanded.add(node.id);
             return true;
         } else {

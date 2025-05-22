@@ -2,11 +2,16 @@ import { SvelteSet } from 'svelte/reactivity';
 import { Column, type ColumnConfig } from './column.svelte';
 
 export type TableRow<T> = { id: string; children?: T[] };
-export type TablePlugin<T extends TableRow<T>> = (conf: Table<T>) => void;
+export type TablePlugin<T extends TableRow<T>> = (state: TableState<T>) => TableState<T>;
 
 export interface TableConfig<T extends TableRow<T>> {
     data: T[];
     plugins?: TablePlugin<T>[];
+}
+
+export interface TableState<T extends TableRow<T>> {
+    data: T[];
+    expanded: Set<string>;
 }
 
 interface TreeRow<T> {
@@ -18,35 +23,32 @@ interface TreeRow<T> {
 export class Table<T extends TableRow<T>> {
     columns = $state<Column[]>([]);
     data = $state<T[]>([]);
-    filteredData = $state<T[]>();
-    expanded: Set<string> = $state(new SvelteSet<string>());
+    expanded: Set<string> = new SvelteSet<string>();
     scrollTop = $state(0);
 
-    readonly results = $derived(treeWalker(this.filteredData ?? this.data, this.expanded));
+    readonly results = $derived(treeWalker(this.data, this.expanded));
 
-    constructor(config: TableConfig<T>) {
-        this.update(config);
-        $effect(() => {
-            this.update(config);
-        });
-    }
-
-    private update(conf: TableConfig<T>) {
-        this.data = conf.data;
+    refresh(conf: TableConfig<T>) {
+        let intitalState: TableState<T> = {
+            data: structuredClone(conf.data),
+            expanded: this.expanded
+        };
 
         for (const plugin of conf.plugins ?? []) {
-            plugin(this);
+            intitalState = plugin(intitalState);
         }
+
+        this.data = intitalState.data;
+        this.expanded = new SvelteSet(intitalState.expanded);
     }
 
     registerColumn(config: ColumnConfig): Column {
         // only register a column once
         let existingColumn: Column | undefined = undefined;
         for (const column of this.columns) {
-            if (column.id === config.id) {
-                existingColumn = column;
-                break;
-            }
+            if (column.id !== config.id) continue;
+            existingColumn = column;
+            break;
         }
         if (existingColumn) return existingColumn;
         const col = new Column(config);

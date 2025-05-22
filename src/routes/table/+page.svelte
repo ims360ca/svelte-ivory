@@ -102,7 +102,7 @@
                 return search;
             },
             matches(row) {
-                return row.name.includes(search);
+                return row.name.toLowerCase().includes(search.toLowerCase());
             }
         })
     ]}

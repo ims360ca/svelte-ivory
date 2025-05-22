@@ -56,13 +56,13 @@
         plugins = []
     }: Props<T> = $props();
 
-    let table: Table<T> = new Table({
-        get data() {
-            return data;
-        },
-        get plugins() {
-            return plugins;
-        }
+    let table: Table<T> = new Table();
+
+    $effect(() => {
+        table.refresh({
+            data,
+            plugins
+        });
     });
 
     setTableContext(table);
