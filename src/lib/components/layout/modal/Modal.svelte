@@ -4,8 +4,7 @@
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
-    import Heading from '../heading/Heading.svelte';
-    import HiddenBackground from '../hiddenBackground/HiddenBackground.svelte';
+    import { Heading, HiddenBackground, Portal } from '..';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
     export interface ModalProps {
@@ -60,58 +59,71 @@
 	A modal, comes with a title, close button and different variants per default.
 -->
 {#if b_open}
-    <HiddenBackground
-        onclose={close}
-        class="flex h-full w-full flex-col items-center justify-start p-16"
-    >
-        {#if modal}
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <div class={clazz} onclick={(e) => e.stopPropagation()} data-testid={testId} {style}>
-                {@render modal()}
-            </div>
-        {:else}
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div
-                class={twMerge(
-                    clsx([
-                        'bg-surface-50-950 relative flex max-h-full max-w-full flex-col overflow-hidden rounded',
-                        clazz
-                    ])
-                )}
-                {style}
-                onclick={(e) => e.stopPropagation()}
-                data-testid={testId}
-            >
+    <Portal>
+        <HiddenBackground
+            onclose={close}
+            class="flex h-full w-full flex-col items-center justify-start p-16"
+        >
+            {#if modal}
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div
-                    class={[
-                        'flex flex-row items-center justify-between gap-4 px-4 py-3',
-                        // !variant && 'pt-3',
-                        variant === 'success' && 'preset-tonal-success',
-                        variant === 'warning' && 'preset-tonal-warning',
-                        variant === 'error' && 'preset-tonal-error',
-                        variant === 'info' && 'preset-tonal-primary'
-                    ]}
+                    class={clazz}
+                    onclick={(e) => e.stopPropagation()}
+                    data-testid={testId}
+                    {style}
                 >
-                    {#if title}
-                        <Heading>{title}</Heading>
-                    {/if}
-                    <button class="group ml-auto flex justify-end" type="button" onclick={close}>
-                        <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
-                    </button>
+                    {@render modal()}
                 </div>
+            {:else}
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class={twMerge(
-                        clsx(
-                            'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-2',
-                            innerClass
-                        )
+                        clsx([
+                            'bg-surface-50-950 relative flex max-h-full max-w-full flex-col overflow-hidden rounded',
+                            clazz
+                        ])
                     )}
+                    {style}
+                    onclick={(e) => e.stopPropagation()}
+                    data-testid={testId}
                 >
-                    {@render children?.()}
+                    <div
+                        class={[
+                            'flex flex-row items-center justify-between gap-4 px-4 py-3',
+                            !variant && 'pb-0',
+                            variant === 'success' && 'preset-tonal-success',
+                            variant === 'warning' && 'preset-tonal-warning',
+                            variant === 'error' && 'preset-tonal-error',
+                            variant === 'info' && 'preset-tonal-primary'
+                        ]}
+                    >
+                        {#if title}
+                            <Heading>{title}</Heading>
+                        {/if}
+                        <button
+                            class="group ml-auto flex justify-end"
+                            type="button"
+                            onclick={close}
+                        >
+                            <X
+                                class="h-full w-auto transition-[stroke-width] group-hover:stroke-3"
+                            />
+                        </button>
+                    </div>
+                    <div
+                        class={twMerge(
+                            clsx(
+                                'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                                innerClass
+                            )
+                        )}
+                    >
+                        {@render children?.()}
+                    </div>
                 </div>
-            </div>
-        {/if}
-    </HiddenBackground>
+            {/if}
+        </HiddenBackground>
+    </Portal>
 {/if}

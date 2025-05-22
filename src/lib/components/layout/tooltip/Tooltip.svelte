@@ -62,7 +62,7 @@
     }
 
     function onpointerleave() {
-        clearTimeout(timeout);
+        clearTimeout(showTimeout);
         open = false;
     }
 </script>
@@ -96,7 +96,7 @@
             placement="top"
             class={twMerge(
                 clsx(
-                    'bg-surface-100-800-token max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',
+                    'bg-surface-50-950 max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',
                     tooltipClass
                 )
             )}
