@@ -14,7 +14,7 @@
         class?: ClassValue;
         data: T[];
         onclick?: (row: T) => void;
-        href?: (row: T) => string;
+        href?: (row: T) => string | undefined;
         rowHeight?: number;
     }
 
@@ -35,7 +35,7 @@
 <script lang="ts" generics="T extends TableRow<T>">
     interface Props<TI extends { id: string }> extends TableProps<TI> {
         /** Renders the rows */
-        children: Snippet<[{ row: TI; nestingLevel?: number }]>;
+        children: Snippet<[{ row: TI; nestingLevel?: number; index: number }]>;
         /** Add columns in front of the tree-indicator */
         firstColumn?: Snippet<[{ row: TI }]>;
         rowClass?: ClassValue;
@@ -99,10 +99,10 @@
             {/each}
         </div>
     {/snippet}
-    {#snippet children({ row: { node, id, nestingLevel } })}
+    {#snippet children({ row: { node, id, nestingLevel }, index })}
         <Row
             onclick={onclick ? () => onclick(node) : undefined}
-            href={href ? () => href(node) : undefined}
+            href={href?.(node)}
             class={rowClass}
         >
             {@render firstColumn?.({ row: node })}
@@ -131,7 +131,7 @@
                     {/if}
                 </div>
             </Column>
-            {@render passedChildren?.({ row: node, nestingLevel })}
+            {@render passedChildren?.({ row: node, nestingLevel, index })}
         </Row>
     {/snippet}
 </VirtualList>

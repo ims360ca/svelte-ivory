@@ -15,7 +15,7 @@
     interface Props {
         class?: ClassValue;
         onclick?: () => void;
-        href?: () => string;
+        href?: string;
         children: Snippet;
     }
 
@@ -41,7 +41,7 @@
         } else if (href) {
             return {
                 this: 'a',
-                href: href()
+                href: href
             };
         } else {
             return {
@@ -57,7 +57,7 @@
     {...elementProps}
     class={twMerge(
         clsx(
-            'flex h-full min-w-full flex-row items-stretch gap-2 overflow-hidden pr-4 pl-2',
+            'flex h-full min-w-full grow flex-row items-stretch gap-2 overflow-hidden pr-4 pl-2',
             defaultClasses,
             clazz
         )

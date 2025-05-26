@@ -11,10 +11,8 @@
     export function setClasses(c: ClassValue) {
         defaultClasses = c;
     }
-</script>
 
-<script lang="ts">
-    interface Props extends ColumnConfig {
+    export interface ColumnProps extends ColumnConfig {
         class?: ClassValue;
         /** If the type is incorrect pass the "row" property with the right type */
         children: Snippet;
@@ -22,7 +20,9 @@
         /** Cannot be used with resizable columns*/
         ignoreWidth?: boolean;
     }
+</script>
 
+<script lang="ts">
     let {
         class: clazz = 'py-2 flex flex-row items-center',
         children,
@@ -32,7 +32,7 @@
         resizable = true,
         width,
         ...props
-    }: Props = $props();
+    }: ColumnProps = $props();
 
     // Register the new column if this is the first table row that was rendered
     const table = getTableContext();

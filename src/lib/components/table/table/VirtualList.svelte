@@ -77,12 +77,12 @@
         {onscroll}
     >
         <div
-            class="flex flex-col"
+            class="flex h-fit shrink-0 flex-col"
             style="padding-top: {top}px; padding-bottom: {bottom}px; min-width: max(100%, {header_width}px) !important;"
         >
             {#each visible as row, i (row.data.id)}
                 <virtual-list-row
-                    class="flex h-fit w-fit !min-w-full shrink-0 flex-row items-center overflow-hidden"
+                    class="flex w-full shrink-0 grow flex-row items-center overflow-hidden"
                     style="height: {rowHeight}px !important;"
                 >
                     {@render children({

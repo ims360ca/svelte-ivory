@@ -1,14 +1,26 @@
-<script lang="ts">
+<script lang="ts" module>
     import { resize } from '$lib/utils/actions';
-    import { type Snippet } from 'svelte';
+    import { getContext, setContext, type Snippet } from 'svelte';
     import type { Column } from './column.svelte';
 
+    const CONTEXT = {};
+    function setColumnHeadContext(column: Column) {
+        setContext(CONTEXT, column);
+    }
+
+    export function getColumnHeadContext(): Column {
+        return getContext(CONTEXT);
+    }
+</script>
+
+<script lang="ts">
     type Props = {
         column: Column;
         children: Snippet;
     };
 
-    let { column = $bindable(), children }: Props = $props();
+    let { column, children }: Props = $props();
+    setColumnHeadContext(column);
 
     let target = $state<HTMLElement | undefined>();
     let dragging = $state(false);
@@ -45,8 +57,8 @@
             class={[
                 'ml-auto flex h-full w-4 shrink-0 cursor-col-resize justify-center border-r bg-inherit',
                 dragging
-                    ? 'border-primary-400-600 block'
-                    : 'group-hover:border-surface-300-700 border-transparent'
+                    ? '!border-primary-400-600'
+                    : 'group-hover:!border-surface-300-700 border-transparent'
             ]}
             use:resize={{ resized: onResize, dragging: onDragging }}
             onmouseenter={onHoverStart}

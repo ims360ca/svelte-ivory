@@ -4,7 +4,6 @@ const DEFAULT_WIDTH = 250;
 const MINIMAL_WIDTH_MULTIPLIER = 0.5;
 
 export interface ColumnConfig {
-    label?: string;
     id: string;
     width?: number;
     minWidth?: number;
@@ -14,16 +13,14 @@ export interface ColumnConfig {
 
 export class Column {
     id = $state('');
+    header = $state<Snippet | string>('');
 
     // resizing
-    width = $state(DEFAULT_WIDTH);
+    width = $state<number>(0);
     private minimalWidth = $state(DEFAULT_WIDTH);
     hovering = $state(false);
     resizable = $state(false);
     dragging = $state(false);
-
-    // head ui
-    header = $state<Snippet | string>('');
 
     constructor(conf: ColumnConfig) {
         this.updateConfig(conf);
@@ -40,7 +37,7 @@ export class Column {
         } else {
             this.minimalWidth = (conf.width ?? DEFAULT_WIDTH) * MINIMAL_WIDTH_MULTIPLIER;
         }
-        if (typeof conf.width !== 'undefined') {
+        if (typeof conf.width !== 'undefined' && !this.width) {
             this.width = conf.width;
         }
         this.header = conf.header;
