@@ -116,7 +116,7 @@
         </Column>
         <Column id="email">
             {#snippet header()}
-                <div class="flex flex-row items-center gap-2">
+                <div class="flex grow flex-row items-center gap-1 overflow-hidden">
                     <Mail size={20} />
                     <p>Email</p>
                 </div>

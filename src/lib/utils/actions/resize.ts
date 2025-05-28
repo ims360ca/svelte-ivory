@@ -30,6 +30,6 @@ export const resize: Action<
     return {
         destroy() {
             node.removeEventListener('pointerdown', onResizeStart);
-        },
+        }
     };
 };

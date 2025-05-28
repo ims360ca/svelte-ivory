@@ -20,7 +20,7 @@ interface TreeRow<T> {
     id: string;
 }
 
-export class Table<T extends TableRow<T>> {
+export class TableController<T extends TableRow<T>> {
     columns = $state<Column[]>([]);
     data = $state<T[]>([]);
     expanded: Set<string> = new SvelteSet<string>();

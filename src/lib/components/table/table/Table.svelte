@@ -7,7 +7,7 @@
     import Column from './Column.svelte';
     import ColumnHead from './ColumnHead.svelte';
     import Row from './Row.svelte';
-    import { Table, type TablePlugin, type TableRow } from './table.svelte';
+    import { TableController, type TablePlugin, type TableRow } from './table.svelte';
     import VirtualList from './VirtualList.svelte';
 
     export interface TableProps<T extends { id: string }> {
@@ -20,15 +20,15 @@
 
     const TABLE_CONTEXT = {};
     function setTableContext<T extends { id: string; children?: T[] | undefined }>(
-        table: Table<T>
+        table: TableController<T>
     ) {
         setContext(TABLE_CONTEXT, table);
     }
 
     export function getTableContext<
         T extends { id: string; children?: T[] | undefined }
-    >(): Table<T> {
-        return getContext<Table<T>>(TABLE_CONTEXT);
+    >(): TableController<T> {
+        return getContext<TableController<T>>(TABLE_CONTEXT);
     }
 </script>
 
@@ -41,6 +41,7 @@
         rowClass?: ClassValue;
         headerClass?: ClassValue;
         plugins?: TablePlugin<TI>[];
+        controller?: TableController<TI>;
     }
 
     let {
@@ -53,10 +54,9 @@
         rowHeight = 64,
         onclick,
         href,
-        plugins = []
+        plugins = [],
+        controller: table = new TableController()
     }: Props<T> = $props();
-
-    let table: Table<T> = new Table();
 
     $effect(() => {
         table.refresh({
@@ -90,7 +90,7 @@
                         {@render column.header()}
                     {:else}
                         <div
-                            class="text-surface-600-400 flex grow flex-row items-center justify-start gap-4 py-2 text-start font-bold select-none"
+                            class="flex grow flex-row items-center justify-start gap-4 py-2 text-start select-none"
                         >
                             {column.header}
                         </div>

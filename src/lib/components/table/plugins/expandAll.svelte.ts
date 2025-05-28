@@ -21,9 +21,9 @@ export function expandAllPlugin<T extends TableRow<T>>(
 
     const middleware: TablePlugin<T> = (state) => {
         if (initialized || !config.enabled) return state;
+        initialized = true;
         const allIds = getAllIds(...state.data);
         const newExpanded = new SvelteSet(allIds);
-        initialized = true;
         return {
             data: state.data,
             expanded: newExpanded

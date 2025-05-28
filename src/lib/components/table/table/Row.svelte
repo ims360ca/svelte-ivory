@@ -1,4 +1,9 @@
 <script lang="ts" module>
+    import clsx from 'clsx';
+    import { type Snippet } from 'svelte';
+    import type { ClassValue } from 'svelte/elements';
+    import { twMerge } from 'tailwind-merge';
+
     let defaultClasses = $state<ClassValue>();
 
     export function setClasses(c: ClassValue) {
@@ -7,11 +12,6 @@
 </script>
 
 <script lang="ts">
-    import clsx from 'clsx';
-    import { type Snippet } from 'svelte';
-    import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
-
     interface Props {
         class?: ClassValue;
         onclick?: () => void;

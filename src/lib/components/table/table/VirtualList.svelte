@@ -58,7 +58,11 @@
     });
 </script>
 
-<div class={twMerge(clsx(['relative flex grow flex-col overflow-hidden border-inherit', clazz]))}>
+<div
+    class={twMerge(
+        clsx(['scroll relative flex grow flex-col overflow-hidden border-inherit', clazz])
+    )}
+>
     {#if header}
         <div class="h-fit w-full border-inherit">
             <div
@@ -71,7 +75,7 @@
         </div>
     {/if}
     <div
-        class="flex !min-w-full grow overflow-auto"
+        class="flex !min-w-full grow overflow-auto [scrollbar-gutter:stable]"
         bind:this={viewport}
         bind:offsetHeight={viewport_height}
         {onscroll}

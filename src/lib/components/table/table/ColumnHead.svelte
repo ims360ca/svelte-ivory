@@ -1,6 +1,6 @@
 <script lang="ts" module>
-    import { resize } from '$lib/utils/actions';
     import { getContext, setContext, type Snippet } from 'svelte';
+    import { resize } from '../../../utils/actions';
     import type { Column } from './column.svelte';
 
     const CONTEXT = {};
@@ -55,7 +55,7 @@
         <button
             type="button"
             class={[
-                'ml-auto flex h-full w-4 shrink-0 cursor-col-resize justify-center border-r bg-inherit',
+                'ml-auto flex h-full w-4 shrink-0 translate-x-px cursor-col-resize justify-center border-r bg-inherit',
                 dragging
                     ? '!border-primary-400-600'
                     : 'group-hover:!border-surface-300-700 border-transparent'

@@ -16,13 +16,14 @@ export class Column {
     header = $state<Snippet | string>('');
 
     // resizing
-    width = $state<number>(0);
+    width = $state<number>();
     private minimalWidth = $state(DEFAULT_WIDTH);
     hovering = $state(false);
     resizable = $state(false);
     dragging = $state(false);
 
     constructor(conf: ColumnConfig) {
+        this.id = conf.id;
         this.updateConfig(conf);
 
         $effect(() => {
@@ -31,17 +32,20 @@ export class Column {
     }
 
     updateConfig(conf: ColumnConfig) {
-        this.id = conf.id;
         if (conf.minWidth !== undefined) {
             this.minimalWidth = conf.minWidth;
         } else {
             this.minimalWidth = (conf.width ?? DEFAULT_WIDTH) * MINIMAL_WIDTH_MULTIPLIER;
         }
-        if (typeof conf.width !== 'undefined' && !this.width) {
-            this.width = conf.width;
+        if (this.width === undefined) {
+            const newWidth = conf.width ?? DEFAULT_WIDTH;
+            this.width = newWidth;
         }
-        this.header = conf.header;
-        this.resizable = conf.resizable ?? false;
+        if (!this.header) this.header = conf.header;
+        const newResizable = conf.resizable ?? false;
+        if (newResizable !== this.resizable) {
+            this.resizable = newResizable;
+        }
     }
 
     resize(newWidth?: number) {
