@@ -11,6 +11,8 @@
         "strict": true,
         "allowArbitraryExtensions": true,
         "moduleResolution": "bundler",
-        "module": "Preserve"
+        "module": "Preserve",
+        "declaration": true,
+        "declarationMap": true
     }
 }

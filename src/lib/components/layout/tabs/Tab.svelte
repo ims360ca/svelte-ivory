@@ -8,7 +8,7 @@
     import { getTabContext } from './Tabs.svelte';
 
     type Props = {
-        class?: (selected: boolean) => ClassValue;
+        class?: ClassValue | ((selected: boolean) => ClassValue);
         id?: string | undefined;
         /**
          * If this is set the element will be a link.
@@ -58,8 +58,8 @@
     this={href ? 'a' : 'button'}
     class={twMerge(
         clsx(
-            'btn flex h-fit w-fit items-center justify-center px-0 text-xl font-bold',
-            clazz(selected)
+            'btn flex h-fit w-fit shrink-0 items-center justify-center px-0 text-xl font-bold select-none',
+            typeof clazz === 'function' ? clazz(selected) : clazz
         )
     )}
     onclick={href

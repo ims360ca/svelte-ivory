@@ -21,8 +21,10 @@
     this={onclick ? 'button' : 'div'}
     class={twMerge(
         clsx(
-            'flex h-5 w-9 items-center rounded-full border p-0.5',
-            value ? 'bg-primary-500 border-primary-500' : 'bg-surface-500/30 border-surface-500/60',
+            'group flex h-5 w-9 items-center rounded-full border p-0.5 transition-colors duration-100',
+            value
+                ? 'bg-primary-500 border-primary-500'
+                : 'bg-surface-500/30 border-surface-500/60 hover:border-surface-500/80',
             clazz
         )
     )}
@@ -36,7 +38,7 @@
         <div
             class={[
                 'relative flex aspect-square h-full items-center justify-center rounded-full transition-all',
-                value ? 'bg-surface-50' : 'bg-surface-600'
+                value ? 'bg-surface-50' : 'bg-surface-600-400 group-hover:bg-surface-700-300'
             ]}
             style={value ? `left: calc(100% - ${thumbWidth}px);` : 'left: 0;'}
             bind:clientWidth={thumbWidth}

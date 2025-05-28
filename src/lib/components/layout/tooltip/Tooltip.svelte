@@ -42,27 +42,28 @@
         onclick,
         href,
         timeout = 500,
-        tooltipClass
+        tooltipClass,
+        placement = 'top'
     }: Props = $props();
 
     let target = $state<HTMLElement>();
 
     let open = $state(false);
 
-    let showTimeout: number;
-    function onpointerenter() {
-        clearTimeout(timeout);
+    let currentTimeout: number;
+    function onmouseenter() {
+        clearTimeout(currentTimeout);
         if (timeout === 0) {
             open = true;
         } else {
-            showTimeout = setTimeout(() => {
+            currentTimeout = setTimeout(() => {
                 open = true;
             }, timeout) as unknown as number;
         }
     }
 
-    function onpointerleave() {
-        clearTimeout(showTimeout);
+    function onmouseleave() {
+        clearTimeout(currentTimeout);
         open = false;
     }
 </script>
@@ -80,8 +81,8 @@
     type={onclick ? 'button' : undefined}
     class={clazz}
     bind:this={target}
-    {onpointerenter}
-    {onpointerleave}
+    {onmouseenter}
+    {onmouseleave}
     {style}
     {onclick}
 >
@@ -93,7 +94,7 @@
         <Popover
             bind:b_open={open}
             {target}
-            placement="top"
+            {placement}
             class={twMerge(
                 clsx(
                     'bg-surface-50-950 max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',

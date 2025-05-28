@@ -13,3 +13,10 @@ Include this line in your `app.css` file, so the TW classes used in the lib are 
 ```
 
 _You may need to adjust the path if your `app.css` is not located in `/src`_
+
+## Roadmap
+
+- [x] Basic components (checkbox, toggle)
+- [x] Basic layout components (modal, tabs, popover, etc.)
+- [ ] Table
+- [ ] Input components
