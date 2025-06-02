@@ -1,8 +1,8 @@
 <script lang="ts">
     import Toggle from '$lib/components/basic/toggle/Toggle.svelte';
+    import Column from '$lib/components/table/Column.svelte';
     import { searchPlugin } from '$lib/components/table/plugins/search.svelte';
-    import Column from '$lib/components/table/table/Column.svelte';
-    import Table from '$lib/components/table/table/Table.svelte';
+    import Table from '$lib/components/table/Table.svelte';
     import { Toasts } from '$lib/components/toast';
     import { pseudoRandomId } from '$lib/utils/functions';
     import { Mail } from '@lucide/svelte';

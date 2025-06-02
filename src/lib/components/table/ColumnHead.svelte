@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import { getContext, setContext, type Snippet } from 'svelte';
-    import { resize } from '../../../utils/actions';
+    import { resize } from '../../utils/actions';
     import type { Column } from './column.svelte';
 
     const CONTEXT = {};

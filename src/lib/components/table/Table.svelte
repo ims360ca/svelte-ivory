@@ -10,39 +10,38 @@
     import { TableController, type TablePlugin, type TableRow } from './table.svelte';
     import VirtualList from './VirtualList.svelte';
 
-    export interface TableProps<T extends { id: string }> {
+    export interface TableProps<T extends TableRow<T>> {
         class?: ClassValue;
         data: T[];
         onclick?: (row: T) => void;
         href?: (row: T) => string | undefined;
         rowHeight?: number;
+        /** Renders the rows */
+        children: Snippet<[{ row: T; nestingLevel?: number; index: number }]>;
+        /** Add columns in front of the tree-indicator */
+        firstColumn?: Snippet<[{ row: T }]>;
+        rowClass?: ClassValue;
+        headerClass?: ClassValue;
+        plugins?: TablePlugin<T>[];
+        controller?: TableController<T>;
+        /**
+         * **Bindable**
+         */
+        b_scrollTop?: number;
     }
 
     const TABLE_CONTEXT = {};
-    function setTableContext<T extends { id: string; children?: T[] | undefined }>(
-        table: TableController<T>
-    ) {
+    function setTableContext<T extends TableRow<T>>(table: TableController<T>) {
         setContext(TABLE_CONTEXT, table);
     }
 
-    export function getTableContext<
-        T extends { id: string; children?: T[] | undefined }
-    >(): TableController<T> {
+    export function getTableContext<T extends TableRow<T>>(): TableController<T> {
         return getContext<TableController<T>>(TABLE_CONTEXT);
     }
 </script>
 
 <script lang="ts" generics="T extends TableRow<T>">
-    interface Props<TI extends { id: string }> extends TableProps<TI> {
-        /** Renders the rows */
-        children: Snippet<[{ row: TI; nestingLevel?: number; index: number }]>;
-        /** Add columns in front of the tree-indicator */
-        firstColumn?: Snippet<[{ row: TI }]>;
-        rowClass?: ClassValue;
-        headerClass?: ClassValue;
-        plugins?: TablePlugin<TI>[];
-        controller?: TableController<TI>;
-    }
+    interface Props<TI extends { id: string }> extends TableProps<TI> {}
 
     let {
         class: clazz,
