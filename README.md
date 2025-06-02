@@ -18,5 +18,5 @@ _You may need to adjust the path if your `app.css` is not located in `/src`_
 
 - [x] Basic components (checkbox, toggle)
 - [x] Basic layout components (modal, tabs, popover, etc.)
-- [ ] Table
+- [x] Table
 - [ ] Input components
