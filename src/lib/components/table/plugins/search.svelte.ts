@@ -1,5 +1,5 @@
 import { SvelteSet } from 'svelte/reactivity';
-import type { TablePlugin, TableRow } from '../table/table.svelte';
+import type { TablePlugin, TableRow } from '../table.svelte';
 
 interface SearchConfig<T extends TableRow<T>> {
     search: string;
