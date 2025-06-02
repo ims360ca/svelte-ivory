@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { fn } from '@vitest/spy';
 import { describe, expect, it } from 'vitest';
-import { Checkbox } from '../index';
+import { Checkbox } from '../index.ts';
 
 const testId = 'checkbox';
 

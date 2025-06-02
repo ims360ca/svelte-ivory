@@ -9,16 +9,16 @@
     export function setClasses(c: ClassValue) {
         defaultClasses = c;
     }
-</script>
 
-<script lang="ts">
-    interface Props {
+    export interface Props {
         class?: ClassValue;
         onclick?: () => void;
         href?: string;
         children: Snippet;
     }
+</script>
 
+<script lang="ts">
     let {
         class: clazz = 'hover:bg-surface-950-50/10 transition-colors',
         onclick,

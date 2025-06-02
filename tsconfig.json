@@ -13,6 +13,9 @@
         "moduleResolution": "bundler",
         "module": "Preserve",
         "declaration": true,
-        "declarationMap": true
+        "declarationMap": true,
+        "target": "es2022",
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true
     }
 }
