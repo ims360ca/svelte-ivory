@@ -1,5 +1,5 @@
 import { SvelteSet } from 'svelte/reactivity';
-import { getAllIds, type TablePlugin, type TableRow } from '../controller.svelte.ts';
+import { getAllIds, type TablePlugin, type TableRow } from '../controller.svelte';
 
 interface ExpandAllConfig {
     enabled: boolean;
