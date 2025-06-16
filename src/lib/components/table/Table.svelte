@@ -4,7 +4,7 @@
     import { getContext, setContext, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
-    import Column from './Column.svelte';
+    import { Column } from '.';
     import ColumnHead from './ColumnHead.svelte';
     import { TableController, type TablePlugin, type TableRow } from './controller.svelte';
     import Row from './Row.svelte';

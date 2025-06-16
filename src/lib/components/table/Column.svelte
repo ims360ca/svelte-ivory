@@ -3,7 +3,7 @@
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
-    import type { ColumnConfig } from './column.svelte';
+    import type { ColumnConfig } from './columnController.svelte';
     import { getTableContext } from './Table.svelte';
 
     let defaultClasses = $state<ClassValue>();

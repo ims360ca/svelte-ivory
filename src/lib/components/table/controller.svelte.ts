@@ -1,5 +1,5 @@
 import { SvelteSet } from 'svelte/reactivity';
-import { Column, type ColumnConfig } from './column.svelte';
+import { Column, type ColumnConfig } from './columnController.svelte';
 
 export type TableRow<T> = { id: string; children?: T[] };
 export type TablePlugin<T extends TableRow<T>> = (state: TableState<T>) => TableState<T>;
