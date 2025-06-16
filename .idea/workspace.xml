@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4377f352-2efe-4e65-9d84-a6c75a341d7d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/lib/components/layout/tabs/Tab.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/layout/tabs/Tab.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/table/Column.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/table/Column.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/table/Row.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/table/Row.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/table/Table.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/table/Table.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/table/VirtualList.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/table/VirtualList.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/components/table/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/table/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/table/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/table/+page.svelte" afterDir="false" />
-    </list>
+    <list default="true" id="4377f352-2efe-4e65-9d84-a6c75a341d7d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,9 +10,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2xOUWFHIK6R0C3l918fciXWbwfO" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -30,7 +22,8 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "table",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/felix/Documents/repos/ims360",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
@@ -54,6 +47,7 @@
       <option name="presentableId" value="Default" />
       <updated>1747808643139</updated>
       <workItem from="1747808644739" duration="306000" />
+      <workItem from="1749113994629" duration="45000" />
     </task>
     <servers />
   </component>

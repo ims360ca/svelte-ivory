@@ -6,8 +6,8 @@
     import { twMerge } from 'tailwind-merge';
     import Column from './Column.svelte';
     import ColumnHead from './ColumnHead.svelte';
+    import { TableController, type TablePlugin, type TableRow } from './controller.svelte.ts';
     import Row from './Row.svelte';
-    import { TableController, type TablePlugin, type TableRow } from './table.svelte';
     import VirtualList from './VirtualList.svelte';
 
     export interface TableProps<T extends TableRow<T>> {

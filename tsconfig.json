@@ -1,21 +1,22 @@
 {
-    "extends": "./.svelte-kit/tsconfig.json",
     "compilerOptions": {
+        "allowArbitraryExtensions": true,
+        "allowImportingTsExtensions": true,
         "allowJs": true,
         "checkJs": true,
+        "declaration": true,
+        "declarationMap": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "module": "Preserve",
+        "moduleResolution": "bundler",
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "allowArbitraryExtensions": true,
-        "moduleResolution": "bundler",
-        "module": "Preserve",
-        "declaration": true,
-        "declarationMap": true,
         "target": "es2022",
-        "verbatimModuleSyntax": true,
-        "isolatedModules": true
-    }
+        "verbatimModuleSyntax": true
+    },
+    "extends": "./.svelte-kit/tsconfig.json"
 }
