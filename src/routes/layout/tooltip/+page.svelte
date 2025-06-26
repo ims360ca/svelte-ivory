@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { Toggle } from '$lib/components/basic';
     import { Tooltip } from '$lib/components/layout';
     import { Toasts } from '$lib/components/toast';
     import { Bath } from '@lucide/svelte';
@@ -21,5 +22,7 @@
     {#snippet tooltip()}
         <Bath />
         <p class="font-bold">This is a tooltip</p>
+        <Toggle value />
+        <Toggle value class="h-8 w-10" />
     {/snippet}
 </Tooltip>
