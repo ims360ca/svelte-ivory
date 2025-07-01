@@ -47,6 +47,3 @@
         </div>
     </div>
 </svelte:element>
-
-<style lang="postcss">
-</style>
