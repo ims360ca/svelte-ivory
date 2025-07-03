@@ -30,7 +30,7 @@ export class TableController<T extends TableRow<T>> {
 
     refresh(conf: TableConfig<T>) {
         let intitalState: TableState<T> = {
-            data: structuredClone(conf.data),
+            data: [...(conf.data ?? [])],
             expanded: this.expanded
         };
 
