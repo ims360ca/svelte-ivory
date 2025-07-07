@@ -1,4 +1,5 @@
 <script lang="ts" module>
+    import type { IvoryComponent } from '$lib/types';
     import clsx from 'clsx';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
@@ -6,16 +7,12 @@
     import Popover, { type PopoverPlacement } from '../popover/Popover.svelte';
     import Portal from '../portal/Portal.svelte';
 
-    export interface Props {
+    export interface Props extends IvoryComponent<HTMLElement> {
         children?: Snippet;
         /** The content of the tooltip */
         tooltip: string | Snippet;
-        /** The class of the element that triggers the tooltip */
-        class?: ClassValue;
         /** The class of the tooltip itself */
         tooltipClass?: ClassValue;
-        style?: string;
-        onclick?: (e: Event) => void;
         /** If the href is set, the resulting element will be a link to the href */
         href?: string;
         /**
@@ -37,13 +34,11 @@
     let {
         children,
         tooltip,
-        class: clazz,
-        style,
-        onclick,
         href,
         timeout = 500,
         tooltipClass,
-        placement = 'top'
+        placement = 'top',
+        ...rest
     }: Props = $props();
 
     let target = $state<HTMLElement>();
@@ -77,14 +72,12 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
     this={href ? 'a' : onclick ? 'button' : 'div'}
-    {href}
     type={onclick ? 'button' : undefined}
-    class={clazz}
+    {...rest}
+    {href}
     bind:this={target}
     {onmouseenter}
     {onmouseleave}
-    {style}
-    {onclick}
 >
     {@render children?.()}
 </svelte:element>

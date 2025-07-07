@@ -5,4 +5,4 @@ export { default as Modal, type ModalProps } from './modal/Modal.svelte';
 export { default as Popover } from './popover/Popover.svelte';
 export { default as Portal, setConfig, type PortalConfig } from './portal/Portal.svelte';
 export { default as Tabs } from './tabs/index';
-export { default as Tooltip } from './tooltip/Tooltip.svelte';
+export { default as Tooltip, type Props as TooltipProps } from './tooltip/Tooltip.svelte';
