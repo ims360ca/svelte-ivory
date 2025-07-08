@@ -1,5 +1,6 @@
 <script lang="ts" module>
     import { browser } from '$app/environment';
+    import type { IvoryComponent } from '$lib/types';
     import {
         autoPlacement,
         autoUpdate,
@@ -9,21 +10,15 @@
         type ComputePositionConfig
     } from '@floating-ui/dom';
     import clsx from 'clsx';
-    import type { Snippet } from 'svelte';
-    import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
     import { clickOutside } from '../../../utils/actions/clickOutside';
 
     /** Possible placements for the popover */
     export type PopoverPlacement = ComputePositionConfig['placement'];
-</script>
 
-<script lang="ts">
-    type Props = {
-        class?: ClassValue;
+    export interface PopoverProps extends IvoryComponent<HTMLDivElement> {
         /** Whether the popover is open or not */
         b_open: boolean;
-        style?: string;
         /** The element the popover will be positioned relative to */
         target: Element | undefined;
         /**
@@ -38,15 +33,16 @@
         onClickOutside?: (e: MouseEvent) => void;
         /** If set to `true`, the nested component will not be unmounted when the popover is closed */
         keepMounted?: boolean;
-        children: Snippet;
         /**
          * Whether to place the popover automatically
          *
          * [Further reading](https://floating-ui.com/docs/autoPlacement)
          */
         autoplacement?: boolean;
-    };
+    }
+</script>
 
+<script lang="ts">
     let {
         class: clazz,
         b_open = $bindable(false),
@@ -58,8 +54,9 @@
         },
         keepMounted = false,
         children,
-        autoplacement
-    }: Props = $props();
+        autoplacement,
+        ...rest
+    }: PopoverProps = $props();
 
     let style: string = $state('');
     let popover: HTMLDivElement | undefined = $state();
@@ -102,7 +99,8 @@
         style={style + ' ' + externalStyle}
         bind:this={popover}
         use:clickOutside={{ callback: onClickOutside, target }}
+        {...rest}
     >
-        {@render children()}
+        {@render children?.()}
     </div>
 {/if}

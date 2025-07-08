@@ -1,17 +1,7 @@
-<!-- 
-    @component
-    It's a checkbox 
--->
+<script lang="ts" module>
+    import type { IvoryComponent } from '$lib/types';
 
-<script lang="ts">
-    import { type Icon as LucideIcon, Minus, icons } from '@lucide/svelte';
-    import clsx from 'clsx';
-    import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
-
-    const Check = $derived(icons.Check);
-
-    type Props = {
+    export interface CheckboxProps extends IvoryComponent<HTMLElement> {
         class?: ClassValue;
         /** `checked` has prioriy over `partial` */
         checked?: boolean | null;
@@ -23,7 +13,19 @@
         onclick?: () => void;
         /** data-testid */
         testId?: string;
-    };
+    }
+</script>
+
+<!-- 
+    @component
+    It's a checkbox 
+-->
+
+<script lang="ts">
+    import { Check, type Icon as LucideIcon, Minus } from '@lucide/svelte';
+    import clsx from 'clsx';
+    import type { ClassValue } from 'svelte/elements';
+    import { twMerge } from 'tailwind-merge';
 
     let {
         class: clazz,
@@ -32,8 +34,8 @@
         id,
         disabled = false,
         onclick,
-        testId
-    }: Props = $props();
+        ...rest
+    }: CheckboxProps = $props();
 
     const {
         icon: Icon,
@@ -62,6 +64,7 @@
     {id}
     {disabled}
     {style}
+    {onclick}
     class={twMerge(
         clsx(
             'box-border flex h-5 w-5 items-center justify-center overflow-hidden rounded border-2 transition-colors',
@@ -70,8 +73,7 @@
             clazz
         )
     )}
-    {onclick}
-    data-testid={testId}
+    {...rest}
 >
     {#if Icon}
         <Icon class="h-full w-full" size={16} strokeWidth={3} />

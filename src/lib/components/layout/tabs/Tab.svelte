@@ -1,5 +1,6 @@
-<script lang="ts">
+<script lang="ts" module>
     import { page } from '$app/state';
+    import type { IvoryComponent } from '$lib/types';
     import { pseudoRandomId } from '$lib/utils/functions/index';
     import clsx from 'clsx';
     import { onMount, type Snippet } from 'svelte';
@@ -7,7 +8,7 @@
     import { twMerge } from 'tailwind-merge';
     import { getTabContext } from './Tabs.svelte';
 
-    type Props = {
+    export interface TabProps extends Omit<IvoryComponent<HTMLElement>, 'children'> {
         class?: ClassValue | ((selected: boolean) => ClassValue);
         id?: string | undefined;
         /**
@@ -17,19 +18,19 @@
          */
         href?: string | undefined;
         children: Snippet<[{ selected: boolean }]>;
-        testId?: string;
         /** If `href` is set, this can be used to highlight an active tab */
         active?: boolean;
-    };
+    }
+</script>
 
+<script lang="ts">
     let {
         class: clazz = (selected: boolean) => [selected && 'text-primary-500 underline'],
         id,
         href,
         children,
-        testId,
         active
-    }: Props = $props();
+    }: TabProps = $props();
 
     const tab = pseudoRandomId('tab-');
     const tabs = getTabContext();
@@ -69,7 +70,6 @@
           }}
     type={href ? undefined : 'button'}
     {href}
-    data-testid={testId}
     role="tab"
     tabindex="0"
     aria-selected={selected}

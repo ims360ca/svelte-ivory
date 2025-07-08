@@ -9,7 +9,10 @@ const testId = 'checkbox';
 
 describe('Basic/Checkbox', () => {
     it('renders the checked icon', async () => {
-        render(Checkbox, { testId, checked: true });
+        render(Checkbox, {
+            checked: true,
+            'data-testid': testId
+        });
 
         const checkbox = screen.getByTestId(testId);
         expect(checkbox).toBeVisible();
@@ -29,7 +32,7 @@ describe('Basic/Checkbox', () => {
 
     it("doesn't fire click event when disabled", async () => {
         const callback = fn();
-        render(Checkbox, { testId, onclick: callback, disabled: true });
+        render(Checkbox, { 'data-testid': testId, onclick: callback, disabled: true });
 
         const checkbox = screen.getByTestId(testId);
         expect(checkbox).toBeVisible();

@@ -1,3 +1,11 @@
+<script lang="ts" module>
+    export interface Props {
+        class?: ClassValue;
+        children?: Snippet<[toast: ToastSettings & { close: () => void }]>;
+        duration?: number;
+    }
+</script>
+
 <!-- 
 	@component
 	Renders the toasts that have been triggered by the `Toasts` store.  
@@ -12,12 +20,7 @@
     import { fly, scale } from 'svelte/transition';
     import { Toasts, type ToastSettings } from './toasts.svelte';
 
-    type Props = {
-        class?: ClassValue;
-        children?: Snippet<[toast: ToastSettings & { close: () => void }]>;
-    };
-
-    let { class: clazz = 'px-2 pb-2', children }: Props = $props();
+    let { class: clazz = 'px-2 pb-2', children, duration = 200 }: Props = $props();
 
     function getIcon(
         variant: 'info' | 'success' | 'warning' | 'error',
@@ -51,9 +54,9 @@
 
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
-                in:fly={{ y: '-100%', duration: 300 }}
-                out:scale={{ duration: 300 }}
-                animate:flip={{ duration: 300 }}
+                in:fly={{ y: '-100%', duration }}
+                out:scale={{ duration }}
+                animate:flip={{ duration }}
                 onpointerenter={() => {
                     Toasts.freeze(toast.id);
                 }}
@@ -71,10 +74,14 @@
                     <div
                         class={[
                             'bg-opacity-85 flex flex-row items-center gap-4 rounded px-4 py-2 shadow-lg group-last:rounded-t-none',
-                            toast.variant === 'info' && 'preset-filled-primary-500',
-                            toast.variant === 'success' && 'preset-filled-success-500',
-                            toast.variant === 'warning' && 'preset-filled-warning-500',
-                            toast.variant === 'error' && 'preset-filled-error-500'
+                            toast.variant === 'info' &&
+                                'bg-primary-200-800 text-primary-contrast-50-950',
+                            toast.variant === 'success' &&
+                                'bg-success-200-800 text-success-contrast-50-950',
+                            toast.variant === 'warning' &&
+                                'bg-warning-200-800 text-warning-contrast-50-950',
+                            toast.variant === 'error' &&
+                                'bg-error-200-800 text-error-contrast-50-950'
                         ]}
                     >
                         <VariantIcon />
@@ -87,9 +94,9 @@
                                 onclick={() => {
                                     Toasts.close(toast.id);
                                 }}
-                                class="transition-transform hover:rotate-90"
+                                class="group"
                             >
-                                <X />
+                                <X size={20} class="stroke-1 transition-all group-hover:stroke-2" />
                             </button>
                         {/if}
                     </div>

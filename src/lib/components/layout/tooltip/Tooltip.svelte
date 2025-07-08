@@ -67,7 +67,6 @@
     @component
     Shows additional information when hovering over an element.
 -->
-
 <!-- Ignoring this error is fine since it's a false positive -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element

@@ -1,2 +1,2 @@
-export { default as ToastUI } from './Toast.svelte';
-export { Toasts } from './toasts.svelte';
+export { default as ToastUI, type Props as ToastUIProps } from './Toast.svelte';
+export { Toasts, type ToastSettings } from './toasts.svelte';

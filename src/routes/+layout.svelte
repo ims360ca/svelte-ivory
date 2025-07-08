@@ -20,6 +20,7 @@
         <NavLink href="/layout/tooltip">Tooltip</NavLink>
         <NavLink href="/drawer">Drawer</NavLink>
         <NavLink href="/table">Table</NavLink>
+        <NavLink href="/toast">Toast</NavLink>
     </NavBar>
     <main class="flex h-full grow flex-col gap-4 overflow-hidden p-4">
         {@render children()}

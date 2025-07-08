@@ -15,8 +15,10 @@ describe('Layout/Modal', () => {
     it('renders', async () => {
         render(ModalTest, {
             open: true,
-            testId,
-            children
+            'data-testid': testId,
+            children,
+            // ignored
+            b_open: false
         });
         const modal = screen.getByTestId(testId);
         expect(modal).toBeVisible();

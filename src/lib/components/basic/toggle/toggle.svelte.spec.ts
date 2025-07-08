@@ -9,7 +9,7 @@ const testId = 'toggle';
 describe('Basic/Toggle', () => {
     it('fires click event when clicked', async () => {
         const callback = fn();
-        render(Toggle, { testId, onclick: callback });
+        render(Toggle, { 'data-testid': testId, onclick: callback });
 
         const toggle = screen.getByTestId(testId);
         expect(toggle).toBeVisible();

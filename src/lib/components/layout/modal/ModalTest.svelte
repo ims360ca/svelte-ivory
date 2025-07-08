@@ -1,16 +1,9 @@
 <script lang="ts">
-    import type { Snippet } from 'svelte';
-    import Modal from './Modal.svelte';
+    import Modal, { type ModalProps } from './Modal.svelte';
 
-    interface Props {
-        open: boolean;
-        testId: string;
-        children: Snippet;
-    }
-
-    let { open, ...props }: Props = $props();
+    let { open, ...props }: ModalProps & { open: boolean } = $props();
 
     let b_open = $state(open);
 </script>
 
-<Modal bind:b_open {...props} />
+<Modal {...props} bind:b_open />

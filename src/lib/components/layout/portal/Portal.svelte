@@ -1,4 +1,13 @@
 <script lang="ts" module>
+    import type { IvoryComponent } from '$lib/types';
+    import type { Snippet } from 'svelte';
+    import { portal } from '../../../utils/actions/index';
+
+    export interface PortalProps extends IvoryComponent<HTMLDivElement> {
+        children: Snippet;
+        target?: string | HTMLElement;
+    }
+
     export interface PortalConfig {
         defaultTarget: string;
     }
@@ -14,15 +23,7 @@
 </script>
 
 <script lang="ts">
-    import type { Snippet } from 'svelte';
-    import { portal } from '../../../utils/actions/index';
-
-    interface Props {
-        children: Snippet;
-        target?: string | HTMLElement;
-    }
-
-    let { children, target }: Props = $props();
+    let { children, target }: PortalProps = $props();
 </script>
 
 <!-- 

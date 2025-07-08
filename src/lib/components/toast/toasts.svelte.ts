@@ -1,18 +1,18 @@
 import type { Icon } from '@lucide/svelte';
 
-export type ToastSettings = {
+export interface ToastSettings {
     message: string;
     autohide?: boolean;
     timeout?: number;
     hideDismiss?: boolean;
     icon?: typeof Icon;
     variant: 'info' | 'success' | 'warning' | 'error';
-};
+}
 
-type Toast = ToastSettings & {
+interface Toast extends ToastSettings {
     id: string;
     timeoutId?: ReturnType<typeof setTimeout>;
-};
+}
 
 const TOAST_DEFAULTS: ToastSettings = {
     message: 'Missing Toast Message',

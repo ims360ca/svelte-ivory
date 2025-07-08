@@ -1,18 +1,19 @@
-<script lang="ts">
+<script lang="ts" module>
+    import type { IvoryComponent } from '$lib/types';
     import clsx from 'clsx';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
 
-    type Props = {
+    export interface ToggleProps extends IvoryComponent<HTMLElement> {
         value?: boolean;
         class?: ClassValue;
-        onclick?: () => void;
         children?: Snippet;
-        testId?: string;
-    };
+    }
+</script>
 
-    let { value, class: clazz, onclick, children, testId }: Props = $props();
+<script lang="ts">
+    let { value, class: clazz, children, ...rest }: ToggleProps = $props();
 </script>
 
 <svelte:element
@@ -26,8 +27,7 @@
     )}
     type={onclick ? 'button' : undefined}
     role={onclick ? 'button' : undefined}
-    {onclick}
-    data-testid={testId}
+    {...rest}
 >
     <div
         class={[
