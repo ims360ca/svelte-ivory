@@ -22,7 +22,7 @@ describe('Basic/Checkbox', () => {
 
     it('fires click event when clicked', async () => {
         const callback = fn();
-        render(Checkbox, { testId, onclick: callback });
+        render(Checkbox, { 'data-testid': testId, onclick: callback });
 
         const checkbox = screen.getByTestId(testId);
         expect(checkbox).toBeVisible();
