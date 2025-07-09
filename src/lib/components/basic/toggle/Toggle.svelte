@@ -17,7 +17,7 @@
 </script>
 
 <svelte:element
-    this={onclick ? 'button' : 'div'}
+    this={rest.onclick ? 'button' : 'div'}
     class={twMerge(
         clsx(
             'group relative flex h-5 w-9 flex-row items-center rounded-full p-0.5 transition-colors duration-100',
@@ -25,8 +25,8 @@
             clazz
         )
     )}
-    type={onclick ? 'button' : undefined}
-    role={onclick ? 'button' : undefined}
+    type={rest.onclick ? 'button' : undefined}
+    role={rest.onclick ? 'button' : undefined}
     {...rest}
 >
     <div

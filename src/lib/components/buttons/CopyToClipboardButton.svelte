@@ -4,8 +4,6 @@
     import type { ClassValue } from 'svelte/elements';
     import { Toasts } from '../toast';
 
-    let lastCopied = $state<string>();
-
     export interface CopyToClipboardButtonProps extends IvoryComponent<HTMLButtonElement> {
         text: string;
         class?: ClassValue;
@@ -18,7 +16,6 @@
 
     async function copyText() {
         await navigator.clipboard.writeText(text);
-        lastCopied = text;
         if (toastMessage) {
             Toasts.trigger({
                 variant: 'success',

@@ -1,5 +1,5 @@
 import { SvelteSet } from 'svelte/reactivity';
-import type { TablePlugin, TableRow } from '../table.svelte';
+import type { TablePlugin, TableRow } from '../';
 
 interface SearchConfig<T extends TableRow<T>> {
     search: string;
@@ -56,8 +56,6 @@ export const search = <T extends TableRow<T>>(
             node.children?.some((c) => recursor(c, matches || childOfMatch)) ?? false;
 
         if (intermediateNode) {
-            console.log('intermediateNode', node);
-
             expanded.add(node.id);
         } else if (!childOfMatch) {
             hidden.add(node.id);
