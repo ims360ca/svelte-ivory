@@ -71,7 +71,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
     this={href ? 'a' : rest.onclick ? 'button' : 'div'}
-    type={onclick ? 'button' : undefined}
+    type={rest.onclick ? 'button' : undefined}
     {...rest}
     {href}
     bind:this={target}
