@@ -16,7 +16,7 @@
         href?: (row: T) => string | undefined;
         rowHeight?: number;
         /** Renders the rows */
-        children: Snippet<[{ row: T; nestingLevel?: number; index: number }]>;
+        children?: Snippet<[{ row: T; nestingLevel?: number; index: number }]>;
         /** Add columns in front of the tree-indicator */
         firstColumn?: Snippet<[{ row: T }]>;
         rowClass?: ClassValue;
