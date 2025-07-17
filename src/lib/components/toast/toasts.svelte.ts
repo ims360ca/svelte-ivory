@@ -1,3 +1,4 @@
+import { pseudoRandomId } from '$lib/utils/functions';
 import type { Icon } from '@lucide/svelte';
 
 export interface ToastSettings {
@@ -24,7 +25,7 @@ const TOAST_DEFAULTS: ToastSettings = {
 class ToastStore {
     toasts = $state<Toast[]>([]);
 
-    trigger(toast: ToastSettings, id = crypto.randomUUID() as string) {
+    trigger(toast: ToastSettings, id = pseudoRandomId('toast')) {
         const mergedToasts: Toast = { ...TOAST_DEFAULTS, ...toast, id };
 
         // start the autohide timeout

@@ -67,7 +67,7 @@
 
         for (let i = 0; i < 1_000; i++) {
             rows.push({
-                id: crypto.randomUUID(),
+                id: pseudoRandomId(),
                 name: pseudoRandomId('Name'),
                 age: Math.floor(Math.random() * 100),
                 email: pseudoRandomId('Email')

@@ -1,4 +1,5 @@
 <script lang="ts" module>
+    import { pseudoRandomId } from '$lib/utils/functions';
     import { ChevronRight } from '@lucide/svelte';
     import clsx from 'clsx';
     import { getContext, setContext, type Snippet } from 'svelte';
@@ -64,7 +65,7 @@
     });
 
     setTableContext(table);
-    const treeIndicatorId = crypto.randomUUID();
+    const treeIndicatorId = pseudoRandomId('tree-indicator-');
 </script>
 
 <VirtualList
