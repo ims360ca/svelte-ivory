@@ -52,16 +52,19 @@ export const search = <T extends TableRow<T>>(
     const recursor = (node: T, childOfMatch = false): boolean => {
         const matches = stringsMatch(node, search);
 
-        const intermediateNode =
-            node.children?.some((c) => recursor(c, matches || childOfMatch)) ?? false;
+        let intermediate = false;
+        for (const child of node.children || []) {
+            const childMatches = recursor(child, matches || childOfMatch);
+            if (childMatches && !intermediate) intermediate = true;
+        }
 
-        if (intermediateNode) {
+        if (intermediate) {
             expanded.add(node.id);
         } else if (!childOfMatch) {
             hidden.add(node.id);
         }
 
-        return matches || intermediateNode;
+        return matches || intermediate;
     };
 
     nodes.forEach((n) => recursor(n));
