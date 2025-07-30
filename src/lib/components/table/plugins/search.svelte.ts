@@ -23,14 +23,12 @@ export function searchPlugin<T extends TableRow<T>>(conf: SearchConfig<T>): Tabl
         if (!conf.search) return state;
 
         // ensure we store the state before the we started searching
-        if (conf.search && !prevSearch) {
-            expandedBeforeSearch = state.expanded;
-        }
+        if (conf.search && !prevSearch) expandedBeforeSearch = state.expanded;
 
         // figure out which nodes to expand and hide
         const { expanded, hidden } = search(state.data, conf.search, conf.matches);
-
         prevSearch = conf.search;
+
         return {
             data: state.data.filter((d) => !hidden.has(d.id)),
             expanded: new SvelteSet(expanded)
@@ -39,7 +37,7 @@ export function searchPlugin<T extends TableRow<T>>(conf: SearchConfig<T>): Tabl
     return middleware;
 }
 
-/** collapses everything that doesnt match the searchString expands direct search hit */
+/** collapses everything that doesnt match the searchString, expands direct search hit */
 export const search = <T extends TableRow<T>>(
     nodes: T[],
     searchString: string,
@@ -49,12 +47,12 @@ export const search = <T extends TableRow<T>>(
     const hidden = new Set<string>();
     const expanded = new Set<string>();
 
-    const recursor = (node: T, childOfMatch = false): boolean => {
+    function nodeMatches(node: T, childOfMatch = false): boolean {
         const matches = stringsMatch(node, search);
 
         let intermediate = false;
         for (const child of node.children || []) {
-            const childMatches = recursor(child, matches || childOfMatch);
+            const childMatches = nodeMatches(child, matches || childOfMatch);
             if (childMatches && !intermediate) intermediate = true;
         }
 
@@ -65,9 +63,9 @@ export const search = <T extends TableRow<T>>(
         }
 
         return matches || intermediate;
-    };
+    }
 
-    nodes.forEach((n) => recursor(n));
+    nodes.forEach((n) => nodeMatches(n));
 
     return {
         hidden,
