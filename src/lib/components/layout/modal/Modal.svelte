@@ -64,7 +64,7 @@
     <Portal>
         <HiddenBackground
             onclose={close}
-            class="flex h-full w-full flex-col items-center justify-start p-16"
+            class="flex h-full w-full flex-col items-center justify-start p-8 lg:p-12 xl:p-16"
         >
             {#if modal}
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
