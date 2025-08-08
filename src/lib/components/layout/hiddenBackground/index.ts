@@ -1,8 +1,8 @@
-import { default as HiddenBg, setClasses, TEST_ID } from './HiddenBackground.svelte';
+import { default as HiddenBg, setClasses } from './HiddenBackground.svelte';
 
 const HiddenBackground = Object.assign(HiddenBg, {
-    setClasses,
-    TEST_ID
+    setClasses
 });
 
 export default HiddenBackground;
+export { type HiddenBackgroundProps } from './HiddenBackground.svelte';

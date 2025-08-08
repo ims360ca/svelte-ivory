@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import type { IvoryComponent } from '$lib/types';
+    import type { IvoryComponent, TransitionProps } from '$lib/types';
     import clsx from 'clsx';
     import type { ClassValue } from 'svelte/elements';
     import { fade } from 'svelte/transition';
@@ -12,12 +12,11 @@
         globalClass = value;
     }
 
-    export const TEST_ID = 'background';
-
-    export interface HiddenBackgroundProps extends IvoryComponent<HTMLDialogElement> {
+    export interface HiddenBackgroundProps
+        extends IvoryComponent<HTMLDialogElement>,
+            TransitionProps {
         /** Gets called when the dialog is clicked */
         onclose?: () => void;
-        duration?: number;
     }
 </script>
 
@@ -26,7 +25,8 @@
         class: clazz,
         onclose,
         children,
-        duration = 300,
+        inTransition = (e) => fade(e, { duration: 200 }),
+        outTransition = (e) => fade(e, { duration: 100 }),
         ...rest
     }: HiddenBackgroundProps = $props();
 </script>
@@ -34,7 +34,7 @@
 <dialog
     class={twMerge(
         clsx(
-            'bg-surface-950-50/40 absolute top-0 left-0 z-40 m-0 h-full w-full p-0',
+            'bg-surface-950-50/40 pointer-events-auto absolute top-0 left-0 z-40 m-0 h-full w-full p-0',
             globalClass,
             clazz
         )
@@ -46,8 +46,8 @@
         callback: onclose ?? (() => {})
     }}
     onclick={onclose}
-    transition:fade={{ duration }}
-    data-testid={TEST_ID}
+    in:inTransition
+    out:outTransition
     {...rest}
 >
     {@render children?.()}

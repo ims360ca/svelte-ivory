@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import type { IvoryComponent } from '$lib/types';
+    import type { IvoryComponent, TransitionProps } from '$lib/types';
     import { X } from '@lucide/svelte';
     import clsx from 'clsx';
     import type { Snippet } from 'svelte';
@@ -11,7 +11,7 @@
 
     export type DrawerPlacement = 'left' | 'right';
 
-    export interface DrawerProps extends IvoryComponent<HTMLDivElement> {
+    export interface DrawerProps extends IvoryComponent<HTMLDivElement>, TransitionProps {
         class?: string;
         b_open: boolean;
         title?: string;
@@ -27,6 +27,10 @@
         children,
         title,
         placement = 'right',
+        inTransition = (e) =>
+            fly(e, { x: placement === 'right' ? '100%' : '-100%', duration: 200 }),
+        outTransition = (e) =>
+            fly(e, { x: placement === 'right' ? '-100%' : '100%', duration: 200 }),
         ...rest
     }: DrawerProps = $props();
 
@@ -49,8 +53,9 @@
                         clazz
                     ])
                 )}
-                transition:fly={{ x: placement === 'right' ? '100%' : '-100%', duration: 200 }}
                 onclick={(e) => e.stopPropagation()}
+                in:inTransition
+                out:outTransition
                 {...rest}
             >
                 <div class="flex flex-row items-center justify-between gap-8">

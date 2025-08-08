@@ -1,14 +1,15 @@
 <script lang="ts" module>
-    import type { IvoryComponent } from '$lib/types';
+    import type { IvoryComponent, TransitionProps } from '$lib/types';
     import { X } from '@lucide/svelte';
     import clsx from 'clsx';
-    import type { Snippet } from 'svelte';
+    import { type Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
+    import { slide } from 'svelte/transition';
     import { twMerge } from 'tailwind-merge';
     import { Heading, HiddenBackground, Portal } from '..';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
-    export interface ModalProps extends IvoryComponent<HTMLDivElement> {
+    export interface ModalProps extends IvoryComponent<HTMLDivElement>, TransitionProps {
         /** Class of the modal itself, does not apply to the inner div */
         class?: ClassValue;
         /** Class of the div wrapping the children */
@@ -42,6 +43,8 @@
         preventClosing = false,
         variant,
         innerClass,
+        inTransition = (e) => slide(e, { axis: 'y', duration: 200 }),
+        outTransition = () => ({}),
         ...rest
     }: Props = $props();
 
@@ -84,6 +87,8 @@
                     )}
                     {...rest}
                     {onclick}
+                    in:inTransition|global
+                    out:outTransition|global
                 >
                     <div
                         class={[
@@ -101,7 +106,7 @@
                         <button
                             class="group ml-auto flex justify-end"
                             type="button"
-                            onclick={close}
+                            onclick={() => close()}
                         >
                             <X
                                 class="h-full w-auto transition-[stroke-width] group-hover:stroke-3"

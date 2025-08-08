@@ -7,7 +7,7 @@
     import Popover, { type PopoverPlacement } from '../popover/Popover.svelte';
     import Portal from '../portal/Portal.svelte';
 
-    export interface Props extends IvoryComponent<HTMLElement> {
+    export interface TooltipProps extends IvoryComponent<HTMLElement> {
         children?: Snippet;
         /** The content of the tooltip */
         tooltip: string | Snippet;
@@ -39,7 +39,7 @@
         tooltipClass,
         placement = 'top',
         ...rest
-    }: Props = $props();
+    }: TooltipProps = $props();
 
     let target = $state<HTMLElement>();
 

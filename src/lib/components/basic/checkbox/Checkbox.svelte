@@ -1,5 +1,10 @@
 <script lang="ts" module>
     import type { IvoryComponent } from '$lib/types';
+    import { Check, type Icon as LucideIcon, Minus } from '@lucide/svelte';
+    import clsx from 'clsx';
+    import type { ClassValue } from 'svelte/elements';
+    import { scale } from 'svelte/transition';
+    import { twMerge } from 'tailwind-merge';
 
     export interface CheckboxProps extends IvoryComponent<HTMLElement> {
         class?: ClassValue;
@@ -11,8 +16,6 @@
         /** if true, the onclick handler will not be called */
         disabled?: boolean;
         onclick?: () => void;
-        /** data-testid */
-        testId?: string;
     }
 </script>
 
@@ -22,11 +25,6 @@
 -->
 
 <script lang="ts">
-    import { Check, type Icon as LucideIcon, Minus } from '@lucide/svelte';
-    import clsx from 'clsx';
-    import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
-
     let {
         class: clazz,
         checked = false,
@@ -76,6 +74,8 @@
     {...rest}
 >
     {#if Icon}
-        <Icon class="h-full w-full" size={16} strokeWidth={3} />
+        <div class="h-full w-full" transition:scale={{ duration: 150 }}>
+            <Icon class="h-full w-full" size={16} strokeWidth={3} />
+        </div>
     {/if}
 </svelte:element>
