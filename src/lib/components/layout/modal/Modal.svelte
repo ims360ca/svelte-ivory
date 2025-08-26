@@ -4,7 +4,7 @@
     import clsx from 'clsx';
     import { type Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
-    import { slide } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
     import { twMerge } from 'tailwind-merge';
     import { Heading, HiddenBackground, Portal } from '..';
 
@@ -43,7 +43,10 @@
         preventClosing = false,
         variant,
         innerClass,
-        inTransition = (e) => slide(e, { axis: 'y', duration: 200 }),
+        inTransition = (e) =>
+            fade(e, {
+                duration: 200
+            }),
         outTransition = () => ({}),
         ...rest
     }: Props = $props();
@@ -116,7 +119,7 @@
                     <div
                         class={twMerge(
                             clsx(
-                                'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                                'flex flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
                                 innerClass
                             )
                         )}
