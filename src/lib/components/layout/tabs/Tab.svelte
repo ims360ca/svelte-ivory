@@ -8,6 +8,14 @@
     import { twMerge } from 'tailwind-merge';
     import { getTabContext } from './Tabs.svelte';
 
+    let defaultClass = $state(
+        (selected: boolean): ClassValue => [selected ? 'text-primary-500' : '']
+    );
+
+    export function setDefaultClass(clazz: (selected: boolean) => ClassValue) {
+        defaultClass = clazz;
+    }
+
     export interface TabProps extends Omit<IvoryComponent<HTMLElement>, 'children'> {
         class?: ClassValue | ((selected: boolean) => ClassValue);
         id?: string | undefined;
@@ -24,13 +32,7 @@
 </script>
 
 <script lang="ts">
-    let {
-        class: clazz = (selected: boolean) => [selected && 'text-primary-500 underline'],
-        id,
-        href,
-        children,
-        active
-    }: TabProps = $props();
+    let { class: clazz = defaultClass, id, href, children, active }: TabProps = $props();
 
     const tab = pseudoRandomId('tab-');
     const tabs = getTabContext();

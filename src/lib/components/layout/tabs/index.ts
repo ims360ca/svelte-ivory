@@ -1,10 +1,11 @@
-import Tab from './Tab.svelte';
+import Tab, { setDefaultClass } from './Tab.svelte';
 import TabPanel from './TabPanel.svelte';
 import { default as TabsComponent } from './Tabs.svelte';
 
 const Tabs = Object.assign(TabsComponent, {
     Tab: Tab,
-    Panel: TabPanel
+    Panel: TabPanel,
+    setDefaultTabClass: setDefaultClass
 });
 
 export default Tabs;

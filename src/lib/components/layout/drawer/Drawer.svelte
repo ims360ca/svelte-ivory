@@ -30,7 +30,7 @@
         inTransition = (e) =>
             fly(e, { x: placement === 'right' ? '100%' : '-100%', duration: 200 }),
         outTransition = (e) =>
-            fly(e, { x: placement === 'right' ? '-100%' : '100%', duration: 200 }),
+            fly(e, { x: placement === 'right' ? '100%' : '-100%', duration: 200 }),
         ...rest
     }: DrawerProps = $props();
 
