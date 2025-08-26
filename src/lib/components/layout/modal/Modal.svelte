@@ -119,7 +119,7 @@
                     <div
                         class={twMerge(
                             clsx(
-                                'flex flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                                'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
                                 innerClass
                             )
                         )}
