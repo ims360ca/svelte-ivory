@@ -7,6 +7,63 @@ export type TablePlugin<T extends TableRow<T>> = (state: TableState<T>) => Table
 export interface TableConfig<T extends TableRow<T>> {
     data: T[];
     plugins?: TablePlugin<T>[];
+    id?: string;
+    expanded: SvelteSet<string>;
+    columns: Column[];
+    scrollTop: number;
+    registerColumn: (config: ColumnConfig) => Column;
+    toggleExpansion: (id: string) => void;
+}
+
+export function createTableConfig<T extends TableRow<T>>(): TableConfig<T> {
+    let data = $state<T[]>([]);
+    let plugins = $state<TablePlugin<T>[]>([]);
+    let scrollTop = $state(0);
+    const expanded = new SvelteSet<string>();
+    const columns = $state<Column[]>([]);
+
+    return {
+        get data() {
+            return data;
+        },
+        set data(d) {
+            data = d;
+        },
+        get plugins() {
+            return plugins;
+        },
+        set plugins(p) {
+            plugins = p;
+        },
+        get scrollTop() {
+            return scrollTop;
+        },
+        set scrollTop(s) {
+            scrollTop = s;
+        },
+        get expanded() {
+            return expanded;
+        },
+        get columns() {
+            return columns;
+        },
+        registerColumn(config: ColumnConfig) {
+            let existingColumn: Column | undefined = undefined;
+            for (const column of columns) {
+                if (column.id !== config.id) continue;
+                existingColumn = column;
+                break;
+            }
+            if (existingColumn) return existingColumn;
+            const col = new Column(config);
+            columns.push(col);
+            return col;
+        },
+        toggleExpansion(id: string) {
+            if (expanded.has(id)) expanded.delete(id);
+            else expanded.add(id);
+        }
+    };
 }
 
 export interface TableState<T extends TableRow<T>> {
@@ -20,50 +77,57 @@ interface TreeRow<T> {
     id: string;
 }
 
-export class TableController<T extends TableRow<T>> {
-    columns = $state<Column[]>([]);
-    data = $state<T[]>([]);
-    expanded: Set<string> = new SvelteSet<string>();
-    scrollTop = $state(0);
+// export class TableController<T extends TableRow<T>> {
+//     id = $state();
+//     columns = $state<Column[]>([]);
+//     data = $state<T[]>([]);
+//     expanded: Set<string> = new SvelteSet<string>();
+//     scrollTop = $state(0);
 
-    readonly results = $derived(treeWalker(this.data, this.expanded));
+//     constructor(id?: string) {
+//         this.id = id;
+//     }
 
-    refresh(conf: TableConfig<T>) {
-        let intitalState: TableState<T> = {
-            data: [...(conf.data ?? [])],
-            expanded: this.expanded
-        };
+//     readonly results = $derived(treeWalker(this.data, this.expanded));
 
-        for (const plugin of conf.plugins ?? []) {
-            intitalState = plugin(intitalState);
-        }
+//     refresh(conf: TableConfig<T>) {
+//         let intitalState: TableState<T> = {
+//             data: [...(conf.data ?? [])],
+//             expanded: this.expanded
+//         };
 
-        this.data = intitalState.data;
-        this.expanded = new SvelteSet(intitalState.expanded);
-    }
+//         for (const plugin of conf.plugins ?? []) {
+//             intitalState = plugin(intitalState);
+//         }
 
-    registerColumn(config: ColumnConfig): Column {
-        // only register a column once
-        let existingColumn: Column | undefined = undefined;
-        for (const column of this.columns) {
-            if (column.id !== config.id) continue;
-            existingColumn = column;
-            break;
-        }
-        if (existingColumn) return existingColumn;
-        const col = new Column(config);
-        this.columns.push(col);
-        return col;
-    }
+//         this.data = intitalState.data;
+//         this.expanded = new SvelteSet(intitalState.expanded);
+//         this.id = conf.id ?? this.id ?? pseudoRandomId('table-');
+//     }
 
-    toggleExpansion(id: string) {
-        if (this.expanded.has(id)) this.expanded.delete(id);
-        else this.expanded.add(id);
-    }
-}
+//     registerColumn(config: ColumnConfig): Column {
+//         // only register a column once
+//         let existingColumn: Column | undefined = undefined;
+//         for (const column of this.columns) {
+//             if (column.id !== config.id) continue;
+//             existingColumn = column;
+//             break;
+//         }
+//         if (existingColumn) return existingColumn;
+//         const col = new Column(config);
+//         this.columns.push(col);
+//         return col;
+//     }
+
+//     toggleExpansion(id: string) {
+//         if (this.expanded.has(id)) this.expanded.delete(id);
+//         else this.expanded.add(id);
+//     }
+// }
 
 /** Walks though a tree strucure and turns it into a flat list, needed since the `VirtualList` needs a list, not a tree */
-function treeWalker<T extends TableRow<T>>(data: T[], expanded: Set<string>) {
+export function treeWalker<T extends TableRow<T>>(config: TableConfig<T>) {
+    const { data, expanded } = config;
     const stack: { node: T; nestingLevel: number }[] = [];
 
     // push the root nodes of the trees onto the stack

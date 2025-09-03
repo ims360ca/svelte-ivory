@@ -5,10 +5,11 @@
     import { getContext, setContext, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
-    import { Column, TableController, type TablePlugin, type TableRow } from '.';
+    import { Column, type TableConfig, type TablePlugin, type TableRow } from '.';
     import ColumnHead from './ColumnHead.svelte';
     import Row from './Row.svelte';
     import VirtualList from './VirtualList.svelte';
+    import { createTableConfig, treeWalker } from './controller.svelte';
 
     export interface TableProps<T extends TableRow<T>> {
         class?: ClassValue;
@@ -23,20 +24,26 @@
         rowClass?: ClassValue;
         headerClass?: ClassValue;
         plugins?: TablePlugin<T>[];
-        controller?: TableController<T>;
+        config?: TableConfig<T>;
         /**
          * **Bindable**
          */
         b_scrollTop?: number;
+        /** Equal to tailwinds `spacing` variable (e.g. `w-4` would be `4`) */
+        nestingInset?: number;
     }
 
     const TABLE_CONTEXT = {};
-    function setTableContext<T extends TableRow<T>>(table: TableController<T>) {
-        setContext(TABLE_CONTEXT, table);
+    export type TableContext<T extends TableRow<T>> = {
+        table: TableConfig<T>;
+        nestingInset: number;
+    };
+    function setTableContext<T extends TableRow<T>>(context: TableContext<T>) {
+        setContext(TABLE_CONTEXT, context);
     }
 
-    export function getTableContext<T extends TableRow<T>>(): TableController<T> {
-        return getContext<TableController<T>>(TABLE_CONTEXT);
+    export function getTableContext<T extends TableRow<T>>(): TableContext<T> {
+        return getContext<TableContext<T>>(TABLE_CONTEXT);
     }
 </script>
 
@@ -54,83 +61,94 @@
         onclick,
         href,
         plugins = [],
-        controller: table = new TableController()
+        config: table = createTableConfig<T>(),
+        nestingInset = 4
     }: Props<T> = $props();
 
     $effect(() => {
-        table.refresh({
-            data,
-            plugins
-        });
+        table.data = data;
+        table.plugins = plugins;
     });
 
-    setTableContext(table);
+    setTableContext({
+        get table() {
+            return table;
+        },
+        get nestingInset() {
+            return nestingInset;
+        }
+    });
+
+    const results = $derived(treeWalker(table));
+
     const treeIndicatorId = pseudoRandomId('tree-indicator-');
 </script>
 
-<VirtualList
-    data={table.results.entries}
-    class={['border-transparent', clazz, 'flex flex-col overflow-hidden']}
-    bind:b_scrollTop={table.scrollTop}
-    {rowHeight}
->
-    {#snippet header()}
-        <div
-            class={twMerge(
-                clsx(
-                    'flex w-fit min-w-full flex-row gap-2 border-b border-inherit pr-4 pl-2',
-                    headerClass
-                )
-            )}
-        >
-            {#each table.columns as column (column.id)}
-                <ColumnHead {column}>
-                    {#if typeof column.header === 'function'}
-                        {@render column.header()}
-                    {:else}
-                        <div
-                            class="flex grow flex-row items-center justify-start gap-4 py-2 text-start select-none"
-                        >
-                            {column.header}
-                        </div>
-                    {/if}
-                </ColumnHead>
-            {/each}
-        </div>
-    {/snippet}
-    {#snippet children({ row: { node, id, nestingLevel }, index })}
-        <Row
-            onclick={onclick ? () => onclick(node) : undefined}
-            href={href?.(node)}
-            class={rowClass}
-        >
-            {@render firstColumn?.({ row: node })}
-            <Column
-                id={treeIndicatorId}
-                resizable={false}
-                header=""
-                onclick={() => {
-                    table.toggleExpansion(node.id);
-                }}
-                ignoreWidth={table.results.someHaveChildren}
-                width={table.results.someHaveChildren ? 24 : 0}
-                minWidth={0}
+{#key table.id}
+    <VirtualList
+        data={results.entries}
+        class={['border-transparent', clazz, 'flex flex-col overflow-hidden']}
+        bind:b_scrollTop={table.scrollTop}
+        {rowHeight}
+    >
+        {#snippet header()}
+            <div
+                class={twMerge(
+                    clsx(
+                        'flex w-fit min-w-full flex-row gap-2 border-b border-inherit pr-4 pl-2',
+                        headerClass
+                    )
+                )}
             >
-                <div
-                    class="flex h-full items-center justify-end"
-                    style="width: calc(var(--spacing) * {nestingLevel * 4} + 24px);"
+                {#each table.columns as column (column.id)}
+                    <ColumnHead {column}>
+                        {#if typeof column.header === 'function'}
+                            {@render column.header()}
+                        {:else}
+                            <div
+                                class="flex grow flex-row items-center justify-start gap-4 py-2 text-start select-none"
+                            >
+                                {column.header}
+                            </div>
+                        {/if}
+                    </ColumnHead>
+                {/each}
+            </div>
+        {/snippet}
+        {#snippet children({ row: { node, id, nestingLevel }, index })}
+            <Row
+                onclick={onclick ? () => onclick(node) : undefined}
+                href={href?.(node)}
+                class={rowClass}
+            >
+                {@render firstColumn?.({ row: node })}
+                <Column
+                    id={treeIndicatorId}
+                    resizable={false}
+                    header=""
+                    onclick={() => {
+                        table.toggleExpansion(node.id);
+                    }}
+                    ignoreWidth={results.someHaveChildren}
+                    width={results.someHaveChildren ? 24 : 0}
+                    minWidth={0}
                 >
-                    {#if node.children}
-                        <ChevronRight
-                            class={[
-                                'ml-auto aspect-square shrink-0 transition-transform duration-100',
-                                table.expanded.has(id) && 'rotate-90'
-                            ]}
-                        />
-                    {/if}
-                </div>
-            </Column>
-            {@render passedChildren?.({ row: node, nestingLevel, index })}
-        </Row>
-    {/snippet}
-</VirtualList>
+                    <div
+                        class="flex h-full items-center justify-end"
+                        style="width: calc(var(--spacing) * {nestingLevel * nestingInset} + 24px);"
+                    >
+                        {#if node.children}
+                            <ChevronRight
+                                class={[
+                                    'ml-auto aspect-square shrink-0 transition-transform duration-100',
+                                    table.expanded.has(id) && 'rotate-90'
+                                ]}
+                            />
+                        {/if}
+                    </div>
+                </Column>
+                {@render passedChildren?.({ row: node, nestingLevel, index })}
+            </Row>
+        {/snippet}
+    </VirtualList>
+{/key}

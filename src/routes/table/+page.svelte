@@ -1,10 +1,10 @@
-<script lang="ts">
+<script lang="ts" module>
     import Toggle from '$lib/components/basic/toggle/Toggle.svelte';
     import Column from '$lib/components/table/Column.svelte';
+    import { createTableConfig } from '$lib/components/table/controller.svelte';
     import { searchPlugin } from '$lib/components/table/plugins/search.svelte';
     import Table from '$lib/components/table/Table.svelte';
     import { Toasts } from '$lib/components/toast';
-    import { pseudoRandomId } from '$lib/utils/functions';
     import { Mail } from '@lucide/svelte';
 
     interface Row {
@@ -15,7 +15,17 @@
         children?: Row[];
     }
 
+    let controllers = $state([
+        createTableConfig<Row>(),
+        createTableConfig<Row>(),
+        createTableConfig<Row>()
+    ]);
+    let controllerIndex = $state(0);
+    const controller = $derived(controllers[controllerIndex]);
     let children = $state(false);
+</script>
+
+<script lang="ts">
     let rowHeight = $state(64);
     let search = $state('');
 
@@ -65,14 +75,14 @@
             { id: '7', name: 'Carol', age: 34, email: 'carol@example.com' }
         ];
 
-        for (let i = 0; i < 1_000; i++) {
-            rows.push({
-                id: pseudoRandomId(),
-                name: pseudoRandomId('Name'),
-                age: Math.floor(Math.random() * 100),
-                email: pseudoRandomId('Email')
-            });
-        }
+        // for (let i = 0; i < 1_000; i++) {
+        //     rows.push({
+        //         id: pseudoRandomId(),
+        //         name: pseudoRandomId('Name'),
+        //         age: Math.floor(Math.random() * 100),
+        //         email: pseudoRandomId('Email')
+        //     });
+        // }
 
         return rows;
     });
@@ -82,6 +92,13 @@
     <button onclick={() => (children = !children)} class="flex flex-row items-center gap-2">
         <Toggle value={children} />
         Toggle children
+    </button>
+    <button
+        onclick={() => (controllerIndex = (controllerIndex + 1) % controllers.length)}
+        class="flex flex-row items-center gap-2"
+    >
+        <Toggle value={controllerIndex === 0} />
+        Toggle controller
     </button>
     <input type="number" bind:value={rowHeight} />
     <input type="text" bind:value={search} placeholder="Search" />
@@ -95,6 +112,7 @@
             message: 'Clicked on a row'
         });
     }}
+    config={controller}
     {rowHeight}
     plugins={[
         searchPlugin({

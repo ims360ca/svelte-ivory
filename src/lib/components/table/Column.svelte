@@ -19,6 +19,7 @@
         onclick?: (e: Event) => void | Promise<void>;
         /** Cannot be used with resizable columns*/
         ignoreWidth?: boolean;
+        offsetNestingLevel?: number;
     }
 </script>
 
@@ -30,11 +31,12 @@
         ignoreWidth = false,
         // ColumnConfig
         resizable = true,
+        offsetNestingLevel = 0,
         ...props
     }: ColumnProps = $props();
 
     // Register the new column if this is the first table row that was rendered
-    const table = getTableContext();
+    const { table, nestingInset } = getTableContext();
     const column = table.registerColumn({ resizable, ...props });
     const allowClicking = $derived(!!onclick);
 
@@ -60,7 +62,9 @@
     this={allowClicking ? 'button' : 'div'}
     onclick={allowClicking ? onClick : undefined}
     type={onclick ? 'button' : undefined}
-    style={ignoreWidth ? '' : `width: ${column.width}px !important;`}
+    style={ignoreWidth
+        ? ''
+        : `width: calc(var(--spacing) * ${offsetNestingLevel * nestingInset} - ${column.width ?? 0}px) !important;`}
     class={twMerge(
         clsx(
             'flex shrink-0 flex-row items-stretch justify-start truncate',
