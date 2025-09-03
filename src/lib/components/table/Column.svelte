@@ -64,7 +64,7 @@
     type={onclick ? 'button' : undefined}
     style={ignoreWidth
         ? ''
-        : `width: calc(var(--spacing) * ${offsetNestingLevel * nestingInset} - ${column.width ?? 0}px) !important;`}
+        : `width: calc(${column.width ?? 0}px - var(--spacing) * ${offsetNestingLevel * nestingInset}) !important;`}
     class={twMerge(
         clsx(
             'flex shrink-0 flex-row items-stretch justify-start truncate',
