@@ -47,7 +47,7 @@
 
     // this must be separate to the above effect, since otherwise the width would be reset on every scroll
     $effect(() => {
-        if (!column.resizable) column.resize(props.width);
+        if (!column.resizable && props.width !== undefined) column.resize(props.width);
     });
 
     function onClick(e: MouseEvent) {

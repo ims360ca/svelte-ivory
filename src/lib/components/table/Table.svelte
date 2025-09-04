@@ -84,71 +84,69 @@
     const treeIndicatorId = pseudoRandomId('tree-indicator-');
 </script>
 
-{#key table.id}
-    <VirtualList
-        data={results.entries}
-        class={['border-transparent', clazz, 'flex flex-col overflow-hidden']}
-        bind:b_scrollTop={table.scrollTop}
-        {rowHeight}
-    >
-        {#snippet header()}
-            <div
-                class={twMerge(
-                    clsx(
-                        'flex w-fit min-w-full flex-row gap-2 border-b border-inherit pr-4 pl-2',
-                        headerClass
-                    )
-                )}
+<VirtualList
+    data={results.entries}
+    class={twMerge(clsx(['flex flex-col overflow-hidden border-transparent', clazz]))}
+    bind:b_scrollTop={table.scrollTop}
+    {rowHeight}
+>
+    {#snippet header()}
+        <div
+            class={twMerge(
+                clsx(
+                    'flex w-fit min-w-full flex-row gap-2 border-b border-inherit pr-4 pl-2',
+                    headerClass
+                )
+            )}
+        >
+            {#each table.columns as column (column.id)}
+                <ColumnHead {column}>
+                    {#if typeof column.header === 'function'}
+                        {@render column.header()}
+                    {:else}
+                        <div
+                            class="flex grow flex-row items-center justify-start gap-4 py-2 text-start select-none"
+                        >
+                            {column.header}
+                        </div>
+                    {/if}
+                </ColumnHead>
+            {/each}
+        </div>
+    {/snippet}
+    {#snippet children({ row: { node, id, nestingLevel }, index })}
+        <Row
+            onclick={onclick ? () => onclick(node) : undefined}
+            href={href?.(node)}
+            class={rowClass}
+        >
+            {@render firstColumn?.({ row: node })}
+            <Column
+                id={treeIndicatorId}
+                resizable={false}
+                header=""
+                onclick={() => {
+                    table.toggleExpansion(node.id);
+                }}
+                ignoreWidth={results.someHaveChildren}
+                width={results.someHaveChildren ? 24 : 0}
+                minWidth={0}
             >
-                {#each table.columns as column (column.id)}
-                    <ColumnHead {column}>
-                        {#if typeof column.header === 'function'}
-                            {@render column.header()}
-                        {:else}
-                            <div
-                                class="flex grow flex-row items-center justify-start gap-4 py-2 text-start select-none"
-                            >
-                                {column.header}
-                            </div>
-                        {/if}
-                    </ColumnHead>
-                {/each}
-            </div>
-        {/snippet}
-        {#snippet children({ row: { node, id, nestingLevel }, index })}
-            <Row
-                onclick={onclick ? () => onclick(node) : undefined}
-                href={href?.(node)}
-                class={rowClass}
-            >
-                {@render firstColumn?.({ row: node })}
-                <Column
-                    id={treeIndicatorId}
-                    resizable={false}
-                    header=""
-                    onclick={() => {
-                        table.toggleExpansion(node.id);
-                    }}
-                    ignoreWidth={results.someHaveChildren}
-                    width={results.someHaveChildren ? 24 : 0}
-                    minWidth={0}
+                <div
+                    class="flex h-full items-center justify-end"
+                    style="width: calc(var(--spacing) * {nestingLevel * nestingInset} + 24px);"
                 >
-                    <div
-                        class="flex h-full items-center justify-end"
-                        style="width: calc(var(--spacing) * {nestingLevel * nestingInset} + 24px);"
-                    >
-                        {#if node.children}
-                            <ChevronRight
-                                class={[
-                                    'ml-auto aspect-square shrink-0 transition-transform duration-100',
-                                    table.expanded.has(id) && 'rotate-90'
-                                ]}
-                            />
-                        {/if}
-                    </div>
-                </Column>
-                {@render passedChildren?.({ row: node, nestingLevel, index })}
-            </Row>
-        {/snippet}
-    </VirtualList>
-{/key}
+                    {#if node.children}
+                        <ChevronRight
+                            class={[
+                                'ml-auto aspect-square shrink-0 transition-transform duration-100',
+                                table.expanded.has(id) && 'rotate-90'
+                            ]}
+                        />
+                    {/if}
+                </div>
+            </Column>
+            {@render passedChildren?.({ row: node, nestingLevel, index })}
+        </Row>
+    {/snippet}
+</VirtualList>
