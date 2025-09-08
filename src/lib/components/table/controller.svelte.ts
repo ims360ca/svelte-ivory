@@ -11,8 +11,9 @@ export interface TableConfig<T extends TableRow<T>> {
     expanded: SvelteSet<string>;
     columns: Column[];
     scrollTop: number;
-    registerColumn: (config: ColumnConfig) => Column;
-    toggleExpansion: (id: string) => void;
+    readonly results: ReturnType<typeof treeWalker<T>>;
+    readonly registerColumn: (config: ColumnConfig) => Column;
+    readonly toggleExpansion: (id: string) => void;
 }
 
 export function createTableConfig<T extends TableRow<T>>(): TableConfig<T> {
@@ -21,6 +22,17 @@ export function createTableConfig<T extends TableRow<T>>(): TableConfig<T> {
     let scrollTop = $state(0);
     const expanded = new SvelteSet<string>();
     const columns = $state<Column[]>([]);
+
+    const results = $derived.by(() => {
+        let state: TableState<T> = {
+            data,
+            expanded
+        };
+        for (const plugin of plugins) {
+            state = plugin(state);
+        }
+        return treeWalker(state);
+    });
 
     return {
         get data() {
@@ -46,6 +58,9 @@ export function createTableConfig<T extends TableRow<T>>(): TableConfig<T> {
         },
         get columns() {
             return columns;
+        },
+        get results() {
+            return results;
         },
         registerColumn(config: ColumnConfig) {
             let existingColumn: Column | undefined = undefined;
@@ -126,7 +141,7 @@ interface TreeRow<T> {
 // }
 
 /** Walks though a tree strucure and turns it into a flat list, needed since the `VirtualList` needs a list, not a tree */
-export function treeWalker<T extends TableRow<T>>(config: TableConfig<T>) {
+function treeWalker<T extends TableRow<T>>(config: TableState<T>) {
     const { data, expanded } = config;
     const stack: { node: T; nestingLevel: number }[] = [];
 

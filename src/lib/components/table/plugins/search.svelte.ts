@@ -28,6 +28,7 @@ export function searchPlugin<T extends TableRow<T>>(conf: SearchConfig<T>): Tabl
         // figure out which nodes to expand and hide
         const { expanded, hidden } = search(state.data, conf.search, conf.matches);
         prevSearch = conf.search;
+        console.log(hidden);
 
         return {
             data: state.data.filter((d) => !hidden.has(d.id)),
@@ -58,7 +59,7 @@ export const search = <T extends TableRow<T>>(
 
         if (intermediate) {
             expanded.add(node.id);
-        } else if (!childOfMatch) {
+        } else if (!childOfMatch && !matches) {
             hidden.add(node.id);
         }
 

@@ -9,7 +9,7 @@
     import ColumnHead from './ColumnHead.svelte';
     import Row from './Row.svelte';
     import VirtualList from './VirtualList.svelte';
-    import { createTableConfig, treeWalker } from './controller.svelte';
+    import { createTableConfig } from './controller.svelte';
 
     export interface TableProps<T extends TableRow<T>> {
         class?: ClassValue;
@@ -79,13 +79,11 @@
         }
     });
 
-    const results = $derived(treeWalker(table));
-
     const treeIndicatorId = pseudoRandomId('tree-indicator-');
 </script>
 
 <VirtualList
-    data={results.entries}
+    data={table.results.entries}
     class={twMerge(clsx(['flex flex-col overflow-hidden border-transparent', clazz]))}
     bind:b_scrollTop={table.scrollTop}
     {rowHeight}
@@ -128,8 +126,8 @@
                 onclick={() => {
                     table.toggleExpansion(node.id);
                 }}
-                ignoreWidth={results.someHaveChildren}
-                width={results.someHaveChildren ? 24 : 0}
+                ignoreWidth={table.results.someHaveChildren}
+                width={table.results.someHaveChildren ? 24 : 0}
                 minWidth={0}
             >
                 <div
