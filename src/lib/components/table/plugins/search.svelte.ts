@@ -45,8 +45,8 @@ export const search = <T extends TableRow<T>>(
     stringsMatch: (a: T, b: string) => boolean
 ) => {
     const search = searchString.trim().toLowerCase();
-    const hidden = new Set<string>();
-    const expanded = new Set<string>();
+    const hidden = new SvelteSet<string>();
+    const expanded = new SvelteSet<string>();
 
     function nodeMatches(node: T, childOfMatch = false): boolean {
         const matches = stringsMatch(node, search);
@@ -54,7 +54,7 @@ export const search = <T extends TableRow<T>>(
         let intermediate = false;
         for (const child of node.children || []) {
             const childMatches = nodeMatches(child, matches || childOfMatch);
-            if (childMatches && !intermediate) intermediate = true;
+            if (childMatches) intermediate = true;
         }
 
         if (intermediate) {

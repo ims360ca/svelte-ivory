@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import type { IvoryComponent, TransitionProps } from '$lib/types';
+    import type { TransitionProps } from '$lib/types';
     import { X } from '@lucide/svelte';
     import clsx from 'clsx';
     import type { Snippet } from 'svelte';
@@ -11,13 +11,13 @@
 
     export type DrawerPlacement = 'left' | 'right';
 
-    export interface DrawerProps extends IvoryComponent<HTMLDivElement>, TransitionProps {
+    export type DrawerProps = TransitionProps & {
         class?: string;
         b_open: boolean;
-        title?: string;
+        title?: string | Snippet;
         children: Snippet;
         placement?: DrawerPlacement;
-    }
+    };
 </script>
 
 <script lang="ts">
@@ -54,13 +54,19 @@
                     ])
                 )}
                 onclick={(e) => e.stopPropagation()}
-                in:inTransition
-                out:outTransition
+                in:inTransition|global
+                out:outTransition|global
                 {...rest}
             >
                 <div class="flex flex-row items-center justify-between gap-8">
                     {#if title}
-                        <Heading>{title}</Heading>
+                        <Heading class="flex grow flex-row items-center gap-4">
+                            {#if typeof title === 'function'}
+                                {@render title()}
+                            {:else}
+                                {title}
+                            {/if}
+                        </Heading>
                     {/if}
                     <button class="group ml-auto flex justify-end" type="button" onclick={onclose}>
                         <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />

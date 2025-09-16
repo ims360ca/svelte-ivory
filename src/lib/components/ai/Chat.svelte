@@ -60,7 +60,7 @@
         return remainHeight;
     }
 
-    async function scrollToBottom() {
+    export async function scrollToBottom() {
         if (!chatContainer) return;
         await tick();
         await tick();

@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import type { IvoryComponent, TransitionProps } from '$lib/types';
+    import type { TransitionProps } from '$lib/types';
     import { X } from '@lucide/svelte';
     import clsx from 'clsx';
     import { type Snippet } from 'svelte';
@@ -9,7 +9,7 @@
     import { Heading, HiddenBackground, Portal } from '..';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
-    export interface ModalProps extends IvoryComponent<HTMLDivElement>, TransitionProps {
+    export type ModalProps = TransitionProps & {
         /** Class of the modal itself, does not apply to the inner div */
         class?: ClassValue;
         /** Class of the div wrapping the children */
@@ -22,8 +22,9 @@
         preventClosing?: boolean;
         /** Variant of the modal, applies styling to the header */
         variant?: ModalVariant;
-        title?: string;
-    }
+        title?: string | Snippet;
+        onclick?: MouseEventHandler<HTMLDivElement>;
+    };
 
     export type ModalVariant = 'success' | 'warning' | 'error' | 'info';
 </script>
@@ -104,7 +105,13 @@
                         ]}
                     >
                         {#if title}
-                            <Heading>{title}</Heading>
+                            <Heading class="flex grow flex-row items-center gap-4">
+                                {#if typeof title === 'function'}
+                                    {@render title()}
+                                {:else}
+                                    {title}
+                                {/if}
+                            </Heading>
                         {/if}
                         <button
                             class="group ml-auto flex justify-end"
