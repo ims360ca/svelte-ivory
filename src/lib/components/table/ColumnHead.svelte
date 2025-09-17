@@ -1,21 +1,21 @@
 <script lang="ts" module>
     import { getContext, setContext, type Snippet } from 'svelte';
     import { resize } from '../../utils/actions';
-    import type { Column } from './columnController.svelte';
+    import type { ColumnController } from './columnController.svelte';
 
     const CONTEXT = {};
-    function setColumnHeadContext(column: Column) {
+    function setColumnHeadContext(column: ColumnController) {
         setContext(CONTEXT, column);
     }
 
-    export function getColumnHeadContext(): Column {
+    export function getColumnHeadContext(): ColumnController {
         return getContext(CONTEXT);
     }
 </script>
 
 <script lang="ts">
     type Props = {
-        column: Column;
+        column: ColumnController;
         children: Snippet;
     };
 

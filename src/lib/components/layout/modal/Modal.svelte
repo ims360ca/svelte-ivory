@@ -74,14 +74,10 @@
             class="flex h-full w-full flex-col items-center justify-start p-8 lg:p-12 xl:p-16"
         >
             {#if modal}
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <div {...rest} {onclick}>
                     {@render modal()}
                 </div>
             {:else}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class={twMerge(
                         clsx([

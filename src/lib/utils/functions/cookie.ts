@@ -4,7 +4,7 @@ function getCookie(name: string) {
 
     try {
         decodedCookie = decodeURIComponent(document.cookie);
-    } catch (error) {
+    } catch {
         return '';
     }
 

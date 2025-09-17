@@ -19,17 +19,12 @@ export function searchPlugin<T extends TableRow<T>>(conf: SearchConfig<T>): Tabl
                 expanded: expandedBeforeSearch
             };
         }
-
         if (!conf.search) return state;
-
         // ensure we store the state before the we started searching
         if (conf.search && !prevSearch) expandedBeforeSearch = state.expanded;
-
         // figure out which nodes to expand and hide
         const { expanded, hidden } = search(state.data, conf.search, conf.matches);
         prevSearch = conf.search;
-        console.log(hidden);
-
         return {
             data: state.data.filter((d) => !hidden.has(d.id)),
             expanded: new SvelteSet(expanded)
@@ -50,24 +45,20 @@ export const search = <T extends TableRow<T>>(
 
     function nodeMatches(node: T, childOfMatch = false): boolean {
         const matches = stringsMatch(node, search);
-
         let intermediate = false;
         for (const child of node.children || []) {
             const childMatches = nodeMatches(child, matches || childOfMatch);
             if (childMatches) intermediate = true;
         }
-
         if (intermediate) {
             expanded.add(node.id);
         } else if (!childOfMatch && !matches) {
             hidden.add(node.id);
         }
-
         return matches || intermediate;
     }
 
     nodes.forEach((n) => nodeMatches(n));
-
     return {
         hidden,
         expanded

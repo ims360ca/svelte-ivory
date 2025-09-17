@@ -36,8 +36,8 @@
     }: ColumnProps = $props();
 
     // Register the new column if this is the first table row that was rendered
-    const { table, nestingInset } = getTableContext();
-    const column = table.registerColumn({ resizable, ...props });
+    const { registerColumn, nestingInset } = getTableContext();
+    const column = registerColumn({ resizable, ...props });
     const allowClicking = $derived(!!onclick);
 
     // passes updated props to the column

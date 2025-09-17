@@ -11,7 +11,7 @@ export interface ColumnConfig {
     header: Snippet | string;
 }
 
-export class Column {
+export class ColumnController {
     id = $state('');
     header = $state<Snippet | string>('');
 

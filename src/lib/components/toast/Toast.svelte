@@ -51,8 +51,6 @@
     >
         {#each Toasts.toasts as toast (toast.id)}
             {@const VariantIcon = getIcon(toast.variant, toast.icon)}
-
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
                 in:fly={{ y: '-100%', duration }}
                 out:scale={{ duration }}

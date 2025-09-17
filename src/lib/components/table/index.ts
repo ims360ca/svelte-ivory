@@ -1,14 +1,7 @@
 export { default as Column, type ColumnProps } from './Column.svelte';
+export { ColumnController, type ColumnConfig } from './columnController.svelte';
 export { getColumnHeadContext } from './ColumnHead.svelte';
-export {
-    createTableConfig,
-    getAllIds,
-    type TableConfig,
-    type TablePlugin,
-    type TableRow,
-    type TableState
-} from './controller.svelte';
-export { expandAllPlugin } from './plugins/expandAll.svelte';
+export { getAllIds, type TablePlugin, type TableRow, type TableState } from './controller';
 export { searchPlugin } from './plugins/search.svelte';
 export {
     getTableContext,

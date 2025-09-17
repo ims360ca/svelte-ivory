@@ -28,7 +28,7 @@
     {@render messageText({ message })}
     {#if message.files}
         <div class="flex flex-row items-center gap-2">
-            {#each message.files as file}
+            {#each message.files as file, i (i)}
                 {@render attachedFile(file)}
             {/each}
         </div>

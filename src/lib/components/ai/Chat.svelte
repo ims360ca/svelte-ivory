@@ -41,7 +41,7 @@
 
     let {
         class: clazz,
-        b_chat: chat = $bindable(),
+        b_chat = $bindable(),
         userMessage = defaultUserMessage,
         systemMessage = defaultSystemMessage,
         placeholder,
@@ -74,20 +74,20 @@
     }
 
     async function submit(message: AiChatMessage) {
-        if (chat.loading) {
+        if (b_chat.loading) {
             return;
         }
 
-        chat.messages.push({
+        b_chat.messages.push({
             ...message,
             from: 'user',
             time: new Date()
         });
         // prevent the user from sending another message while we are loading the ai response
-        chat.loading = true;
+        b_chat.loading = true;
 
         // add an empty system message to the chat, this will indicate a loading state
-        chat.messages.push({
+        b_chat.messages.push({
             from: 'system',
             message: '',
             time: new Date()
@@ -97,7 +97,7 @@
 
         await externalSubmit(message);
 
-        chat.loading = false;
+        b_chat.loading = false;
     }
 </script>
 
@@ -106,11 +106,11 @@
         class="flex grow flex-col gap-4 overflow-auto pr-2 [scrollbar-gutter:stable]"
         bind:this={chatContainer}
     >
-        {#if chat.messages.length === 0 && placeholder}
+        {#if b_chat.messages.length === 0 && placeholder}
             {@render placeholder()}
         {/if}
-        {#each chat.messages as _, i}
-            {@const message = chat.messages[i]}
+        {#each b_chat.messages as _, i (i)}
+            {@const message = b_chat.messages[i]}
             {#if message.from === 'user'}
                 {@render userMessage({
                     message,
@@ -120,7 +120,7 @@
                 {@render systemMessage({
                     message,
                     i,
-                    minHeight: i === chat.messages.length - 1 ? lastMessageMinHeight : 0
+                    minHeight: i === b_chat.messages.length - 1 ? lastMessageMinHeight : 0
                 })}
             {/if}
         {/each}
@@ -136,7 +136,7 @@
     message: AiChatMessage;
     minHeight?: number;
 })}
-    <AiMessage bind:b_message={chat.messages[i]} {minHeight} />
+    <AiMessage bind:b_message={b_chat.messages[i]} {minHeight} />
 {/snippet}
 
 {#snippet defaultUserMessage({

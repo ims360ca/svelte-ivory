@@ -19,12 +19,12 @@
         data,
         children,
         header,
-        b_scrollTop = $bindable(0),
+        b_scrollTop = $bindable(),
         rowHeight,
         overscan = 2
     }: Props<T> = $props();
 
-    let scroll_top = $state(b_scrollTop);
+    let scroll_top = $state(b_scrollTop ?? 0);
     let scroll_left = $state(0);
     let header_width = $state(0);
     let viewport = $state<HTMLElement>();
@@ -53,7 +53,7 @@
     }
 
     onMount(() => {
-        if (!viewport) return;
+        if (!viewport || typeof b_scrollTop === 'undefined') return;
         viewport.scrollTop = b_scrollTop;
     });
 </script>

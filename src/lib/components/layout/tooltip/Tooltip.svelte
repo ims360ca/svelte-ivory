@@ -1,13 +1,15 @@
 <script lang="ts" module>
-    import type { IvoryComponent } from '$lib/types';
     import clsx from 'clsx';
     import type { Snippet } from 'svelte';
-    import type { ClassValue } from 'svelte/elements';
+    import type { ClassValue, MouseEventHandler } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
     import Popover, { type PopoverPlacement } from '../popover/Popover.svelte';
     import Portal from '../portal/Portal.svelte';
 
-    export interface TooltipProps extends IvoryComponent<HTMLElement> {
+    export interface TooltipProps {
+        onclick?: MouseEventHandler<HTMLElement>;
+        class?: ClassValue;
+        style?: string;
         children?: Snippet;
         /** The content of the tooltip */
         tooltip: string | Snippet;
@@ -67,8 +69,6 @@
     @component
     Shows additional information when hovering over an element.
 -->
-<!-- Ignoring this error is fine since it's a false positive -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
     this={href ? 'a' : rest.onclick ? 'button' : 'div'}
     type={rest.onclick ? 'button' : undefined}

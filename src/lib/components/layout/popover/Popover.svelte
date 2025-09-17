@@ -82,6 +82,7 @@
 
     // TODO: this is kinda hacky
     $effect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         [popover, target];
         postion(b_open);
     });

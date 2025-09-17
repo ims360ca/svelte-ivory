@@ -4,12 +4,14 @@
     import clsx from 'clsx';
     import { getContext, setContext, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
+    import { SvelteSet } from 'svelte/reactivity';
     import { twMerge } from 'tailwind-merge';
-    import { Column, type TableConfig, type TablePlugin, type TableRow } from '.';
+    import { Column as ColumnComponent, type TablePlugin, type TableRow } from '.';
     import ColumnHead from './ColumnHead.svelte';
     import Row from './Row.svelte';
     import VirtualList from './VirtualList.svelte';
-    import { createTableConfig } from './controller.svelte';
+    import { ColumnController, type ColumnConfig } from './columnController.svelte';
+    import { treeWalker, type TableState } from './controller';
 
     export interface TableProps<T extends TableRow<T>> {
         class?: ClassValue;
@@ -24,7 +26,11 @@
         rowClass?: ClassValue;
         headerClass?: ClassValue;
         plugins?: TablePlugin<T>[];
-        config?: TableConfig<T>;
+        /**
+         * **Bindable**
+         */
+        b_columns?: ColumnController[];
+        expanded?: SvelteSet<string>;
         /**
          * **Bindable**
          */
@@ -35,9 +41,11 @@
 
     const TABLE_CONTEXT = {};
     export type TableContext<T extends TableRow<T>> = {
-        table: TableConfig<T>;
+        registerColumn: (config: ColumnConfig) => ColumnController;
+        toggleExpansion: (id: string) => void;
         nestingInset: number;
     };
+
     function setTableContext<T extends TableRow<T>>(context: TableContext<T>) {
         setContext(TABLE_CONTEXT, context);
     }
@@ -48,8 +56,6 @@
 </script>
 
 <script lang="ts" generics="T extends TableRow<T>">
-    interface Props<TI extends { id: string }> extends TableProps<TI> {}
-
     let {
         class: clazz,
         data,
@@ -61,31 +67,57 @@
         onclick,
         href,
         plugins = [],
-        config: table = createTableConfig<T>(),
-        nestingInset = 4
-    }: Props<T> = $props();
+        expanded: expanded = new SvelteSet<string>(),
+        nestingInset = 4,
+        b_columns: externalColumns = $bindable(),
+        b_scrollTop = $bindable()
+    }: TableProps<T> = $props();
 
-    $effect(() => {
-        table.data = data;
-        table.plugins = plugins;
-    });
+    let columns = $state<ColumnController[]>(externalColumns ?? []);
+    const results = $derived(computeResults(data, expanded, plugins));
+
+    function toggleExpansion(id: string) {
+        if (expanded.has(id)) expanded.delete(id);
+        else expanded.add(id);
+    }
 
     setTableContext({
-        get table() {
-            return table;
+        toggleExpansion,
+        registerColumn(config: ColumnConfig) {
+            let existingColumn: ColumnController | undefined = undefined;
+            for (const column of existingColumn || columns) {
+                if (column.id !== config.id) continue;
+                existingColumn = column;
+                break;
+            }
+            if (existingColumn) return existingColumn;
+            const col = new ColumnController(config);
+            (externalColumns || columns).push(col);
+            return col;
         },
         get nestingInset() {
             return nestingInset;
         }
     });
 
+    function computeResults(data: T[], expanded: Set<string>, plugins: TablePlugin<T>[]) {
+        let state: TableState<T> = {
+            data,
+            expanded
+        };
+        for (const plugin of plugins) {
+            state = plugin(state);
+        }
+        return treeWalker(state);
+    }
+
     const treeIndicatorId = pseudoRandomId('tree-indicator-');
 </script>
 
 <VirtualList
-    data={table.results.entries}
+    data={results.entries}
     class={twMerge(clsx(['flex flex-col overflow-hidden border-transparent', clazz]))}
-    bind:b_scrollTop={table.scrollTop}
+    bind:b_scrollTop
     {rowHeight}
 >
     {#snippet header()}
@@ -97,7 +129,7 @@
                 )
             )}
         >
-            {#each table.columns as column (column.id)}
+            {#each externalColumns || columns as column (column.id)}
                 <ColumnHead {column}>
                     {#if typeof column.header === 'function'}
                         {@render column.header()}
@@ -119,15 +151,15 @@
             class={rowClass}
         >
             {@render firstColumn?.({ row: node })}
-            <Column
+            <ColumnComponent
                 id={treeIndicatorId}
                 resizable={false}
                 header=""
                 onclick={() => {
-                    table.toggleExpansion(node.id);
+                    toggleExpansion(node.id);
                 }}
-                ignoreWidth={table.results.someHaveChildren}
-                width={table.results.someHaveChildren ? 24 : 0}
+                ignoreWidth={results.someHaveChildren}
+                width={results.someHaveChildren ? 24 : 0}
                 minWidth={0}
             >
                 <div
@@ -138,12 +170,12 @@
                         <ChevronRight
                             class={[
                                 'ml-auto aspect-square shrink-0 transition-transform duration-100',
-                                table.expanded.has(id) && 'rotate-90'
+                                expanded.has(id) && 'rotate-90'
                             ]}
                         />
                     {/if}
                 </div>
-            </Column>
+            </ColumnComponent>
             {@render passedChildren?.({ row: node, nestingLevel, index })}
         </Row>
     {/snippet}

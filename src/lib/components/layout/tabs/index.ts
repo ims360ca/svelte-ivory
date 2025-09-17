@@ -12,4 +12,3 @@ export default Tabs;
 export { type TabProps } from './Tab.svelte';
 export { type TabPanelProps } from './TabPanel.svelte';
 export { getTabContext, type TabContext, type TabsProps } from './Tabs.svelte';
-
