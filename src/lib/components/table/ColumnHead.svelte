@@ -16,7 +16,7 @@
 <script lang="ts">
     type Props = {
         column: ColumnController;
-        children: Snippet;
+        children?: Snippet;
     };
 
     let { column, children }: Props = $props();
@@ -50,7 +50,7 @@
     bind:this={target}
     style="width: {column.width}px;"
 >
-    {@render children()}
+    {@render children?.()}
     {#if column.resizable}
         <button
             type="button"

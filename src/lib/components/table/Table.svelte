@@ -1,5 +1,4 @@
 <script lang="ts" module>
-    import { pseudoRandomId } from '$lib/utils/functions';
     import { ChevronRight } from '@lucide/svelte';
     import clsx from 'clsx';
     import { getContext, setContext, type Snippet } from 'svelte';
@@ -53,6 +52,8 @@
     export function getTableContext<T extends TableRow<T>>(): TableContext<T> {
         return getContext<TableContext<T>>(TABLE_CONTEXT);
     }
+
+    const treeIndicatorId = 'tree-chevron';
 </script>
 
 <script lang="ts" generics="T extends TableRow<T>">
@@ -75,6 +76,7 @@
 
     let columns = $state<ColumnController[]>(externalColumns ?? []);
     const results = $derived(computeResults(data, expanded, plugins));
+    let treeIndicatorColumn = $state<ColumnController>();
 
     function toggleExpansion(id: string) {
         if (expanded.has(id)) expanded.delete(id);
@@ -85,6 +87,12 @@
         toggleExpansion,
         registerColumn(config: ColumnConfig) {
             let existingColumn: ColumnController | undefined = undefined;
+
+            if (config.id === treeIndicatorId) {
+                if (!treeIndicatorColumn) treeIndicatorColumn = new ColumnController(config);
+                return treeIndicatorColumn;
+            }
+
             for (const column of existingColumn || columns) {
                 if (column.id !== config.id) continue;
                 existingColumn = column;
@@ -110,8 +118,6 @@
         }
         return treeWalker(state);
     }
-
-    const treeIndicatorId = pseudoRandomId('tree-indicator-');
 </script>
 
 <VirtualList
@@ -129,6 +135,9 @@
                 )
             )}
         >
+            {#if treeIndicatorColumn}
+                <ColumnHead column={treeIndicatorColumn}></ColumnHead>
+            {/if}
             {#each externalColumns || columns as column (column.id)}
                 <ColumnHead {column}>
                     {#if typeof column.header === 'function'}

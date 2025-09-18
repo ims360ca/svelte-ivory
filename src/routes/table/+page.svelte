@@ -100,8 +100,8 @@
         })
     ]}
 >
-    {#snippet children({ row })}
-        <Column id="name" header="Name">
+    {#snippet children({ row, nestingLevel })}
+        <Column id="name" header="Name" offsetNestingLevel={nestingLevel}>
             {row.name}
         </Column>
         <Column id="age" header="Age">
