@@ -10,7 +10,7 @@
     import ColumnHead from './ColumnHead.svelte';
     import { treeWalker } from './controller';
     import Row from './Row.svelte';
-    import { searchData } from './search.svelte';
+    import { applyHidden, searchTable } from './search.svelte';
     import VirtualList from './VirtualList.svelte';
 
     export interface TableProps<T extends TableRow<T>> {
@@ -88,25 +88,24 @@
         else expanded.add(id);
     }
 
-    let expandedBeforeSearch = $state<SvelteSet<string> | null>(null);
-    let prevSearch = $state('');
-
+    let hidden = $state(new SvelteSet<string>());
     const searchResult = $derived.by(() => {
         if (!search)
             return {
                 filteredData: data,
                 isSearching: false
             };
-        const query = search.term.trim();
-        // Note: We only use the 'filteredData' part of the search result here.
-        const { hidden } = searchData(data, query, search.matches);
         return {
-            filteredData: data.filter((d) => !hidden.has(d.id)),
+            filteredData: applyHidden(structuredClone(data), hidden),
             isSearching: true
         };
     });
     const results = $derived(treeWalker({ data: searchResult.filteredData, expanded }));
 
+    let expandedBeforeSearch = $state<SvelteSet<string> | null>(null);
+    let prevSearch = $state('');
+
+    // updates expanded and hidden states
     $effect(() => {
         if (!search) return;
         const currentSearch = search.term.trim();
@@ -117,8 +116,13 @@
         if (!wasSearching && isSearching) {
             // Save the current expansion state before overwriting it.
             expandedBeforeSearch = untrack(() => new SvelteSet(expanded));
-            const { expanded: searchExpanded } = searchData(data, currentSearch, search.matches);
+            const { expanded: searchExpanded, hidden: searchHidden } = searchTable(
+                data,
+                currentSearch,
+                search.matches
+            );
             expanded = searchExpanded; // Set the initial expansion for the search.
+            hidden = searchHidden;
         }
 
         // Transition: Searching -> Not Searching
@@ -127,13 +131,19 @@
             if (expandedBeforeSearch) {
                 expanded = expandedBeforeSearch;
                 expandedBeforeSearch = null;
+                hidden = new SvelteSet<string>();
             }
         }
 
         // Transition: Searching -> Searching (different query)
         if (wasSearching && isSearching && currentSearch !== prevSearch) {
-            const { expanded: searchExpanded } = searchData(data, currentSearch, search.matches);
+            const { expanded: searchExpanded, hidden: searchHidden } = searchTable(
+                data,
+                currentSearch,
+                search.matches
+            );
             expanded = searchExpanded; // Update the expansion for the new search.
+            hidden = searchHidden;
         }
 
         prevSearch = currentSearch;

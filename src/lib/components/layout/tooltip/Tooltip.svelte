@@ -44,7 +44,6 @@
     }: TooltipProps = $props();
 
     let target = $state<HTMLElement>();
-
     let open = $state(false);
 
     let currentTimeout: number;

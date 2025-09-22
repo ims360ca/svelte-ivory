@@ -13,11 +13,7 @@
 </script>
 
 <Tooltip tooltip="Tooltip" onclick={onClick} class="btn preset-tonal-primary">Hover me</Tooltip>
-<Tooltip
-    onclick={onClick}
-    class="btn preset-tonal-primary"
-    tooltipClass="flex flex-row items-center gap-2"
->
+<Tooltip class="btn preset-tonal-primary" tooltipClass="flex flex-row items-center gap-2">
     Snippet tooltip
     {#snippet tooltip()}
         <Bath />
