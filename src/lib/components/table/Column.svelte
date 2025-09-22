@@ -26,7 +26,7 @@
 
 <script lang="ts">
     let {
-        class: clazz = 'py-2 flex flex-row items-center',
+        class: clazz = 'py-2 flex flex-row items-center truncate',
         children,
         onclick,
         ignoreWidth = false,
@@ -71,9 +71,9 @@
         ? ''
         : `width: calc(${column.width ?? 0}px - var(--spacing) * ${offsetNestingLevel * tableContext.nestingInset}) !important;`}
     class={[
-        'relative flex h-full shrink-0 flex-row items-stretch justify-start truncate',
+        'flex h-full shrink-0 flex-row items-stretch justify-start truncate',
         !ignoreWidth && [
-            'after:absolute after:inset-y-0 after:right-2 after:box-content after:w-px',
+            'after:mr-2 after:ml-auto after:h-full after:w-px',
             column.dragging && 'after:bg-primary-400-600',
             !column.dragging && column.hovering && 'after:bg-surface-300-700'
         ]
