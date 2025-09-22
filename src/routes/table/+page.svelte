@@ -24,7 +24,12 @@
     let rows: Row[] = $derived.by(() => {
         if (!shuffleHelper) return [];
         const rows = [
-            { id: '1', name: 'Dwight', age: 42, email: 'dwight@example.com' },
+            {
+                id: '1',
+                name: 'Dwighttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt',
+                age: 42,
+                email: 'dwight@example.com'
+            },
             { id: '3', name: 'Jane', age: 36, email: 'jane@example.com' },
             { id: '4', name: 'John', age: 28, email: 'john@example.com' },
             { id: '5', name: 'Alice', age: 30, email: 'alice@example.com' },

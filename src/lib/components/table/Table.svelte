@@ -47,6 +47,7 @@
         readonly registerColumn: (config: ColumnConfig) => ColumnController;
         readonly toggleExpansion: (id: string) => void;
         readonly nestingInset: number;
+        readonly rowHeight: number;
     };
 
     function setTableContext<T extends TableRow<T>>(context: TableContext<T>) {
@@ -160,6 +161,9 @@
         },
         get nestingInset() {
             return nestingInset;
+        },
+        get rowHeight() {
+            return rowHeight;
         }
     });
 </script>
@@ -213,9 +217,9 @@
                 minWidth={0}
             >
                 <div
-                    class="flex h-full items-center justify-end pr-2"
-                    style="width: calc(var(--spacing) * {nestingLevel *
-                        nestingInset} + {treeIndicatorInset}px);"
+                    class="flex h-full items-center justify-end"
+                    style="width: calc(var(--spacing) * {nestingLevel * nestingInset -
+                        2} + {treeIndicatorInset}px);"
                 >
                     {#if node.children}
                         <ChevronRight

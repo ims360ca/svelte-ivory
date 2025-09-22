@@ -26,7 +26,7 @@
 
 <script lang="ts">
     let {
-        class: clazz = 'py-2 flex flex-row items-center truncate',
+        class: clazz,
         children,
         onclick,
         ignoreWidth = false,
@@ -42,7 +42,7 @@
     const column = tableContext.registerColumn({ resizable, ...props });
 
     const finalOnClick = $derived(onclick || rowContext.onclick);
-    const allowClicking = $derived(!!onclick);
+    const allowClicking = $derived(!!(onclick || rowContext.onclick));
 
     const element = $derived.by(() => {
         if (finalOnClick) return 'button';
@@ -59,27 +59,27 @@
     $effect(() => {
         if (!column.resizable && props.width !== undefined) column.resize(props.width);
     });
+
+    const widthStyle = $derived(
+        `calc(${column.width ?? 0}px - var(--spacing) * ${offsetNestingLevel * tableContext.nestingInset}) !important;`
+    );
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
     this={element}
     onclick={allowClicking ? finalOnClick : undefined}
-    href={rowContext.href}
+    href={!allowClicking ? rowContext.href : undefined}
     type={allowClicking ? 'button' : undefined}
-    style={ignoreWidth
-        ? ''
-        : `width: calc(${column.width ?? 0}px - var(--spacing) * ${offsetNestingLevel * tableContext.nestingInset}) !important;`}
-    class={[
-        'flex h-full shrink-0 flex-row items-stretch justify-start truncate',
-        !ignoreWidth && [
-            'after:mr-2 after:ml-auto after:h-full after:w-px',
-            column.dragging && 'after:bg-primary-400-600',
-            !column.dragging && column.hovering && 'after:bg-surface-300-700'
-        ]
-    ]}
+    style={ignoreWidth ? '' : `width: ${widthStyle}`}
+    class={twMerge(
+        clsx([
+            'box-border flex h-full shrink-0 flex-row items-center justify-start gap-1 truncate',
+            column.width !== 0 && 'pr-2',
+            defaultClasses,
+            clazz
+        ])
+    )}
 >
-    <div class={twMerge(clsx(['flex flex-row items-center gap-1', defaultClasses, clazz]))}>
-        {@render children()}
-    </div>
+    {@render children()}
 </svelte:element>
