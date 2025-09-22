@@ -4,6 +4,7 @@
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
     import type { ColumnConfig } from './columnController.svelte';
+    import { getRowContext } from './Row.svelte';
     import { getTableContext } from './Table.svelte';
 
     let defaultClasses = $state<ClassValue>();
@@ -36,9 +37,18 @@
     }: ColumnProps = $props();
 
     // Register the new column if this is the first table row that was rendered
-    const { registerColumn, nestingInset } = getTableContext();
-    const column = registerColumn({ resizable, ...props });
+    const tableContext = getTableContext();
+    const rowContext = getRowContext();
+    const column = tableContext.registerColumn({ resizable, ...props });
+
+    const finalOnClick = $derived(onclick || rowContext.onclick);
     const allowClicking = $derived(!!onclick);
+
+    const element = $derived.by(() => {
+        if (finalOnClick) return 'button';
+        if (rowContext.href) return 'a';
+        return 'div';
+    });
 
     // passes updated props to the column
     $effect(() => {
@@ -49,34 +59,27 @@
     $effect(() => {
         if (!column.resizable && props.width !== undefined) column.resize(props.width);
     });
-
-    function onClick(e: MouseEvent) {
-        e.stopPropagation();
-        e.preventDefault();
-        onclick?.(e);
-    }
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
-    this={allowClicking ? 'button' : 'div'}
-    onclick={allowClicking ? onClick : undefined}
-    type={onclick ? 'button' : undefined}
+    this={element}
+    onclick={allowClicking ? finalOnClick : undefined}
+    href={rowContext.href}
+    type={allowClicking ? 'button' : undefined}
     style={ignoreWidth
         ? ''
-        : `width: calc(${column.width ?? 0}px - var(--spacing) * ${offsetNestingLevel * nestingInset}) !important;`}
-    class={twMerge(
-        clsx(
-            'flex shrink-0 flex-row items-stretch justify-start truncate',
-            !ignoreWidth && [
-                'border-r border-transparent',
-                column.dragging && 'border-primary-400-600',
-                !column.dragging && column.hovering && 'border-surface-300-700'
-            ],
-            defaultClasses,
-            clazz
-        )
-    )}
+        : `width: calc(${column.width ?? 0}px - var(--spacing) * ${offsetNestingLevel * tableContext.nestingInset}) !important;`}
+    class={[
+        'relative flex h-full shrink-0 flex-row items-stretch justify-start truncate',
+        !ignoreWidth && [
+            'after:absolute after:inset-y-0 after:right-2 after:box-content after:w-px',
+            column.dragging && 'after:bg-primary-400-600',
+            !column.dragging && column.hovering && 'after:bg-surface-300-700'
+        ]
+    ]}
 >
-    {@render children()}
+    <div class={twMerge(clsx(['flex flex-row items-center gap-1', defaultClasses, clazz]))}>
+        {@render children()}
+    </div>
 </svelte:element>

@@ -36,7 +36,7 @@
     const onResize = (mouseX: number) => {
         if (!target) return;
         let newWidth = mouseX - target.getBoundingClientRect().left;
-        column.resize(newWidth + 2);
+        column.resize(newWidth + 8);
     };
 
     const onDragging = (d: boolean) => {
@@ -55,10 +55,8 @@
         <button
             type="button"
             class={[
-                'ml-auto flex h-full w-4 shrink-0 translate-x-px cursor-col-resize justify-center border-r bg-inherit',
-                dragging
-                    ? '!border-primary-400-600'
-                    : 'group-hover:!border-surface-300-700 border-transparent'
+                'relative ml-auto h-full w-4 shrink-0 cursor-col-resize bg-inherit after:absolute after:top-0 after:right-2 after:h-full after:w-px',
+                dragging ? 'after:bg-primary-400-600' : 'group-hover:after:bg-surface-300-700'
             ]}
             use:resize={{ resized: onResize, dragging: onDragging }}
             onmouseenter={onHoverStart}

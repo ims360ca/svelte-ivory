@@ -12,6 +12,7 @@
         b_scrollTop?: number;
         rowHeight: number;
         overscan?: number;
+        rowClass?: ClassValue;
     };
 
     let {
@@ -21,8 +22,13 @@
         header,
         b_scrollTop = $bindable(),
         rowHeight,
-        overscan = 2
+        overscan = 2,
+        rowClass
     }: Props<T> = $props();
+
+    const finalRowClass = $derived(
+        twMerge(clsx(['flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowClass]))
+    );
 
     let scroll_top = $state(b_scrollTop ?? 0);
     let scroll_left = $state(0);
@@ -85,10 +91,7 @@
             style="padding-top: {top}px; padding-bottom: {bottom}px; min-width: max(100%, {header_width}px) !important;"
         >
             {#each visible as row, i (row.data.id)}
-                <virtual-list-row
-                    class="flex w-full shrink-0 grow flex-row items-center overflow-hidden"
-                    style="height: {rowHeight}px !important;"
-                >
+                <virtual-list-row class={finalRowClass} style="height: {rowHeight}px !important;">
                     {@render children({
                         row: row.data,
                         domIndex: i,

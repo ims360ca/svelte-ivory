@@ -1,16 +1,17 @@
 <script lang="ts" module>
     import { ChevronRight } from '@lucide/svelte';
     import clsx from 'clsx';
-    import { getContext, setContext, type Snippet } from 'svelte';
+    import { getContext, setContext, untrack, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { SvelteSet } from 'svelte/reactivity';
     import { twMerge } from 'tailwind-merge';
-    import { Column as ColumnComponent, type TablePlugin, type TableRow } from '.';
-    import ColumnHead from './ColumnHead.svelte';
-    import Row from './Row.svelte';
-    import VirtualList from './VirtualList.svelte';
+    import { Column as ColumnComponent, type TableRow } from '.';
     import { ColumnController, type ColumnConfig } from './columnController.svelte';
-    import { treeWalker, type TableState } from './controller';
+    import ColumnHead from './ColumnHead.svelte';
+    import { treeWalker } from './controller';
+    import Row from './Row.svelte';
+    import { searchData } from './search.svelte';
+    import VirtualList from './VirtualList.svelte';
 
     export interface TableProps<T extends TableRow<T>> {
         class?: ClassValue;
@@ -24,7 +25,10 @@
         firstColumn?: Snippet<[{ row: T }]>;
         rowClass?: ClassValue;
         headerClass?: ClassValue;
-        plugins?: TablePlugin<T>[];
+        search?: {
+            term: string;
+            matches: (row: T) => boolean;
+        };
         /**
          * **Bindable**
          */
@@ -40,9 +44,9 @@
 
     const TABLE_CONTEXT = {};
     export type TableContext<T extends TableRow<T>> = {
-        registerColumn: (config: ColumnConfig) => ColumnController;
-        toggleExpansion: (id: string) => void;
-        nestingInset: number;
+        readonly registerColumn: (config: ColumnConfig) => ColumnController;
+        readonly toggleExpansion: (id: string) => void;
+        readonly nestingInset: number;
     };
 
     function setTableContext<T extends TableRow<T>>(context: TableContext<T>) {
@@ -54,6 +58,7 @@
     }
 
     const treeIndicatorId = 'tree-chevron';
+    const treeIndicatorInset = 32;
 </script>
 
 <script lang="ts" generics="T extends TableRow<T>">
@@ -62,26 +67,76 @@
         data,
         children: passedChildren,
         firstColumn,
-        rowClass,
+        rowClass = 'hover:bg-surface-950-50/10 transition-colors',
         headerClass,
         rowHeight = 64,
         onclick,
         href,
-        plugins = [],
         expanded: expanded = new SvelteSet<string>(),
         nestingInset = 4,
         b_columns: externalColumns = $bindable(),
-        b_scrollTop = $bindable()
+        b_scrollTop = $bindable(),
+        search
     }: TableProps<T> = $props();
 
     let columns = $state<ColumnController[]>(externalColumns ?? []);
-    const results = $derived(computeResults(data, expanded, plugins));
     let treeIndicatorColumn = $state<ColumnController>();
 
     function toggleExpansion(id: string) {
         if (expanded.has(id)) expanded.delete(id);
         else expanded.add(id);
     }
+
+    let expandedBeforeSearch = $state<SvelteSet<string> | null>(null);
+    let prevSearch = $state('');
+
+    const searchResult = $derived.by(() => {
+        if (!search)
+            return {
+                filteredData: data,
+                isSearching: false
+            };
+        const query = search.term.trim();
+        // Note: We only use the 'filteredData' part of the search result here.
+        const { hidden } = searchData(data, query, search.matches);
+        return {
+            filteredData: data.filter((d) => !hidden.has(d.id)),
+            isSearching: true
+        };
+    });
+    const results = $derived(treeWalker({ data: searchResult.filteredData, expanded }));
+
+    $effect(() => {
+        if (!search) return;
+        const currentSearch = search.term.trim();
+        const wasSearching = prevSearch !== '';
+        const isSearching = currentSearch !== '';
+
+        // Transition: Not Searching -> Searching
+        if (!wasSearching && isSearching) {
+            // Save the current expansion state before overwriting it.
+            expandedBeforeSearch = untrack(() => new SvelteSet(expanded));
+            const { expanded: searchExpanded } = searchData(data, currentSearch, search.matches);
+            expanded = searchExpanded; // Set the initial expansion for the search.
+        }
+
+        // Transition: Searching -> Not Searching
+        if (wasSearching && !isSearching) {
+            // Restore the saved expansion state.
+            if (expandedBeforeSearch) {
+                expanded = expandedBeforeSearch;
+                expandedBeforeSearch = null;
+            }
+        }
+
+        // Transition: Searching -> Searching (different query)
+        if (wasSearching && isSearching && currentSearch !== prevSearch) {
+            const { expanded: searchExpanded } = searchData(data, currentSearch, search.matches);
+            expanded = searchExpanded; // Update the expansion for the new search.
+        }
+
+        prevSearch = currentSearch;
+    });
 
     setTableContext({
         toggleExpansion,
@@ -107,17 +162,6 @@
             return nestingInset;
         }
     });
-
-    function computeResults(data: T[], expanded: Set<string>, plugins: TablePlugin<T>[]) {
-        let state: TableState<T> = {
-            data,
-            expanded
-        };
-        for (const plugin of plugins) {
-            state = plugin(state);
-        }
-        return treeWalker(state);
-    }
 </script>
 
 <VirtualList
@@ -125,12 +169,13 @@
     class={twMerge(clsx(['flex flex-col overflow-hidden border-transparent', clazz]))}
     bind:b_scrollTop
     {rowHeight}
+    rowClass={['pl-2 pr-4', rowClass]}
 >
     {#snippet header()}
         <div
             class={twMerge(
                 clsx(
-                    'flex w-fit min-w-full flex-row gap-2 border-b border-inherit pr-4 pl-2',
+                    'flex w-fit min-w-full flex-row border-b border-inherit pr-4 pl-2',
                     headerClass
                 )
             )}
@@ -154,11 +199,7 @@
         </div>
     {/snippet}
     {#snippet children({ row: { node, id, nestingLevel }, index })}
-        <Row
-            onclick={onclick ? () => onclick(node) : undefined}
-            href={href?.(node)}
-            class={rowClass}
-        >
+        <Row href={href?.(node)} onclick={onclick ? () => onclick(node) : undefined}>
             {@render firstColumn?.({ row: node })}
             <ColumnComponent
                 id={treeIndicatorId}
@@ -168,12 +209,13 @@
                     toggleExpansion(node.id);
                 }}
                 ignoreWidth={results.someHaveChildren}
-                width={results.someHaveChildren ? 24 : 0}
+                width={results.someHaveChildren ? treeIndicatorInset : 0}
                 minWidth={0}
             >
                 <div
-                    class="flex h-full items-center justify-end"
-                    style="width: calc(var(--spacing) * {nestingLevel * nestingInset} + 24px);"
+                    class="flex h-full items-center justify-end pr-2"
+                    style="width: calc(var(--spacing) * {nestingLevel *
+                        nestingInset} + {treeIndicatorInset}px);"
                 >
                     {#if node.children}
                         <ChevronRight

@@ -1,9 +1,11 @@
+import type { SvelteSet } from 'svelte/reactivity';
+
 export type TableRow<T> = { id: string; children?: T[] };
-export type TablePlugin<T extends TableRow<T>> = (state: TableState<T>) => TableState<T>;
+export type TablePlugin<T extends TableRow<T>> = (state: TableState<T>) => void;
 
 export interface TableState<T extends TableRow<T>> {
     data: T[];
-    expanded: Set<string>;
+    expanded: SvelteSet<string>;
 }
 
 interface TreeRow<T> {

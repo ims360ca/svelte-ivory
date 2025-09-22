@@ -1,7 +1,6 @@
 <script lang="ts" module>
     import Toggle from '$lib/components/basic/toggle/Toggle.svelte';
     import Column from '$lib/components/table/Column.svelte';
-    import { searchPlugin } from '$lib/components/table/plugins/search.svelte';
     import Table from '$lib/components/table/Table.svelte';
     import { Toasts } from '$lib/components/toast';
     import { Mail } from '@lucide/svelte';
@@ -21,7 +20,9 @@
     let rowHeight = $state(64);
     let search = $state('');
 
+    let shuffleHelper = $state(1);
     let rows: Row[] = $derived.by(() => {
+        if (!shuffleHelper) return [];
         const rows = [
             { id: '1', name: 'Dwight', age: 42, email: 'dwight@example.com' },
             { id: '3', name: 'Jane', age: 36, email: 'jane@example.com' },
@@ -65,13 +66,16 @@
             },
             { id: '6', name: 'Bob', age: 32, email: 'bob@example.com' },
             { id: '7', name: 'Carol', age: 34, email: 'carol@example.com' }
-        ];
+        ].sort(() => Math.random() - 0.5);
 
         return rows;
     });
 </script>
 
 <div class="flex flex-row items-center gap-2">
+    <button onclick={() => shuffleHelper++} class="flex flex-row items-center gap-2">
+        Shuffle
+    </button>
     <button onclick={() => (children = !children)} class="flex flex-row items-center gap-2">
         <Toggle value={children} />
         Toggle children
@@ -89,16 +93,12 @@
         });
     }}
     {rowHeight}
-    plugins={[
-        searchPlugin({
-            get search() {
-                return search;
-            },
-            matches(row) {
-                return row.name.toLowerCase().includes(search.toLowerCase());
-            }
-        })
-    ]}
+    search={{
+        term: search,
+        matches(row) {
+            return row.name.toLowerCase().includes(search.toLowerCase());
+        }
+    }}
 >
     {#snippet children({ row, nestingLevel })}
         <Column id="name" header="Name" offsetNestingLevel={nestingLevel}>

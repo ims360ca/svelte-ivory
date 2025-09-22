@@ -1,66 +1,39 @@
 <script lang="ts" module>
-    import clsx from 'clsx';
-    import { type Snippet } from 'svelte';
-    import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
+    import { getContext, setContext, type Snippet } from 'svelte';
 
-    let defaultClasses = $state<ClassValue>();
-
-    export function setClasses(c: ClassValue) {
-        defaultClasses = c;
-    }
-
-    export interface Props {
-        class?: ClassValue;
+    interface Props {
         onclick?: () => void;
         href?: string;
         children: Snippet;
     }
+
+    interface RowContext {
+        readonly onclick?: () => void;
+        readonly href?: string;
+    }
+
+    const CONTEXT = {};
+
+    function setRowContext(context: RowContext) {
+        setContext(CONTEXT, context);
+    }
+
+    export function getRowContext(): RowContext {
+        return getContext(CONTEXT);
+    }
 </script>
 
 <script lang="ts">
-    let {
-        class: clazz = 'hover:bg-surface-950-50/10 transition-colors',
-        onclick,
-        href,
-        children
-    }: Props = $props();
+    let { onclick, href, children }: Props = $props();
 
-    const elementProps: {
-        this: 'button' | 'a' | 'div';
-        type?: 'button';
-        onclick?: () => void;
-        href?: string;
-    } = $derived.by(() => {
-        if (onclick) {
-            return {
-                this: 'button',
-                type: 'button',
-                onclick
-            };
-        } else if (href) {
-            return {
-                this: 'a',
-                href: href
-            };
-        } else {
-            return {
-                this: 'div'
-            };
+    setRowContext({
+        get onclick() {
+            return onclick;
+        },
+        get href() {
+            return href;
         }
     });
 </script>
 
-<svelte:element
-    this={elementProps.this}
-    {...elementProps}
-    class={twMerge(
-        clsx(
-            'flex h-full min-w-full grow flex-row items-stretch gap-2 overflow-hidden pr-4 pl-2',
-            defaultClasses,
-            clazz
-        )
-    )}
->
-    {@render children()}
-</svelte:element>
+{@render children()}
