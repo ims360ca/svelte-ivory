@@ -5,10 +5,10 @@
     import type { ClassValue } from 'svelte/elements';
     import { SvelteSet } from 'svelte/reactivity';
     import { twMerge } from 'tailwind-merge';
-    import { Column as ColumnComponent, type TableRow } from '.';
+    import ColumnComponent from './Column.svelte';
     import { ColumnController, type ColumnConfig } from './columnController.svelte';
     import ColumnHead from './ColumnHead.svelte';
-    import { treeWalker } from './controller';
+    import { treeWalker, type TableRow } from './controller';
     import Row from './Row.svelte';
     import { applyHidden, searchTable } from './search.svelte';
     import VirtualList from './VirtualList.svelte';

@@ -65,7 +65,7 @@
 
 {#if open}
     <Portal>
-        <HiddenBackground>
+        <HiddenBackground class="flex items-center justify-center">
             {@render children()}
         </HiddenBackground>
     </Portal>
