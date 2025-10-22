@@ -4,6 +4,7 @@
     import type { ModalVariant } from '$lib/components/layout/modal/Modal.svelte';
 
     let open = $state(false);
+    let open2 = $state(false);
     let variant = $state<ModalVariant>();
 </script>
 
@@ -34,4 +35,13 @@
         <option value="warning">Warning</option>
         <option value="error">Error</option>
     </select>
+    <button
+        class="btn"
+        onclick={() => {
+            open2 = true;
+        }}
+    >
+        Open new modal
+    </button>
 </Modal>
+<Modal bind:b_open={open2} title="Modal">Content</Modal>

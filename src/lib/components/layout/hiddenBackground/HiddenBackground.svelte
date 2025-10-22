@@ -41,10 +41,10 @@
     )}
     open
     use:focusTrap={true}
-    use:shortcut={{
+    {@attach shortcut({
         code: 'Escape',
         callback: onclose ?? (() => {})
-    }}
+    })}
     onclick={onclose}
     in:inTransition
     out:outTransition
