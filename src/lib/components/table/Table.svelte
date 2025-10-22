@@ -48,6 +48,7 @@
         readonly toggleExpansion: (id: string) => void;
         readonly nestingInset: number;
         readonly rowHeight: number;
+        readonly scrollTo: (top?: number, left?: number) => void;
     };
 
     function setTableContext<T extends TableRow<T>>(context: TableContext<T>) {
@@ -175,6 +176,9 @@
         },
         get rowHeight() {
             return rowHeight;
+        },
+        scrollTo(top?: number, left?: number) {
+            list?.scrollTo(top, left);
         }
     });
 
