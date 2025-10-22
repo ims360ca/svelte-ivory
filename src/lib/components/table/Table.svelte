@@ -88,6 +88,7 @@
         else expanded.add(id);
     }
 
+    // eslint-disable-next-line svelte/no-unnecessary-state-wrap
     let hidden = $state(new SvelteSet<string>());
     const searchResult = $derived.by(() => {
         if (!search)
@@ -176,9 +177,16 @@
             return rowHeight;
         }
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let list = $state<VirtualList<any>>();
+    export function scrollTo(top?: number, left?: number) {
+        list?.scrollTo(top, left);
+    }
 </script>
 
 <VirtualList
+    bind:this={list}
     data={results.entries}
     class={twMerge(clsx(['flex flex-col overflow-hidden border-transparent', clazz]))}
     bind:b_scrollTop

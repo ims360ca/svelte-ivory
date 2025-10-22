@@ -36,6 +36,19 @@
     let viewport = $state<HTMLElement>();
     let viewport_height = $state(0);
 
+    export function scrollTo(top?: number, left?: number) {
+        if (!viewport) return;
+        if (top !== undefined) {
+            scroll_top = top;
+            viewport.scrollTop = top;
+            b_scrollTop = top;
+        }
+        if (left !== undefined) {
+            scroll_left = left;
+            viewport.scrollLeft = left;
+        }
+    }
+
     const start = $derived(Math.max(0, Math.floor(scroll_top / rowHeight) - overscan));
 
     const end = $derived(

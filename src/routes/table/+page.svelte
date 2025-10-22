@@ -75,9 +75,12 @@
 
         return rows;
     });
+
+    let table = $state<Table<Row>>();
 </script>
 
 <div class="flex flex-row items-center gap-2">
+    <button onclick={() => table?.scrollTo(20, 20)}>Scroll to top</button>
     <button onclick={() => shuffleHelper++} class="flex flex-row items-center gap-2">
         Shuffle
     </button>
@@ -89,6 +92,7 @@
     <input type="text" bind:value={search} placeholder="Search" />
 </div>
 <Table
+    bind:this={table}
     data={rows}
     class="border-surface-300-700 w-full grow rounded border"
     onclick={() => {
