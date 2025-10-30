@@ -25,7 +25,7 @@ Use the following structure for your components:
 
 ### Prop naming
 
-[**Bindables**](https://svelte.dev/docs/svelte/$bindable): If a prop is bindable, prefix it with `b_` (e.g. `b_open`).  
+[**Bindables**](https://svelte.dev/docs/svelte/$bindable): Avoid using bindables.
 [**Events**](https://svelte.dev/docs/svelte/basic-markup#Events): If a prop is an event handler, follow svelte's `onfooBar` naming convention (note that the first character of the name is not capitalized).
 
 ## Naming

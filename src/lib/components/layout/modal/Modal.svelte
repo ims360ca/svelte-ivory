@@ -53,7 +53,6 @@
     }: Props = $props();
 
     function close() {
-        if (preventClosing) return;
         b_open = false;
     }
 
@@ -70,7 +69,10 @@
 {#if b_open}
     <Portal>
         <HiddenBackground
-            onclose={close}
+            onclose={() => {
+                if (preventClosing) return;
+                close();
+            }}
             class="flex h-full w-full flex-col items-center justify-start p-8 lg:p-12 xl:p-16"
         >
             {#if modal}
