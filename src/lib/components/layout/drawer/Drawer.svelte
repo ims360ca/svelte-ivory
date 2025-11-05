@@ -13,20 +13,20 @@
 
     export type DrawerProps = TransitionProps & {
         class?: string;
-        b_open: boolean;
         title?: string | Snippet;
         children: Snippet;
         placement?: DrawerPlacement;
+        closeOnOutsideClick?: boolean;
     };
 </script>
 
 <script lang="ts">
     let {
         class: clazz,
-        b_open = $bindable(false),
         children,
         title,
         placement = 'right',
+        closeOnOutsideClick = true,
         inTransition = (e) =>
             fly(e, { x: placement === 'right' ? '100%' : '-100%', duration: 200 }),
         outTransition = (e) =>
@@ -34,14 +34,31 @@
         ...rest
     }: DrawerProps = $props();
 
-    const onclose = () => {
-        b_open = false;
-    };
+    let currentlyOpen = $state(false);
+    export function close() {
+        currentlyOpen = false;
+    }
+
+    export function open() {
+        currentlyOpen = true;
+    }
+
+    export function toggle() {
+        currentlyOpen = !currentlyOpen;
+    }
+
+    export function isOpen() {
+        return currentlyOpen;
+    }
 </script>
 
-{#if b_open}
+{#if currentlyOpen}
     <Portal>
-        <HiddenBackground {onclose}>
+        <HiddenBackground
+            onclose={() => {
+                if (closeOnOutsideClick) close();
+            }}
+        >
             <div
                 class={twMerge(
                     clsx([
@@ -66,7 +83,7 @@
                             {/if}
                         </Heading>
                     {/if}
-                    <button class="group ml-auto flex justify-end" type="button" onclick={onclose}>
+                    <button class="group ml-auto flex justify-end" type="button" onclick={close}>
                         <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
                     </button>
                 </div>

@@ -14,12 +14,14 @@
         class?: ClassValue;
         /** Class of the div wrapping the children */
         innerClass?: ClassValue;
-        /** If `true`, the modal will be open */
-        b_open: boolean;
         /** Content of the modal */
         children?: Snippet;
-        /** If `true` the modal will not close when clicking outside of it */
-        preventClosing?: boolean;
+        /**
+         * If `true` the modal will not close when clicking outside of it
+         *
+         * Defaults to `true`
+         * */
+        closeOnOutsideClick?: boolean;
         /** Variant of the modal, applies styling to the header */
         variant?: ModalVariant;
         title?: string | Snippet;
@@ -38,10 +40,9 @@
     let {
         class: clazz = 'flex flex-col',
         title,
-        b_open = $bindable(),
         children,
         modal,
-        preventClosing = false,
+        closeOnOutsideClick = true,
         variant,
         innerClass,
         inTransition = (e) =>
@@ -52,8 +53,22 @@
         ...rest
     }: Props = $props();
 
-    function close() {
-        b_open = false;
+    let currentlyOpen = $state(false);
+
+    export function close() {
+        currentlyOpen = false;
+    }
+
+    export function open() {
+        currentlyOpen = true;
+    }
+
+    export function toggle() {
+        currentlyOpen = !currentlyOpen;
+    }
+
+    export function isOpen() {
+        return currentlyOpen;
     }
 
     const onclick: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -66,12 +81,11 @@
 	@component
 	A modal, comes with a title, close button and different variants per default.
 -->
-{#if b_open}
+{#if currentlyOpen}
     <Portal>
         <HiddenBackground
             onclose={() => {
-                if (preventClosing) return;
-                close();
+                if (closeOnOutsideClick) close();
             }}
             class="flex h-full w-full flex-col items-center justify-start p-8 lg:p-12 xl:p-16"
         >

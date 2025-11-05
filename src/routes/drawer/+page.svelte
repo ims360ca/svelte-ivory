@@ -1,12 +1,12 @@
 <script lang="ts">
     import Drawer from '$lib/components/layout/drawer/Drawer.svelte';
 
-    let rightOpen = $state(false);
-    let leftOpen = $state(false);
+    let rightDrawer = $state<Drawer>();
+    let leftDrawer = $state<Drawer>();
 </script>
 
-<button onclick={() => (rightOpen = true)}>Open right</button>
-<button onclick={() => (leftOpen = true)}>Open left</button>
+<button onclick={rightDrawer?.open}>Open right</button>
+<button onclick={leftDrawer?.open}>Open left</button>
 
-<Drawer bind:b_open={rightOpen} title="Right" placement="right">Content</Drawer>
-<Drawer bind:b_open={leftOpen} title="Left" placement="left">Content</Drawer>
+<Drawer bind:this={rightDrawer} title="Right" placement="right">Content</Drawer>
+<Drawer bind:this={leftDrawer} title="Left" placement="left">Content</Drawer>

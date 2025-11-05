@@ -4,7 +4,6 @@
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
     import Popover, { type PopoverPlacement } from '../popover/Popover.svelte';
-    import Portal from '../portal/Portal.svelte';
 
     export interface TooltipProps {
         onclick?: MouseEventHandler<HTMLElement>;
@@ -44,23 +43,24 @@
     }: TooltipProps = $props();
 
     let target = $state<HTMLElement>();
-    let open = $state(false);
+
+    let popover = $state<Popover>();
 
     let currentTimeout: number;
     function onmouseenter() {
         clearTimeout(currentTimeout);
         if (timeout === 0) {
-            open = true;
+            popover?.open();
         } else {
             currentTimeout = setTimeout(() => {
-                open = true;
+                popover?.open();
             }, timeout) as unknown as number;
         }
     }
 
     function onmouseleave() {
         clearTimeout(currentTimeout);
-        open = false;
+        popover?.close();
     }
 </script>
 
@@ -80,24 +80,20 @@
     {@render children?.()}
 </svelte:element>
 
-{#if open}
-    <Portal>
-        <Popover
-            bind:b_open={open}
-            {target}
-            {placement}
-            class={twMerge(
-                clsx(
-                    'bg-surface-50-950 max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',
-                    tooltipClass
-                )
-            )}
-        >
-            {#if typeof tooltip === 'string'}
-                {tooltip}
-            {:else}
-                {@render tooltip()}
-            {/if}
-        </Popover>
-    </Portal>
-{/if}
+<Popover
+    bind:this={popover}
+    {target}
+    {placement}
+    class={twMerge(
+        clsx(
+            'bg-surface-50-950 max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',
+            tooltipClass
+        )
+    )}
+>
+    {#if typeof tooltip === 'string'}
+        {tooltip}
+    {:else}
+        {@render tooltip()}
+    {/if}
+</Popover>

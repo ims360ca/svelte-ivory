@@ -3,21 +3,14 @@
     import { Modal } from '$lib/components/layout/index';
     import type { ModalVariant } from '$lib/components/layout/modal/Modal.svelte';
 
-    let open = $state(false);
-    let open2 = $state(false);
+    let modal = $state<Modal>();
+    let modal2 = $state<Modal>();
     let variant = $state<ModalVariant>();
 </script>
 
-<button
-    onclick={() => {
-        open = true;
-    }}
-    class="btn preset-tonal-primary"
->
-    Open modal
-</button>
+<button onclick={modal?.open} class="btn preset-tonal-primary"> Open modal </button>
 
-<Modal bind:b_open={open} title="Modal" {variant}>
+<Modal bind:this={modal} title="Modal" {variant}>
     <p>Content</p>
     <button
         class="flex flex-row items-center gap-2"
@@ -35,13 +28,6 @@
         <option value="warning">Warning</option>
         <option value="error">Error</option>
     </select>
-    <button
-        class="btn"
-        onclick={() => {
-            open2 = true;
-        }}
-    >
-        Open new modal
-    </button>
+    <button class="btn" onclick={modal2?.open}> Open new modal </button>
 </Modal>
-<Modal bind:b_open={open2} title="Modal">Content</Modal>
+<Modal bind:this={modal2} title="Modal" closeOnOutsideClick={false}>Content</Modal>

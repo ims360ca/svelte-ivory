@@ -12,13 +12,12 @@
     import clsx from 'clsx';
     import { twMerge } from 'tailwind-merge';
     import { clickOutside } from '../../../utils/actions/clickOutside';
+    import Portal from '../portal/Portal.svelte';
 
     /** Possible placements for the popover */
     export type PopoverPlacement = ComputePositionConfig['placement'];
 
     export interface PopoverProps extends IvoryComponent<HTMLDivElement> {
-        /** Whether the popover is open or not */
-        b_open: boolean;
         /** The element the popover will be positioned relative to */
         target: Element | undefined;
         /**
@@ -45,13 +44,10 @@
 <script lang="ts">
     let {
         class: clazz,
-        b_open = $bindable(false),
         style: externalStyle,
         target,
         placement = 'bottom-start',
-        onClickOutside = () => {
-            b_open = false;
-        },
+        onClickOutside = close,
         keepMounted = false,
         children,
         autoplacement,
@@ -70,21 +66,33 @@
         style = `top: ${y}px; left: ${x}px;`;
     };
 
+    let currentlyOpen = $state(false);
+
     let cleanup: () => void = () => {};
-    $effect(() => {
-        if (browser && popover && target)
-            if (b_open) {
-                cleanup = autoUpdate(target, popover, () => postion(b_open));
-            } else {
-                cleanup();
-            }
-    });
+    export function close() {
+        currentlyOpen = false;
+        cleanup();
+    }
+
+    export function open() {
+        currentlyOpen = true;
+        if (!target || !popover) return;
+        cleanup = autoUpdate(target, popover, () => postion(true));
+    }
+
+    export function toggle() {
+        currentlyOpen = !currentlyOpen;
+    }
+
+    export function isOpen() {
+        return currentlyOpen;
+    }
 
     // TODO: this is kinda hacky
     $effect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         [popover, target];
-        postion(b_open);
+        postion(currentlyOpen);
     });
 </script>
 
@@ -92,16 +100,22 @@
     @component
     A popover, positions itself relative to a target element.
 -->
-{#if b_open || keepMounted}
-    <div
-        class={twMerge(
-            clsx('absolute z-30', !keepMounted && clazz, keepMounted && !b_open ? 'hidden' : clazz)
-        )}
-        style={style + ' ' + externalStyle}
-        bind:this={popover}
-        use:clickOutside={{ callback: onClickOutside, target }}
-        {...rest}
-    >
-        {@render children?.()}
-    </div>
+{#if currentlyOpen || keepMounted}
+    <Portal>
+        <div
+            class={twMerge(
+                clsx(
+                    'absolute z-30',
+                    !keepMounted && clazz,
+                    keepMounted && !currentlyOpen ? 'hidden' : clazz
+                )
+            )}
+            style={style + ' ' + externalStyle}
+            bind:this={popover}
+            use:clickOutside={{ callback: onClickOutside, target }}
+            {...rest}
+        >
+            {@render children?.()}
+        </div>
+    </Portal>
 {/if}

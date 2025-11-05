@@ -84,7 +84,38 @@
     let columns = $state<ColumnController[]>(externalColumns ?? []);
     let treeIndicatorColumn = $state<ColumnController>();
 
-    function toggleExpansion(id: string) {
+    setTableContext({
+        toggleExpansion,
+        registerColumn(config: ColumnConfig) {
+            let existingColumn: ColumnController | undefined = undefined;
+
+            if (config.id === treeIndicatorId) {
+                if (!treeIndicatorColumn) treeIndicatorColumn = new ColumnController(config);
+                return treeIndicatorColumn;
+            }
+
+            for (const column of existingColumn || columns) {
+                if (column.id !== config.id) continue;
+                existingColumn = column;
+                break;
+            }
+            if (existingColumn) return existingColumn;
+            const col = new ColumnController(config);
+            (externalColumns || columns).push(col);
+            return col;
+        },
+        get nestingInset() {
+            return nestingInset;
+        },
+        get rowHeight() {
+            return rowHeight;
+        },
+        scrollTo(top?: number, left?: number) {
+            list?.scrollTo(top, left);
+        }
+    });
+
+    export function toggleExpansion(id: string) {
         if (expanded.has(id)) expanded.delete(id);
         else expanded.add(id);
     }
@@ -149,37 +180,6 @@
         }
 
         prevSearch = currentSearch;
-    });
-
-    setTableContext({
-        toggleExpansion,
-        registerColumn(config: ColumnConfig) {
-            let existingColumn: ColumnController | undefined = undefined;
-
-            if (config.id === treeIndicatorId) {
-                if (!treeIndicatorColumn) treeIndicatorColumn = new ColumnController(config);
-                return treeIndicatorColumn;
-            }
-
-            for (const column of existingColumn || columns) {
-                if (column.id !== config.id) continue;
-                existingColumn = column;
-                break;
-            }
-            if (existingColumn) return existingColumn;
-            const col = new ColumnController(config);
-            (externalColumns || columns).push(col);
-            return col;
-        },
-        get nestingInset() {
-            return nestingInset;
-        },
-        get rowHeight() {
-            return rowHeight;
-        },
-        scrollTo(top?: number, left?: number) {
-            list?.scrollTo(top, left);
-        }
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
