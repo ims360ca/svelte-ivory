@@ -3,7 +3,7 @@
     import { getContext, onDestroy, setContext } from 'svelte';
 
     export interface TabsProps extends IvoryComponent<HTMLDivElement> {
-        b_index?: number;
+        initialTab?: number;
     }
 
     export interface TabContext {
@@ -24,26 +24,29 @@
 </script>
 
 <script lang="ts">
-    let { children, b_index = $bindable(0), ...rest }: TabsProps = $props();
+    let { children, initialTab = 0, ...rest }: TabsProps = $props();
 
     let allTabs: string[] = $state([]);
     let panels: string[] = $state([]);
+    let index: number = $state(initialTab);
 
     export const forward = () => {
-        if (b_index >= panels.length - 1) {
-            b_index = 0;
+        if (index >= panels.length - 1) {
+            index = 0;
         } else {
-            b_index++;
+            index++;
         }
     };
 
     export const back = () => {
-        if (b_index === 0) {
-            b_index = panels.length - 1;
+        if (index === 0) {
+            index = panels.length - 1;
         } else {
-            b_index--;
+            index--;
         }
     };
+
+    export const currentTab = () => index;
 
     setTabContext({
         registerTab: (tab: string) => {
@@ -56,23 +59,23 @@
 
         registerPanel: (panel: string) => {
             panels.push(panel);
-            b_index = b_index;
+            index = index;
             onDestroy(() => {
                 panels.filter((p) => p !== panel);
             });
         },
 
         get selectedTab() {
-            return allTabs[b_index];
+            return allTabs[index];
         },
         set selectedTab(tab: string) {
-            b_index = allTabs.indexOf(tab);
+            index = allTabs.indexOf(tab);
         },
         get selectedPanel() {
-            return panels[b_index];
+            return panels[index];
         },
         set selectedPanel(panel: string) {
-            b_index = panels.indexOf(panel);
+            index = panels.indexOf(panel);
         },
         tabs: allTabs
     });
