@@ -5,9 +5,8 @@
     import type { Snippet } from 'svelte';
     import { fly } from 'svelte/transition';
     import { twMerge } from 'tailwind-merge';
-    import { Portal } from '..';
-    import Heading from '../heading';
-    import HiddenBackground from '../hiddenBackground';
+    import { HiddenBackground, Portal } from '..';
+    import Heading from '../Heading.svelte';
 
     export type DrawerPlacement = 'left' | 'right';
 

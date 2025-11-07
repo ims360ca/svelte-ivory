@@ -1,5 +1,6 @@
 <script lang="ts" module>
     import { page } from '$app/state';
+    import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import { pseudoRandomId } from '$lib/utils/functions/index';
     import clsx from 'clsx';
@@ -7,14 +8,6 @@
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
     import { getTabContext } from './Tabs.svelte';
-
-    let defaultClass = $state(
-        (selected: boolean): ClassValue => [selected ? 'text-primary-500' : '']
-    );
-
-    export function setDefaultClass(clazz: (selected: boolean) => ClassValue) {
-        defaultClass = clazz;
-    }
 
     export interface TabProps extends Omit<IvoryComponent<HTMLElement>, 'children'> {
         class?: ClassValue | ((selected: boolean) => ClassValue);
@@ -32,7 +25,7 @@
 </script>
 
 <script lang="ts">
-    let { class: clazz = defaultClass, id, href, children, active }: TabProps = $props();
+    let { class: clazz, id, href, children, active }: TabProps = $props();
 
     const tab = pseudoRandomId('tab-');
     const tabs = getTabContext();
@@ -62,6 +55,7 @@
     class={twMerge(
         clsx(
             'btn flex h-fit w-fit shrink-0 items-center justify-center px-0 text-xl font-bold select-none',
+            theme.current.tabs?.tab?.class?.(selected),
             typeof clazz === 'function' ? clazz(selected) : clazz
         )
     )}

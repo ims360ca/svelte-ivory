@@ -1,4 +1,5 @@
 <script lang="ts" module>
+    import { theme } from '$lib/theme.svelte';
     import clsx from 'clsx';
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
@@ -6,12 +7,6 @@
     import type { ColumnConfig } from './columnController.svelte';
     import { getRowContext } from './Row.svelte';
     import { getTableContext } from './Table.svelte';
-
-    let defaultClasses = $state<ClassValue>();
-
-    export function setClasses(c: ClassValue) {
-        defaultClasses = c;
-    }
 
     export interface ColumnProps extends ColumnConfig {
         class?: ClassValue;
@@ -75,8 +70,8 @@
     class={twMerge(
         clsx([
             'box-border flex h-full shrink-0 flex-row items-center justify-start gap-1 truncate',
-            column.width !== 0 && 'border-r-[calc(var(--spacing)_*_2)] border-transparent',
-            defaultClasses,
+            column.width !== 0 && 'border-r-[calc(var(--spacing)*2)] border-transparent',
+            theme.current.table?.column?.class,
             clazz
         ])
     )}

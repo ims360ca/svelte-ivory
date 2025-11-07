@@ -1,14 +1,3 @@
-import Tab, { setDefaultClass } from './Tab.svelte';
-import TabPanel from './TabPanel.svelte';
-import { default as TabsComponent } from './Tabs.svelte';
-
-const Tabs = Object.assign(TabsComponent, {
-    Tab: Tab,
-    Panel: TabPanel,
-    setDefaultTabClass: setDefaultClass
-});
-
-export default Tabs;
-export { type TabProps } from './Tab.svelte';
-export { type TabPanelProps } from './TabPanel.svelte';
-export { getTabContext, type TabContext, type TabsProps } from './Tabs.svelte';
+export { default as Tab, type TabProps } from './Tab.svelte';
+export { default as TabPanel, type TabPanelProps } from './TabPanel.svelte';
+export { getTabContext, default as Tabs, type TabContext, type TabsProps } from './Tabs.svelte';
