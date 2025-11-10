@@ -48,7 +48,7 @@
 <div
     class={['group flex shrink-0 flex-row justify-start']}
     bind:this={target}
-    style="width: {column.width}px;"
+    style="width: {column?.width ?? 0}px;"
 >
     {@render children?.()}
     {#if column.resizable}

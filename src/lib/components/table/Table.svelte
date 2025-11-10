@@ -191,11 +191,11 @@
 
 <VirtualList
     bind:this={list}
+    bind:b_scrollTop
     data={results.entries}
     class={twMerge(clsx(['flex flex-col overflow-hidden border-transparent', clazz]))}
-    bind:b_scrollTop
-    {rowHeight}
     rowClass={['pl-2 pr-4', rowClass]}
+    {rowHeight}
 >
     {#snippet header()}
         <div
@@ -206,7 +206,7 @@
                 )
             )}
         >
-            {#if treeIndicatorColumn}
+            {#if treeIndicatorColumn instanceof ColumnController}
                 <ColumnHead column={treeIndicatorColumn}></ColumnHead>
             {/if}
             {#each externalColumns || columns as column (column.id)}
