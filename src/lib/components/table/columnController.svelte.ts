@@ -32,14 +32,14 @@ export class ColumnController {
     }
 
     updateConfig(conf: ColumnConfig) {
-        if (conf.minWidth !== undefined) {
-            this.minimalWidth = conf.minWidth;
-        } else {
-            this.minimalWidth = (conf.width ?? DEFAULT_WIDTH) * MINIMAL_WIDTH_MULTIPLIER;
-        }
-        if (this.width === undefined) {
+        if (typeof this.width === 'undefined') {
             const newWidth = typeof conf.width === 'undefined' ? DEFAULT_WIDTH : conf.width;
             this.width = newWidth;
+        }
+        if (typeof conf.minWidth !== 'undefined') {
+            this.minimalWidth = conf.minWidth;
+        } else {
+            this.minimalWidth = this.width * MINIMAL_WIDTH_MULTIPLIER;
         }
         if (!this.header) this.header = conf.header;
         const newResizable = conf.resizable ?? false;
@@ -49,7 +49,7 @@ export class ColumnController {
     }
 
     resize(newWidth?: number) {
-        if (newWidth === undefined) return;
+        if (typeof newWidth === 'undefined') return;
         if (newWidth < this.minimalWidth) {
             this.width = this.minimalWidth;
         } else {

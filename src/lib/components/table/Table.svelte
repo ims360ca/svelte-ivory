@@ -82,7 +82,17 @@
     }: TableProps<T> = $props();
 
     let columns = $state<ColumnController[]>(externalColumns ?? []);
-    let treeIndicatorColumn = $state<ColumnController>();
+
+    const treeIndicatorColumnConfig: ColumnConfig = {
+        id: treeIndicatorId,
+        resizable: false,
+        header: '',
+        width: 0,
+        minWidth: 0
+    };
+    let treeIndicatorColumn = $state<ColumnController>(
+        new ColumnController(treeIndicatorColumnConfig)
+    );
 
     setTableContext({
         toggleExpansion,
@@ -228,15 +238,12 @@
         <Row href={href?.(node)} onclick={onclick ? () => onclick(node) : undefined}>
             {@render firstColumn?.({ row: node })}
             <ColumnComponent
-                id={treeIndicatorId}
-                resizable={false}
-                header=""
+                {...treeIndicatorColumnConfig}
                 onclick={() => {
                     toggleExpansion(node.id);
                 }}
                 ignoreWidth={results.someHaveChildren}
                 width={results.someHaveChildren ? treeIndicatorInset : 0}
-                minWidth={0}
             >
                 <div
                     class="flex h-full items-center justify-end"

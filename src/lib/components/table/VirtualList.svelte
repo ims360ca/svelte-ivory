@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends { id: string }">
     import clsx from 'clsx';
-    import { onMount, type Snippet } from 'svelte';
+    import { onMount, tick, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
 
@@ -30,6 +30,7 @@
         twMerge(clsx(['flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowClass]))
     );
 
+    let viewportReactivity = $state(0);
     let scroll_top = $state(b_scrollTop ?? 0);
     let scroll_left = $state(0);
     let header_width = $state(0);
@@ -64,8 +65,13 @@
     const top = $derived(start * rowHeight);
     const bottom = $derived((data.length - end) * rowHeight);
 
-    function onscroll() {
-        if (!viewport) return;
+    async function onscroll() {
+        if (!viewport) {
+            viewportReactivity++;
+            await tick();
+            onscroll();
+            return;
+        }
         scroll_top = viewport.scrollTop;
         scroll_left = viewport.scrollLeft;
         b_scrollTop = scroll_top;
@@ -93,25 +99,30 @@
             </div>
         </div>
     {/if}
-    <div
-        class="flex !min-w-full grow overflow-auto [scrollbar-gutter:stable]"
-        bind:this={viewport}
-        bind:offsetHeight={viewport_height}
-        {onscroll}
-    >
+    {#key viewportReactivity}
         <div
-            class="flex h-fit shrink-0 flex-col"
-            style="padding-top: {top}px; padding-bottom: {bottom}px; min-width: max(100%, {header_width}px) !important;"
+            class="flex min-w-full! grow overflow-auto [scrollbar-gutter:stable]"
+            bind:this={viewport}
+            bind:offsetHeight={viewport_height}
+            {onscroll}
         >
-            {#each visible as row, i (row.data.id)}
-                <virtual-list-row class={finalRowClass} style="height: {rowHeight}px !important;">
-                    {@render children({
-                        row: row.data,
-                        domIndex: i,
-                        index: row.index
-                    })}
-                </virtual-list-row>
-            {/each}
+            <div
+                class="flex h-fit shrink-0 flex-col"
+                style="padding-top: {top}px; padding-bottom: {bottom}px; min-width: max(100%, {header_width}px) !important;"
+            >
+                {#each visible as row, i (row.data.id)}
+                    <virtual-list-row
+                        class={finalRowClass}
+                        style="height: {rowHeight}px !important;"
+                    >
+                        {@render children({
+                            row: row.data,
+                            domIndex: i,
+                            index: row.index
+                        })}
+                    </virtual-list-row>
+                {/each}
+            </div>
         </div>
-    </div>
+    {/key}
 </div>

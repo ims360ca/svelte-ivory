@@ -33,8 +33,8 @@
 
     // Register the new column if this is the first table row that was rendered
     const tableContext = getTableContext();
-    const rowContext = getRowContext();
     const column = tableContext.registerColumn({ resizable, ...props });
+    const rowContext = getRowContext();
 
     const finalOnClick = $derived(onclick || rowContext.onclick);
     const allowClicking = $derived(!!(onclick || rowContext.onclick));

@@ -35,9 +35,6 @@
         close?.(); // Ask the parent to close
         await tick();
         await tick();
-
-        console.log(dialog);
-
         dialog?.showModal();
     }
 
