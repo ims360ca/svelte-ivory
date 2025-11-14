@@ -21,8 +21,6 @@
         rowHeight?: number;
         /** Renders the rows */
         children?: Snippet<[{ row: T; nestingLevel?: number; index: number }]>;
-        /** Add columns in front of the tree-indicator */
-        firstColumn?: Snippet<[{ row: T }]>;
         rowClass?: ClassValue;
         headerClass?: ClassValue;
         search?: {
@@ -68,7 +66,6 @@
         class: clazz,
         data,
         children: passedChildren,
-        firstColumn,
         rowClass = 'hover:bg-surface-950-50/10 transition-colors',
         headerClass,
         rowHeight = 64,
@@ -216,7 +213,7 @@
                 )
             )}
         >
-            {#if treeIndicatorColumn instanceof ColumnController}
+            {#if results.someHaveChildren}
                 <ColumnHead column={treeIndicatorColumn}></ColumnHead>
             {/if}
             {#each externalColumns || columns as column (column.id)}
@@ -236,30 +233,31 @@
     {/snippet}
     {#snippet children({ row: { node, id, nestingLevel }, index })}
         <Row href={href?.(node)} onclick={onclick ? () => onclick(node) : undefined}>
-            {@render firstColumn?.({ row: node })}
-            <ColumnComponent
-                {...treeIndicatorColumnConfig}
-                onclick={() => {
-                    toggleExpansion(node.id);
-                }}
-                ignoreWidth={results.someHaveChildren}
-                width={results.someHaveChildren ? treeIndicatorInset : 0}
-            >
-                <div
-                    class="flex h-full items-center justify-end"
-                    style="width: calc(var(--spacing) * {nestingLevel * nestingInset -
-                        2} + {treeIndicatorInset}px);"
+            {#if results.someHaveChildren}
+                <ColumnComponent
+                    {...treeIndicatorColumnConfig}
+                    onclick={() => {
+                        toggleExpansion(node.id);
+                    }}
+                    width={treeIndicatorInset}
+                    ignoreWidth
                 >
-                    {#if node.children}
-                        <ChevronRight
-                            class={[
-                                'ml-auto aspect-square shrink-0 transition-transform duration-100',
-                                expanded.has(id) && 'rotate-90'
-                            ]}
-                        />
-                    {/if}
-                </div>
-            </ColumnComponent>
+                    <div
+                        class="flex h-full items-center justify-end"
+                        style="width: calc(var(--spacing) * {nestingLevel * nestingInset -
+                            2} + {treeIndicatorInset}px);"
+                    >
+                        {#if node.children}
+                            <ChevronRight
+                                class={[
+                                    'ml-auto aspect-square shrink-0 transition-transform duration-100',
+                                    expanded.has(id) && 'rotate-90'
+                                ]}
+                            />
+                        {/if}
+                    </div>
+                </ColumnComponent>
+            {/if}
             {@render passedChildren?.({ row: node, nestingLevel, index })}
         </Row>
     {/snippet}
