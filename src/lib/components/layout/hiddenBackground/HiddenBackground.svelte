@@ -12,9 +12,7 @@
         globalClass = value;
     }
 
-    export interface HiddenBackgroundProps
-        extends IvoryComponent<HTMLDialogElement>,
-            TransitionProps {
+    export interface HiddenBackgroundProps extends IvoryComponent<HTMLDivElement>, TransitionProps {
         /** Gets called when the dialog is clicked */
         onclose?: () => void;
     }
@@ -31,7 +29,7 @@
     }: HiddenBackgroundProps = $props();
 </script>
 
-<dialog
+<div
     class={twMerge(
         clsx(
             'bg-surface-950-50/40 pointer-events-auto absolute top-0 left-0 z-40 m-0 h-full w-full p-0',
@@ -39,7 +37,6 @@
             clazz
         )
     )}
-    open
     use:focusTrap={true}
     {@attach shortcut({
         code: 'Escape',
@@ -51,4 +48,4 @@
     {...rest}
 >
     {@render children?.()}
-</dialog>
+</div>
