@@ -32,7 +32,7 @@
 <div
     class={twMerge(
         clsx(
-            'bg-surface-950-50/40 pointer-events-auto absolute top-0 left-0 z-40 m-0 h-full w-full p-0',
+            'bg-surface-950-50/40 pointer-events-auto absolute top-0 left-0 m-0 h-full w-full p-0',
             globalClass,
             clazz
         )

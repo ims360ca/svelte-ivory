@@ -105,7 +105,7 @@
         <div
             class={twMerge(
                 clsx(
-                    'absolute z-30',
+                    'absolute',
                     !keepMounted && clazz,
                     keepMounted && !currentlyOpen ? 'hidden' : clazz
                 )
