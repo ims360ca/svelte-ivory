@@ -1,5 +1,6 @@
 <script lang="ts" module>
     import { browser } from '$app/environment';
+    import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import {
         autoPlacement,
@@ -106,6 +107,7 @@
             class={twMerge(
                 clsx(
                     'absolute',
+                    theme.current.popover?.class,
                     !keepMounted && clazz,
                     keepMounted && !currentlyOpen ? 'hidden' : clazz
                 )

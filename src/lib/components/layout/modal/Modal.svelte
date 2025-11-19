@@ -1,4 +1,5 @@
 <script lang="ts" module>
+    import { theme } from '$lib/theme.svelte';
     import type { TransitionProps } from '$lib/types';
     import { X } from '@lucide/svelte';
     import clsx from 'clsx';
@@ -98,6 +99,7 @@
                     class={twMerge(
                         clsx([
                             'bg-surface-50-950 relative flex max-h-full max-w-full flex-col overflow-hidden rounded',
+                            theme.current.modal?.class,
                             clazz
                         ])
                     )}
@@ -139,6 +141,7 @@
                         class={twMerge(
                             clsx(
                                 'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                                theme.current.modal?.innerClass,
                                 innerClass
                             )
                         )}

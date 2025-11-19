@@ -17,6 +17,13 @@ export interface Theme {
             class?: ClassValue;
         };
     };
+    modal?: {
+        class?: ClassValue;
+        innerClass?: ClassValue;
+    };
+    popover?: {
+        class?: ClassValue;
+    };
 }
 
 function createTheme() {
