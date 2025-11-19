@@ -80,6 +80,7 @@
     onMount(() => {
         if (!viewport || typeof b_scrollTop === 'undefined') return;
         viewport.scrollTop = b_scrollTop;
+        onscroll();
     });
 </script>
 

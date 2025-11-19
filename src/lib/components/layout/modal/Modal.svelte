@@ -130,7 +130,7 @@
                         <button
                             class="group ml-auto flex justify-end"
                             type="button"
-                            onclick={() => close()}
+                            onclick={close}
                         >
                             <X
                                 class="h-full w-auto transition-[stroke-width] group-hover:stroke-3"
