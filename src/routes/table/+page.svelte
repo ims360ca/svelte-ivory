@@ -77,6 +77,7 @@
     });
 
     let table = $state<Table<Row>>();
+    let b_scrollTop = $state(20);
 </script>
 
 <div class="flex flex-row items-center gap-2">
@@ -90,9 +91,17 @@
     </button>
     <input type="number" bind:value={rowHeight} />
     <input type="text" bind:value={search} placeholder="Search" />
+    <button
+        onclick={() => {
+            b_scrollTop = b_scrollTop + 20;
+        }}
+    >
+        Set scrolltop value
+    </button>
 </div>
 <Table
     bind:this={table}
+    bind:b_scrollTop
     data={rows}
     class="border-surface-300-700 w-full grow rounded border"
     onclick={() => {

@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends { id: string }">
     import clsx from 'clsx';
-    import { onMount, tick, type Snippet } from 'svelte';
+    import { tick, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
 
@@ -77,10 +77,11 @@
         b_scrollTop = scroll_top;
     }
 
-    onMount(() => {
-        if (!viewport || typeof b_scrollTop === 'undefined') return;
-        viewport.scrollTop = b_scrollTop;
-        onscroll();
+    // update the scrolltop when the prop value changes
+    $effect(() => {
+        if (typeof b_scrollTop !== 'undefined') {
+            scrollTo(b_scrollTop);
+        }
     });
 </script>
 
