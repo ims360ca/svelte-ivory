@@ -13,7 +13,7 @@
         children?: Row[];
     }
 
-    let children = $state(false);
+    let children = $state(true);
 </script>
 
 <script lang="ts">

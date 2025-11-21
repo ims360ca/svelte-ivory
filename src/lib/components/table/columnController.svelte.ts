@@ -1,7 +1,7 @@
 import type { Snippet } from 'svelte';
 
 const DEFAULT_WIDTH = 250;
-const MINIMAL_WIDTH_MULTIPLIER = 0.5;
+export const MINIMAL_WIDTH_MULTIPLIER = 0.5;
 
 export interface ColumnConfig {
     id: string;
@@ -17,7 +17,7 @@ export class ColumnController {
 
     // resizing
     width = $state<number>();
-    private minimalWidth = $state(DEFAULT_WIDTH);
+    minWidth = $state(DEFAULT_WIDTH);
     hovering = $state(false);
     resizable = $state(false);
     dragging = $state(false);
@@ -37,9 +37,9 @@ export class ColumnController {
             this.width = newWidth;
         }
         if (typeof conf.minWidth !== 'undefined') {
-            this.minimalWidth = conf.minWidth;
+            this.minWidth = conf.minWidth;
         } else {
-            this.minimalWidth = this.width * MINIMAL_WIDTH_MULTIPLIER;
+            this.minWidth = this.width * MINIMAL_WIDTH_MULTIPLIER;
         }
         if (!this.header) this.header = conf.header;
         const newResizable = conf.resizable ?? false;
@@ -50,8 +50,8 @@ export class ColumnController {
 
     resize(newWidth?: number) {
         if (typeof newWidth === 'undefined') return;
-        if (newWidth < this.minimalWidth) {
-            this.width = this.minimalWidth;
+        if (newWidth < this.minWidth) {
+            this.width = this.minWidth;
         } else {
             this.width = newWidth;
         }

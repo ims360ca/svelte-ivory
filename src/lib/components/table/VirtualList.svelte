@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends { id: string }">
     import clsx from 'clsx';
-    import { tick, type Snippet } from 'svelte';
+    import { onMount, tick, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
 
@@ -82,6 +82,11 @@
         if (typeof b_scrollTop !== 'undefined') {
             scrollTo(b_scrollTop);
         }
+        onscroll();
+    });
+
+    onMount(() => {
+        onscroll();
     });
 </script>
 
