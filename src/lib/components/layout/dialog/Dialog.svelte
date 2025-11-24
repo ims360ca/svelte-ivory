@@ -63,8 +63,8 @@
     onclose={close}
     class={twMerge(
         clsx(
-            'h-full max-h-none w-screen max-w-full bg-transparent backdrop:bg-black/20',
-            theme.current.hiddenBackground?.class,
+            'h-full max-h-none w-screen max-w-full bg-transparent backdrop:bg-transparent',
+            theme.current.dialog?.class,
             clazz
         )
     )}

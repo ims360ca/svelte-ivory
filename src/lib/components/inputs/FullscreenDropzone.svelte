@@ -2,7 +2,7 @@
     import { FileUp } from '@lucide/svelte';
     import type { Snippet } from 'svelte';
     import { scale } from 'svelte/transition';
-    import { HiddenBackground, Portal } from '../layout';
+    import { HiddenBackground } from '../layout';
 
     export interface FullscreenDropzoneProps {
         ondrop: (files: File[]) => void;
@@ -64,11 +64,9 @@
 />
 
 {#if open}
-    <Portal>
-        <HiddenBackground class="flex items-center justify-center">
-            {@render children()}
-        </HiddenBackground>
-    </Portal>
+    <HiddenBackground class="flex items-center justify-center">
+        {@render children()}
+    </HiddenBackground>
 {/if}
 
 {#snippet defaultChildren()}

@@ -13,7 +13,6 @@
     import clsx from 'clsx';
     import { twMerge } from 'tailwind-merge';
     import { clickOutside } from '../../../utils/actions/clickOutside';
-    import Portal from '../portal/Portal.svelte';
 
     /** Possible placements for the popover */
     export type PopoverPlacement = ComputePositionConfig['placement'];
@@ -43,6 +42,8 @@
 </script>
 
 <script lang="ts">
+    import { Dialog } from '../dialog';
+
     let {
         class: clazz,
         style: externalStyle,
@@ -102,7 +103,7 @@
     A popover, positions itself relative to a target element.
 -->
 {#if currentlyOpen || keepMounted}
-    <Portal>
+    <Dialog>
         <div
             class={twMerge(
                 clsx(
@@ -119,5 +120,5 @@
         >
             {@render children?.()}
         </div>
-    </Portal>
+    </Dialog>
 {/if}

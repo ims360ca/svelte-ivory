@@ -7,7 +7,7 @@
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
     import { fade } from 'svelte/transition';
     import { twMerge } from 'tailwind-merge';
-    import { Heading, HiddenBackground, Portal } from '..';
+    import { Heading, HiddenBackground } from '..';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
     export type ModalProps = TransitionProps & {
@@ -83,73 +83,65 @@
 	A modal, comes with a title, close button and different variants per default.
 -->
 {#if currentlyOpen}
-    <Portal>
-        <HiddenBackground
-            onclose={() => {
-                if (closeOnOutsideClick) close();
-            }}
-            class="flex h-full w-full flex-col items-center justify-start p-8 lg:p-12 xl:p-16"
-        >
-            {#if modal}
-                <div {...rest} {onclick}>
-                    {@render modal()}
+    <HiddenBackground
+        onclose={() => {
+            if (closeOnOutsideClick) close();
+        }}
+        class="flex h-full w-full flex-col items-center justify-start p-8 lg:p-12 xl:p-16"
+    >
+        {#if modal}
+            <div {...rest} {onclick}>
+                {@render modal()}
+            </div>
+        {:else}
+            <div
+                class={twMerge(
+                    clsx([
+                        'bg-surface-50-950 relative flex max-h-full max-w-full flex-col overflow-hidden rounded',
+                        theme.current.modal?.class,
+                        clazz
+                    ])
+                )}
+                {...rest}
+                {onclick}
+                in:inTransition|global
+                out:outTransition|global
+            >
+                <div
+                    class={[
+                        'flex flex-row items-center justify-between gap-4 px-4 py-3',
+                        !variant && 'pb-0',
+                        variant === 'success' && 'preset-tonal-success',
+                        variant === 'warning' && 'preset-tonal-warning',
+                        variant === 'error' && 'preset-tonal-error',
+                        variant === 'info' && 'preset-tonal-primary'
+                    ]}
+                >
+                    {#if title}
+                        <Heading class="flex grow flex-row items-center gap-4">
+                            {#if typeof title === 'function'}
+                                {@render title()}
+                            {:else}
+                                {title}
+                            {/if}
+                        </Heading>
+                    {/if}
+                    <button class="group ml-auto flex justify-end" type="button" onclick={close}>
+                        <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
+                    </button>
                 </div>
-            {:else}
                 <div
                     class={twMerge(
-                        clsx([
-                            'bg-surface-50-950 relative flex max-h-full max-w-full flex-col overflow-hidden rounded',
-                            theme.current.modal?.class,
-                            clazz
-                        ])
+                        clsx(
+                            'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                            theme.current.modal?.innerClass,
+                            innerClass
+                        )
                     )}
-                    {...rest}
-                    {onclick}
-                    in:inTransition|global
-                    out:outTransition|global
                 >
-                    <div
-                        class={[
-                            'flex flex-row items-center justify-between gap-4 px-4 py-3',
-                            !variant && 'pb-0',
-                            variant === 'success' && 'preset-tonal-success',
-                            variant === 'warning' && 'preset-tonal-warning',
-                            variant === 'error' && 'preset-tonal-error',
-                            variant === 'info' && 'preset-tonal-primary'
-                        ]}
-                    >
-                        {#if title}
-                            <Heading class="flex grow flex-row items-center gap-4">
-                                {#if typeof title === 'function'}
-                                    {@render title()}
-                                {:else}
-                                    {title}
-                                {/if}
-                            </Heading>
-                        {/if}
-                        <button
-                            class="group ml-auto flex justify-end"
-                            type="button"
-                            onclick={close}
-                        >
-                            <X
-                                class="h-full w-auto transition-[stroke-width] group-hover:stroke-3"
-                            />
-                        </button>
-                    </div>
-                    <div
-                        class={twMerge(
-                            clsx(
-                                'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
-                                theme.current.modal?.innerClass,
-                                innerClass
-                            )
-                        )}
-                    >
-                        {@render children?.()}
-                    </div>
+                    {@render children?.()}
                 </div>
-            {/if}
-        </HiddenBackground>
-    </Portal>
+            </div>
+        {/if}
+    </HiddenBackground>
 {/if}

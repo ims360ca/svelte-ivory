@@ -7,6 +7,9 @@ export interface Theme {
     hiddenBackground?: {
         class?: ClassValue;
     };
+    dialog?: {
+        class?: ClassValue;
+    };
     tabs?: {
         tab?: {
             class?: (active: boolean) => ClassValue;
