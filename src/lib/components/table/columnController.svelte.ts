@@ -32,6 +32,7 @@ export class ColumnController {
     }
 
     updateConfig(conf: ColumnConfig) {
+        if (!this.header) this.header = conf.header;
         if (typeof this.width === 'undefined') {
             const newWidth = typeof conf.width === 'undefined' ? DEFAULT_WIDTH : conf.width;
             this.width = newWidth;
@@ -41,7 +42,6 @@ export class ColumnController {
         } else {
             this.minWidth = this.width * MINIMAL_WIDTH_MULTIPLIER;
         }
-        if (!this.header) this.header = conf.header;
         const newResizable = conf.resizable ?? false;
         if (newResizable !== this.resizable) {
             this.resizable = newResizable;

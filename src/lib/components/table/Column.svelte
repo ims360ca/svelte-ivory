@@ -52,7 +52,7 @@
 
     // this must be separate to the above effect, since otherwise the width would be reset on every scroll
     $effect(() => {
-        if (!column.resizable && props.width !== undefined) column.resize(props.width);
+        if (!resizable && typeof props.width !== 'undefined') column.width = props.width;
     });
 
     const widthStyle = $derived(
