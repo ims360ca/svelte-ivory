@@ -4,7 +4,7 @@
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { twMerge } from 'tailwind-merge';
-    import { type ColumnConfig } from './columnController.svelte';
+    import type { ColumnConfig } from './columnController.svelte';
     import { getRowContext } from './Row.svelte';
     import { getTableContext } from './Table.svelte';
 
@@ -28,8 +28,6 @@
         // ColumnConfig
         resizable = true,
         offsetNestingLevel = 0,
-        width,
-        minWidth,
         ...props
     }: ColumnProps = $props();
 
@@ -49,12 +47,12 @@
 
     // passes updated props to the column
     $effect(() => {
-        column.updateConfig({ resizable, minWidth, width, ...props });
+        column.updateConfig({ resizable, ...props });
     });
 
     // this must be separate to the above effect, since otherwise the width would be reset on every scroll
     $effect(() => {
-        if (!column.resizable && width !== undefined) column.width = width;
+        if (!column.resizable && props.width !== undefined) column.resize(props.width);
     });
 
     const widthStyle = $derived(
