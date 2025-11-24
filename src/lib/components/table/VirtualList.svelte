@@ -38,16 +38,7 @@
     let viewport_height = $state(0);
 
     export function scrollTo(top?: number, left?: number) {
-        if (!viewport) return;
-        if (top !== undefined) {
-            scroll_top = top;
-            viewport.scrollTop = top;
-            b_scrollTop = top;
-        }
-        if (left !== undefined) {
-            scroll_left = left;
-            viewport.scrollLeft = left;
-        }
+        onscroll(top, left);
     }
 
     const start = $derived(Math.max(0, Math.floor(scroll_top / rowHeight) - overscan));
@@ -65,16 +56,26 @@
     const top = $derived(start * rowHeight);
     const bottom = $derived((data.length - end) * rowHeight);
 
-    async function onscroll() {
+    async function onscroll(top?: number, left?: number, retry = true) {
         if (!viewport) {
             viewportReactivity++;
             await tick();
-            onscroll();
+            if (retry) await onscroll(top, left, false);
             return;
         }
-        scroll_top = viewport.scrollTop;
-        scroll_left = viewport.scrollLeft;
-        b_scrollTop = scroll_top;
+        if (typeof top !== 'undefined') {
+            scroll_top = top;
+            viewport.scrollTop = top;
+        } else {
+            scroll_top = viewport.scrollTop;
+            b_scrollTop = scroll_top;
+        }
+        if (typeof left !== 'undefined') {
+            scroll_left = left;
+            viewport.scrollLeft = left;
+        } else {
+            scroll_left = viewport.scrollLeft;
+        }
     }
 
     // update the scrolltop when the prop value changes
@@ -113,7 +114,7 @@
             class="flex min-w-full! grow overflow-auto [scrollbar-gutter:stable]"
             bind:this={viewport}
             bind:offsetHeight={viewport_height}
-            {onscroll}
+            onscroll={() => onscroll()}
         >
             <div
                 class="flex h-fit shrink-0 flex-col"
