@@ -37,12 +37,8 @@
     let viewport = $state<HTMLElement>();
     let viewport_height = $state(0);
 
-    export async function scrollTo(top?: number, left?: number) {
-        if (!viewport) {
-            viewportReactivity++;
-            await tick();
-            if (!viewport) return;
-        }
+    export function scrollTo(top?: number, left?: number) {
+        if (!viewport) return;
         if (top !== undefined) {
             scroll_top = top;
             viewport.scrollTop = top;
@@ -91,7 +87,8 @@
         }
     });
 
-    onMount(() => {
+    onMount(async () => {
+        await tick();
         onscroll();
     });
 </script>

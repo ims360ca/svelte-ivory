@@ -13,6 +13,7 @@
     import clsx from 'clsx';
     import { twMerge } from 'tailwind-merge';
     import { clickOutside } from '../../../utils/actions/clickOutside';
+    import { Dialog } from '../dialog';
 
     /** Possible placements for the popover */
     export type PopoverPlacement = ComputePositionConfig['placement'];
@@ -30,8 +31,6 @@
          * Callback that is called when the user clicks outside the popover or the target element.
          */
         onClickOutside?: (e: MouseEvent) => void;
-        /** If set to `true`, the nested component will not be unmounted when the popover is closed */
-        keepMounted?: boolean;
         /**
          * Whether to place the popover automatically
          *
@@ -42,15 +41,12 @@
 </script>
 
 <script lang="ts">
-    import { Dialog } from '../dialog';
-
     let {
         class: clazz,
         style: externalStyle,
         target,
         placement = 'bottom-start',
         onClickOutside = close,
-        keepMounted = false,
         children,
         autoplacement,
         ...rest
@@ -102,17 +98,10 @@
     @component
     A popover, positions itself relative to a target element.
 -->
-{#if currentlyOpen || keepMounted}
+{#if currentlyOpen}
     <Dialog>
         <div
-            class={twMerge(
-                clsx(
-                    'absolute',
-                    theme.current.popover?.class,
-                    !keepMounted && clazz,
-                    keepMounted && !currentlyOpen ? 'hidden' : clazz
-                )
-            )}
+            class={twMerge(clsx('absolute', theme.current.popover?.class, clazz))}
             style={style + ' ' + externalStyle}
             bind:this={popover}
             use:clickOutside={{ callback: onClickOutside, target }}

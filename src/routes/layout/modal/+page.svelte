@@ -13,7 +13,7 @@
 
 <button onclick={modal?.open} class="btn preset-tonal-primary"> Open modal </button>
 
-<Modal bind:this={modal} title="Modal" {variant} closeOnOutsideClick={false}>
+<Modal bind:this={modal} title="Modal" {variant}>
     <p>Content</p>
     <button
         class="flex flex-row items-center gap-2"
