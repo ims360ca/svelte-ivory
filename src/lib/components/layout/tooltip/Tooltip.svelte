@@ -1,8 +1,7 @@
 <script lang="ts" module>
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import type { Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
     import Popover, { type PopoverPlacement } from '../popover/Popover.svelte';
 
     export interface TooltipProps {
@@ -84,11 +83,9 @@
     bind:this={popover}
     {target}
     {placement}
-    class={twMerge(
-        clsx(
-            'bg-surface-50-950 max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',
-            tooltipClass
-        )
+    class={merge(
+        'bg-surface-50-950 max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',
+        tooltipClass
     )}
 >
     {#if typeof tooltip === 'string'}

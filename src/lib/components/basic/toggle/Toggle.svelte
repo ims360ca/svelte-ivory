@@ -1,9 +1,8 @@
 <script lang="ts" module>
     import type { IvoryComponent } from '$lib/types';
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
 
     export interface ToggleProps extends IvoryComponent<HTMLElement> {
         value?: boolean;
@@ -18,12 +17,10 @@
 
 <svelte:element
     this={rest.onclick ? 'button' : 'div'}
-    class={twMerge(
-        clsx(
-            'group relative flex h-5 w-9 flex-row items-center rounded-full p-0.5 transition-colors duration-100',
-            value ? 'bg-primary-500' : 'bg-surface-300-700',
-            clazz
-        )
+    class={merge(
+        'group relative flex h-5 w-9 flex-row items-center rounded-full p-0.5 transition-colors duration-100',
+        value ? 'bg-primary-500' : 'bg-surface-300-700',
+        clazz
     )}
     type={rest.onclick ? 'button' : undefined}
     role={rest.onclick ? 'button' : undefined}

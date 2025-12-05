@@ -1,8 +1,7 @@
 <script lang="ts" generics="T extends { id: string }">
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import { onMount, tick, untrack, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
 
     type Props<T> = {
         class?: ClassValue;
@@ -27,7 +26,7 @@
     }: Props<T> = $props();
 
     const finalRowClass = $derived(
-        twMerge(clsx(['flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowClass]))
+        merge(['flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowClass])
     );
 
     let viewportReactivity = $state(0);
@@ -93,11 +92,7 @@
     });
 </script>
 
-<div
-    class={twMerge(
-        clsx(['scroll relative flex grow flex-col overflow-hidden border-inherit', clazz])
-    )}
->
+<div class={merge(['scroll relative flex grow flex-col overflow-hidden border-inherit', clazz])}>
     {#if header}
         <div class="h-fit w-full border-inherit">
             <div

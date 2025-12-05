@@ -1,9 +1,8 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
     import type { ColumnConfig } from './columnController.svelte';
     import { getRowContext } from './Row.svelte';
     import { getTableContext } from './Table.svelte';
@@ -67,14 +66,12 @@
     href={!allowClicking ? rowContext.href : undefined}
     type={allowClicking ? 'button' : undefined}
     style={ignoreWidth ? '' : `width: ${widthStyle}`}
-    class={twMerge(
-        clsx([
-            'box-border flex h-full shrink-0 flex-row items-center justify-start gap-1 truncate',
-            column.width !== 0 && 'border-r-[calc(var(--spacing)*2)] border-transparent',
-            theme.current.table?.column?.class,
-            clazz
-        ])
-    )}
+    class={merge([
+        'box-border flex h-full shrink-0 flex-row items-center justify-start gap-1 truncate',
+        column.width !== 0 && 'border-r-[calc(var(--spacing)*2)] border-transparent',
+        theme.current.table?.column?.class,
+        clazz
+    ])}
 >
     {@render children()}
 </svelte:element>

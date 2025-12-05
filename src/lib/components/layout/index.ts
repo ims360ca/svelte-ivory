@@ -1,16 +1,12 @@
 export { default as Drawer } from './drawer/Drawer.svelte';
 export { default as Heading } from './Heading.svelte';
-export {
-    default as HiddenBackground,
-    type HiddenBackgroundProps
-} from './hiddenBackground/HiddenBackground.svelte';
+export { default as HiddenBackground } from './hiddenBackground/HiddenBackground.svelte';
 export { default as Modal, type ModalProps, type ModalVariant } from './modal/Modal.svelte';
 export {
     default as Popover,
     type PopoverPlacement,
     type PopoverProps
 } from './popover/Popover.svelte';
-export { default as Portal } from './portal';
 export {
     getTabContext,
     Tab,

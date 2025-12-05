@@ -1,6 +1,10 @@
+import type { RemoteFormIssue } from '@sveltejs/kit';
 import type { ClassValue } from 'svelte/elements';
 
 export interface Theme {
+    checkbox?: {
+        class?: (checked: boolean, partial: boolean) => ClassValue;
+    };
     heading?: {
         class?: ClassValue;
     };
@@ -26,6 +30,20 @@ export interface Theme {
     };
     popover?: {
         class?: ClassValue;
+    };
+    input?: {
+        outerClass?: ClassValue;
+        class?: (value: boolean, issues?: boolean) => ClassValue;
+        label?: {
+            class?: (value: boolean, issues?: boolean) => ClassValue;
+        };
+        issues?: {
+            issue?: {
+                label?: (issue: RemoteFormIssue) => string;
+                class?: ClassValue;
+            };
+            class?: ClassValue;
+        };
     };
 }
 

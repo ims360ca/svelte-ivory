@@ -20,8 +20,3 @@ _You may need to adjust the path if your `app.css` is not located in `/src`_
 - [x] Basic layout components (modal, tabs, popover, etc.)
 - [x] Table
 - [ ] Input components
-
-## TODOs
-
-- [ ] Bindings to exported functions
-- [ ] Replace `<Portal>` with `<dialog>` element in Modal, Popover and Drawer

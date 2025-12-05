@@ -5,11 +5,10 @@
 -->
 
 <script lang="ts">
+    import { merge } from '$lib/utils/merge';
     import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
-    import clsx from 'clsx';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
     import CopyToClipboardButton from '../buttons/CopyToClipboardButton.svelte';
     import type { AiChatMessage } from './Chat.svelte';
     import Markdown from './Markdown.svelte';
@@ -48,7 +47,7 @@
 </script>
 
 <div
-    class={twMerge(clsx('group flex w-full flex-col items-start', clazz))}
+    class={merge('group flex w-full flex-col items-start', clazz)}
     style={minHeight ? `min-height: ${minHeight}px;` : undefined}
 >
     {@render messageText({

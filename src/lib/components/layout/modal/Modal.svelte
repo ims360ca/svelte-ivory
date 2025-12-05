@@ -1,12 +1,11 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
     import type { TransitionProps } from '$lib/types';
+    import { merge } from '$lib/utils/merge';
     import { X } from '@lucide/svelte';
-    import clsx from 'clsx';
     import { type Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
     import { fade } from 'svelte/transition';
-    import { twMerge } from 'tailwind-merge';
     import { Heading, HiddenBackground } from '..';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
@@ -95,13 +94,11 @@
             </div>
         {:else}
             <div
-                class={twMerge(
-                    clsx([
-                        'bg-surface-50-950 relative flex max-h-full max-w-full flex-col overflow-hidden rounded',
-                        theme.current.modal?.class,
-                        clazz
-                    ])
-                )}
+                class={merge([
+                    'bg-surface-50-950 flex max-h-full max-w-full flex-col overflow-hidden rounded',
+                    theme.current.modal?.class,
+                    clazz
+                ])}
                 {...rest}
                 {onclick}
                 in:inTransition|global
@@ -131,12 +128,10 @@
                     </button>
                 </div>
                 <div
-                    class={twMerge(
-                        clsx(
-                            'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
-                            theme.current.modal?.innerClass,
-                            innerClass
-                        )
+                    class={merge(
+                        'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                        theme.current.modal?.innerClass,
+                        innerClass
                     )}
                 >
                     {@render children?.()}

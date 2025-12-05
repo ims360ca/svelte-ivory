@@ -1,10 +1,9 @@
 <script lang="ts" module>
     import type { TransitionProps } from '$lib/types';
+    import { merge } from '$lib/utils/merge';
     import { X } from '@lucide/svelte';
-    import clsx from 'clsx';
     import type { Snippet } from 'svelte';
     import { fly } from 'svelte/transition';
-    import { twMerge } from 'tailwind-merge';
     import { HiddenBackground } from '..';
     import Heading from '../Heading.svelte';
 
@@ -58,14 +57,12 @@
         }}
     >
         <div
-            class={twMerge(
-                clsx([
-                    'bg-surface-50-950 absolute top-0 flex h-full flex-col gap-4 p-4',
-                    placement === 'left' && 'left-0',
-                    placement === 'right' && 'right-0',
-                    clazz
-                ])
-            )}
+            class={merge([
+                'bg-surface-50-950 absolute top-0 flex h-full flex-col gap-4 p-4',
+                placement === 'left' && 'left-0',
+                placement === 'right' && 'right-0',
+                clazz
+            ])}
             onclick={(e) => e.stopPropagation()}
             in:inTransition|global
             out:outTransition|global

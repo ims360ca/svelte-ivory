@@ -6,10 +6,9 @@
 -->
 
 <script lang="ts" module>
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import { tick, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
     import AiMessage from './AiMessage.svelte';
     import UserMessage from './UserMessage.svelte';
 
@@ -101,7 +100,7 @@
     }
 </script>
 
-<div class={twMerge(clsx('flex grow flex-col gap-2 overflow-hidden', clazz))}>
+<div class={merge('flex grow flex-col gap-2 overflow-hidden', clazz)}>
     <div
         class="flex grow flex-col gap-4 overflow-auto pr-2 [scrollbar-gutter:stable]"
         bind:this={chatContainer}

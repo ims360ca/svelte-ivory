@@ -3,10 +3,9 @@
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import { pseudoRandomId } from '$lib/utils/functions/index';
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import { onMount, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
     import { getTabContext } from './Tabs.svelte';
 
     export interface TabProps extends Omit<IvoryComponent<HTMLElement>, 'children'> {
@@ -52,12 +51,10 @@
 
 <svelte:element
     this={href ? 'a' : 'button'}
-    class={twMerge(
-        clsx(
-            'btn flex h-fit w-fit shrink-0 items-center justify-center px-0 text-xl font-bold select-none',
-            theme.current.tabs?.tab?.class?.(selected),
-            typeof clazz === 'function' ? clazz(selected) : clazz
-        )
+    class={merge(
+        'btn flex h-fit w-fit shrink-0 items-center justify-center px-0 text-xl font-bold select-none',
+        theme.current.tabs?.tab?.class?.(selected),
+        typeof clazz === 'function' ? clazz(selected) : clazz
     )}
     onclick={href
         ? undefined

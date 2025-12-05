@@ -1,10 +1,9 @@
 <script lang="ts" module>
+    import { merge } from '$lib/utils/merge';
     import { ChevronRight } from '@lucide/svelte';
-    import clsx from 'clsx';
     import { getContext, setContext, untrack, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { SvelteSet } from 'svelte/reactivity';
-    import { twMerge } from 'tailwind-merge';
     import ColumnComponent from './Column.svelte';
     import { ColumnController, type ColumnConfig } from './columnController.svelte';
     import ColumnHead from './ColumnHead.svelte';
@@ -200,17 +199,15 @@
     bind:this={list}
     bind:b_scrollTop
     data={results.entries}
-    class={twMerge(clsx(['flex flex-col overflow-hidden border-transparent', clazz]))}
+    class={merge(['flex flex-col overflow-hidden border-transparent', clazz])}
     rowClass={['pl-2 pr-4', rowClass]}
     {rowHeight}
 >
     {#snippet header()}
         <div
-            class={twMerge(
-                clsx(
-                    'flex w-fit min-w-full flex-row border-b border-inherit pr-4 pl-2',
-                    headerClass
-                )
+            class={merge(
+                'flex w-fit min-w-full flex-row border-b border-inherit pr-4 pl-2',
+                headerClass
             )}
         >
             {#if results.someHaveChildren}

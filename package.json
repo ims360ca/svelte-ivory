@@ -1,6 +1,6 @@
 {
     "name": "@ims360/svelte-ivory",
-    "version": "0.1.15",
+    "version": "0.2.0",
     "keywords": [
         "svelte"
     ],
@@ -38,9 +38,9 @@
             "types": "./dist/components/inputs/index.d.ts",
             "svelte": "./dist/components/inputs/index.js"
         },
-        "./utils/actions": {
-            "types": "./dist/utils/actions/index.d.ts",
-            "svelte": "./dist/utils/actions/index.js"
+        "./utils/attachments": {
+            "types": "./dist/utils/attachments/index.d.ts",
+            "svelte": "./dist/utils/attachments/index.js"
         },
         "./utils/functions": {
             "types": "./dist/utils/functions/index.d.ts",
@@ -73,6 +73,7 @@
     "dependencies": {
         "@floating-ui/dom": "^1.7.4",
         "@lucide/svelte": "^0.553.0",
+        "@oddbird/css-anchor-positioning": "^0.8.0",
         "@tailwindcss/forms": "^0.5.10",
         "@tailwindcss/typography": "^0.5.19",
         "@tailwindcss/vite": "^4.1.17",
@@ -108,7 +109,8 @@
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.46.4",
         "vite": "^7.2.2",
-        "vitest": "^4.0.8"
+        "vitest": "^4.0.8",
+        "zod": "^4.1.13"
     },
     "peerDependencies": {
         "@skeletonlabs/skeleton": "^3.1.1",

@@ -1,8 +1,7 @@
 <script lang="ts">
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
     import AttachedFile from './AttachedFile.svelte';
     import type { AiChatMessage } from './Chat.svelte';
     import Markdown from './Markdown.svelte';
@@ -24,7 +23,7 @@
     }: Props = $props();
 </script>
 
-<div class={twMerge(clsx('flex w-full flex-col items-end gap-1', clazz))}>
+<div class={merge('flex w-full flex-col items-end gap-1', clazz)}>
     {@render messageText({ message })}
     {#if message.files}
         <div class="flex flex-row items-center gap-2">

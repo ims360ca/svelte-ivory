@@ -1,9 +1,8 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import type { ClassValue } from 'svelte/elements';
-    import { twMerge } from 'tailwind-merge';
 
     export interface HeadingProps extends IvoryComponent<HTMLHeadingElement> {
         class?: ClassValue;
@@ -15,8 +14,10 @@
 </script>
 
 <h2
-    class={twMerge(
-        clsx('shrink-0 truncate text-lg font-bold select-none', theme.current.heading?.class, clazz)
+    class={merge(
+        'shrink-0 truncate text-lg font-bold select-none',
+        theme.current.heading?.class,
+        clazz
     )}
     {...rest}
 >

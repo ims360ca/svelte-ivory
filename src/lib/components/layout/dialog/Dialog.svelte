@@ -1,11 +1,10 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent, TransitionProps } from '$lib/types';
-    import clsx from 'clsx';
+    import { merge } from '$lib/utils/merge';
     import { onMount, tick } from 'svelte';
     import type { MouseEventHandler } from 'svelte/elements';
     import { fade } from 'svelte/transition';
-    import { twMerge } from 'tailwind-merge';
 
     export interface DialogProps extends IvoryComponent<HTMLElement>, TransitionProps {
         /** Gets called when the dialog requests to close (Escape, backdrop click) */
@@ -61,12 +60,10 @@
     onclick={handleBackdropClick}
     oncancel={requestClose}
     onclose={close}
-    class={twMerge(
-        clsx(
-            'h-full max-h-none w-screen max-w-full bg-transparent backdrop:bg-transparent',
-            theme.current.dialog?.class,
-            clazz
-        )
+    class={merge(
+        'h-full max-h-none w-screen max-w-full bg-transparent backdrop:bg-transparent',
+        theme.current.dialog?.class,
+        clazz
     )}
     in:inTransition
     out:outTransition

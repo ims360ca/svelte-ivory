@@ -1,10 +1,11 @@
 <script lang="ts" module>
+    import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
+    import { merge } from '$lib/utils/merge';
     import { Check, type Icon as LucideIcon, Minus } from '@lucide/svelte';
     import clsx from 'clsx';
     import type { ClassValue } from 'svelte/elements';
     import { scale } from 'svelte/transition';
-    import { twMerge } from 'tailwind-merge';
 
     export interface CheckboxProps extends IvoryComponent<HTMLElement> {
         class?: ClassValue;
@@ -40,16 +41,19 @@
         innerClass,
         style
     }: { icon?: typeof LucideIcon; innerClass?: string; style?: string } = $derived.by(() => {
-        if (!checked && !partial) return { innerClass: 'border-surface-500' };
+        const overwrittenClass =
+            theme.current.checkbox?.class &&
+            clsx(theme.current.checkbox?.class?.(!!checked, !!partial));
+        if (!checked && !partial) return { innerClass: overwrittenClass ?? 'border-surface-500' };
         if (checked)
             return {
                 icon: Check,
-                innerClass: 'bg-primary-500 border-primary-500 text-surface-50'
+                innerClass: overwrittenClass ?? 'bg-primary-500 border-primary-500 text-surface-50'
             };
         if (partial)
             return {
                 icon: Minus,
-                innerClass: 'border-primary-700 text-primary-500'
+                innerClass: overwrittenClass ?? 'border-primary-700 text-primary-500'
             };
         return {};
     });
@@ -62,13 +66,11 @@
     {disabled}
     {style}
     {onclick}
-    class={twMerge(
-        clsx(
-            'box-border flex h-5 w-5 items-center justify-center overflow-hidden rounded border-2 transition-colors',
-            disabled && 'cursor-not-allowed opacity-70',
-            innerClass,
-            clazz
-        )
+    class={merge(
+        'box-border flex h-5 w-5 items-center justify-center overflow-hidden rounded border-2 transition-colors',
+        disabled && 'cursor-not-allowed opacity-70',
+        innerClass,
+        clazz
     )}
     {...rest}
 >

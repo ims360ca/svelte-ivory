@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import { getContext, setContext, type Snippet } from 'svelte';
-    import { resize } from '../../utils/actions';
+    import { resize } from '../../utils/attachments';
     import type { ColumnController } from './columnController.svelte';
 
     const CONTEXT = {};
@@ -53,12 +53,12 @@
     {@render children?.()}
     {#if column.resizable}
         <button
+            {@attach resize({ resized: onResize, dragging: onDragging })}
             type="button"
             class={[
                 'relative ml-auto h-full w-4 shrink-0 cursor-col-resize bg-inherit after:absolute after:top-0 after:right-2 after:h-full after:w-px',
                 dragging ? 'after:bg-primary-400-600' : 'group-hover:after:bg-surface-300-700'
             ]}
-            use:resize={{ resized: onResize, dragging: onDragging }}
             onmouseenter={onHoverStart}
             onmouseleave={onHoverEnd}
             onfocusin={onHoverStart}
