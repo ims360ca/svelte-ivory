@@ -1,130 +1,110 @@
 <script lang="ts" module>
+    import { browser } from '$app/environment';
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
-    import { pseudoRandomId } from '$lib/utils/functions';
-    import { merge } from '$lib/utils/merge';
-    import { type ComputePositionConfig } from '@floating-ui/dom';
-    import polyfill from '@oddbird/css-anchor-positioning/fn';
+    import { clickOutside } from '$lib/utils/attachments';
+    import {
+        autoPlacement,
+        autoUpdate,
+        computePosition,
+        flip,
+        shift,
+        type ComputePositionConfig
+    } from '@floating-ui/dom';
+    import clsx from 'clsx';
+    import { twMerge } from 'tailwind-merge';
 
-    // ... (Your existing types remain unchanged)
-    type Alignment = 'start' | 'end';
-    type Side = 'top' | 'bottom' | 'left' | 'right';
-    type AlignedPlacement = `${Side}-${Alignment}` | Side;
+    /** Possible placements for the popover */
     export type PopoverPlacement = ComputePositionConfig['placement'];
 
-    const ANCHOR_STYLES: Record<string, string> = {
-        // Bottom Placements
-        'bottom-start': 'top: anchor(bottom); left: anchor(left);',
-        bottom: 'top: anchor(bottom); left: anchor(center); translate: -50% 0;',
-        'bottom-end': 'top: anchor(bottom); right: anchor(right);',
-
-        // Top Placements
-        'top-start': 'bottom: anchor(top); left: anchor(left);',
-        top: 'bottom: anchor(top); left: anchor(center); translate: -50% 0;',
-        'top-end': 'bottom: anchor(top); right: anchor(right);',
-
-        // Left Placements
-        'left-start': 'right: anchor(left); top: anchor(top);',
-        left: 'right: anchor(left); top: anchor(center); translate: 0 -50%;',
-        'left-end': 'right: anchor(left); bottom: anchor(bottom);',
-
-        // Right Placements
-        'right-start': 'left: anchor(right); top: anchor(top);',
-        right: 'left: anchor(right); top: anchor(center); translate: 0 -50%;',
-        'right-end': 'left: anchor(right); bottom: anchor(bottom);'
-    };
-
     export interface PopoverProps extends IvoryComponent<HTMLDivElement> {
-        target: HTMLElement | undefined;
-        placement?: AlignedPlacement;
+        /** The element the popover will be positioned relative to */
+        target: Element | undefined;
+        /**
+         * Where the popover should be positioned relative to the target.
+         *
+         * default: `bottom-start`
+         */
+        placement?: PopoverPlacement;
+        /**
+         * Callback that is called when the user clicks outside the popover or the target element.
+         */
+        onClickOutside?: (e: MouseEvent) => void;
+        /**
+         * Whether to place the popover automatically
+         *
+         * [Further reading](https://floating-ui.com/docs/autoPlacement)
+         */
         autoplacement?: boolean;
     }
 </script>
 
 <script lang="ts">
-    import { onMount, tick } from 'svelte';
-
     let {
         class: clazz,
         style: externalStyle,
         target,
         placement = 'bottom-start',
+        onClickOutside = close,
         children,
-        popover = 'auto',
-        id = pseudoRandomId(),
+        autoplacement,
         ...rest
     }: PopoverProps = $props();
 
-    let popoverEl: HTMLDivElement | undefined = $state();
+    let style: string = $state('');
+    let popover: HTMLDivElement | undefined = $state();
+
+    const postion = async (open: boolean) => {
+        if (!open || !popover || !browser || !target) return;
+        const { x, y } = await computePosition(target, popover, {
+            middleware: [shift(), ...(autoplacement ? [autoPlacement()] : [flip()])],
+            placement
+        });
+        style = `top: ${y}px; left: ${x}px;`;
+    };
+
     let currentlyOpen = $state(false);
 
-    // 1. Load Polyfill
-    // We import the 'fn' version to manually control execution,
-    // ensuring it runs after the DOM is ready.
-    onMount(async () => {
-        if (!CSS.supports('position-anchor', '--foo')) {
-            await polyfill();
-            console.log('loaded polyfill');
-        }
-    });
-
-    const anchorName = $derived(`--anchor-${id}`);
-
-    // 2. Anchor Association
-    $effect(() => {
-        if (!target) return;
-        const currentStyle = target.getAttribute('style') || '';
-        if (!currentStyle.includes(anchorName)) {
-            target.setAttribute('style', `anchor-name: ${anchorName}; ${currentStyle}`);
-        }
-        tick().then(() => polyfill());
-    });
-
-    $effect(() => {
-        if (!popoverEl) return;
-
-        // Use the explicit coordinates instead of position-area
-        const coords = ANCHOR_STYLES[placement] ?? ANCHOR_STYLES['bottom-start'];
-
-        // Important: We ensure position-area is NOT present
-        const polyfillStyles = `
-            position-anchor: ${anchorName}; 
-            ${coords}
-        `;
-
-        const combinedStyle = `${externalStyle ? externalStyle + '; ' : ''}${polyfillStyles}`;
-        popoverEl.setAttribute('style', combinedStyle);
-
-        tick().then(() => polyfill());
-    });
-
-    export async function close() {
-        popoverEl?.hidePopover();
+    let cleanup: () => void = () => {};
+    export function close() {
+        currentlyOpen = false;
+        cleanup();
     }
 
-    export async function open() {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (popoverEl?.showPopover as any)();
+    export function open() {
+        currentlyOpen = true;
+        if (!target || !popover) return;
+        cleanup = autoUpdate(target, popover, () => postion(true));
     }
 
-    export async function toggle() {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (popoverEl?.togglePopover as any)();
+    export function toggle() {
+        currentlyOpen = !currentlyOpen;
     }
 
     export function isOpen() {
         return currentlyOpen;
     }
+
+    // TODO: this is kinda hacky
+    $effect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        [popover, target];
+        postion(currentlyOpen);
+    });
 </script>
 
-<div
-    {popover}
-    class={merge('absolute m-0', theme.current.popover?.class, clazz)}
-    bind:this={popoverEl}
-    ontoggle={(e) => {
-        currentlyOpen = e.newState === 'open';
-    }}
-    {...rest}
->
-    {@render children?.()}
-</div>
+<!-- 
+    @component
+    A popover, positions itself relative to a target element.
+-->
+{#if currentlyOpen}
+    <div
+        class={twMerge(clsx('absolute', theme.current.popover?.class, clazz))}
+        style={style + ' ' + externalStyle}
+        bind:this={popover}
+        {@attach clickOutside({ callback: onClickOutside, target })}
+        {...rest}
+    >
+        {@render children?.()}
+    </div>
+{/if}
