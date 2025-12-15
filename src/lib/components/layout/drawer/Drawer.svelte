@@ -15,6 +15,8 @@
         children: Snippet;
         placement?: DrawerPlacement;
         closeOnOutsideClick?: boolean;
+        /** Overwrites entire content of the drawer */
+        inner?: Snippet;
     };
 </script>
 
@@ -29,6 +31,7 @@
             fly(e, { x: placement === 'right' ? '100%' : '-100%', duration: 200 }),
         outTransition = (e) =>
             fly(e, { x: placement === 'right' ? '100%' : '-100%', duration: 200 }),
+        inner,
         ...rest
     }: DrawerProps = $props();
 
@@ -68,21 +71,25 @@
             out:outTransition|global
             {...rest}
         >
-            <div class="flex flex-row items-center justify-between gap-8">
-                {#if title}
-                    <Heading class="flex grow flex-row items-center gap-4">
-                        {#if typeof title === 'function'}
-                            {@render title()}
-                        {:else}
-                            {title}
-                        {/if}
-                    </Heading>
-                {/if}
-                <button class="group ml-auto flex justify-end" type="button" onclick={close}>
-                    <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
-                </button>
-            </div>
-            {@render children()}
+            {#if inner}
+                {@render inner()}
+            {:else}
+                <div class="flex flex-row items-center justify-between gap-8">
+                    {#if title}
+                        <Heading class="flex grow flex-row items-center gap-4">
+                            {#if typeof title === 'function'}
+                                {@render title()}
+                            {:else}
+                                {title}
+                            {/if}
+                        </Heading>
+                    {/if}
+                    <button class="group ml-auto flex justify-end" type="button" onclick={close}>
+                        <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
+                    </button>
+                </div>
+                {@render children()}
+            {/if}
         </div>
     </HiddenBackground>
 {/if}
