@@ -1,12 +1,12 @@
 <script lang="ts">
+    import type { Variant } from '$lib';
     import { Toggle } from '$lib/components/basic/index';
     import { Modal, Popover } from '$lib/components/layout/index';
-    import type { ModalVariant } from '$lib/components/layout/modal/Modal.svelte';
     import { Toasts } from '$lib/components/toast';
 
     let modal = $state<Modal>();
     let modal2 = $state<Modal>();
-    let variant = $state<ModalVariant>();
+    let variant = $state<Variant>();
 
     let popoverButton = $state<HTMLButtonElement>();
     let popover = $state<Popover>();
@@ -28,9 +28,11 @@
     </button>
     <select bind:value={variant}>
         <option value="success">Success</option>
-        <option value="info">Info</option>
+        <option value="primary">Info</option>
         <option value="warning">Warning</option>
         <option value="error">Error</option>
+        <option value="secondary">secondary</option>
+        <option value="tertiary">tertiary</option>
     </select>
     <button
         onclick={() => {

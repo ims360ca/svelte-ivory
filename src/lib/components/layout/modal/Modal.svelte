@@ -1,4 +1,5 @@
 <script lang="ts" module>
+    import type { Variant } from '$lib';
     import { theme } from '$lib/theme.svelte';
     import type { TransitionProps } from '$lib/types';
     import { merge } from '$lib/utils/merge';
@@ -23,12 +24,10 @@
          * */
         closeOnOutsideClick?: boolean;
         /** Variant of the modal, applies styling to the header */
-        variant?: ModalVariant;
+        variant?: Variant;
         title?: string | Snippet;
         onclick?: MouseEventHandler<HTMLDivElement>;
     };
-
-    export type ModalVariant = 'success' | 'warning' | 'error' | 'info';
 </script>
 
 <script lang="ts">
@@ -108,10 +107,13 @@
                     class={[
                         'flex flex-row items-center justify-between gap-4 px-4 py-3',
                         !variant && 'pb-0',
+                        variant === 'primary' && 'preset-tonal-primary',
+                        variant === 'secondary' && 'preset-tonal-secondary',
+                        variant === 'tertiary' && 'preset-tonal-tertiary',
                         variant === 'success' && 'preset-tonal-success',
                         variant === 'warning' && 'preset-tonal-warning',
                         variant === 'error' && 'preset-tonal-error',
-                        variant === 'info' && 'preset-tonal-primary'
+                        variant === 'surface' && 'preset-tonal-surface'
                     ]}
                 >
                     {#if title}

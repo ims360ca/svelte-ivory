@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { theme } from '$lib';
     import { ToastUI } from '$lib/components/toast';
     import type { Snippet } from 'svelte';
     import '../app.css';
@@ -11,12 +10,6 @@
     }
 
     let { children }: Props = $props();
-
-    theme.setTheme({
-        heading: {
-            class: 'text-error-500'
-        }
-    });
 </script>
 
 <div class="flex h-full w-full flex-row items-start gap-4">
