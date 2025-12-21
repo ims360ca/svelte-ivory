@@ -27,6 +27,9 @@ export interface Theme {
     modal?: {
         class?: ClassValue;
         innerClass?: ClassValue;
+        dialog?: {
+            class?: ClassValue;
+        };
     };
     popover?: {
         class?: ClassValue;

@@ -85,7 +85,10 @@
         onclose={() => {
             if (closeOnOutsideClick) close();
         }}
-        class="flex h-full w-full flex-col items-center justify-start p-8 lg:p-12 xl:p-16"
+        class={merge(
+            'flex h-full w-full flex-col items-center justify-center p-8 lg:p-12 xl:p-16',
+            theme.current.modal?.dialog?.class
+        )}
     >
         {#if modal}
             <div {...rest} {onclick}>
