@@ -2,8 +2,7 @@
     import { page } from '$app/state';
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
-    import { pseudoRandomId } from '$lib/utils/functions/index';
-    import { merge } from '$lib/utils/merge';
+    import { merge, pseudoRandomId } from '$lib/utils/functions';
     import { onMount, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import { getTabContext } from './Tabs.svelte';

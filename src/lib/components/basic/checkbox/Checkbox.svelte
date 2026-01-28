@@ -1,7 +1,7 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { Check, type Icon as LucideIcon, Minus } from '@lucide/svelte';
     import clsx from 'clsx';
     import type { ClassValue } from 'svelte/elements';

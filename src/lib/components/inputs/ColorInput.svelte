@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import Input, { INPUT_UNSET_OUTLINE, type InputProps } from './Input.svelte';
 
     let props: InputProps<string> = $props();

@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends { id: string }">
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { onMount, tick, untrack, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
 

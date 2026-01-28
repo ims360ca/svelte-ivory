@@ -2,7 +2,7 @@
     import type { Variant } from '$lib';
     import { theme } from '$lib/theme.svelte';
     import type { TransitionProps } from '$lib/types';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { X } from '@lucide/svelte';
     import { type Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';

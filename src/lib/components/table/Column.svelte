@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import type { ColumnConfig } from './columnController.svelte';

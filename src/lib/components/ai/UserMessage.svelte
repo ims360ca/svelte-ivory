@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import AttachedFile from './AttachedFile.svelte';

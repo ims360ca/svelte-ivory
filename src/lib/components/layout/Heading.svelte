@@ -1,7 +1,7 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import type { ClassValue } from 'svelte/elements';
 
     export interface HeadingProps extends IvoryComponent<HTMLHeadingElement> {

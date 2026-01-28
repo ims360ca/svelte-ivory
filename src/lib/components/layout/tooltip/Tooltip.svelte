@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import type { Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
     import Popover, { type PopoverPlacement } from '../popover/Popover.svelte';

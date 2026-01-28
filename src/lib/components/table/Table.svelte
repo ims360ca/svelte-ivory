@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { ChevronRight } from '@lucide/svelte';
     import { getContext, setContext, untrack, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';

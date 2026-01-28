@@ -1,6 +1,6 @@
 {
     "name": "@ims360/svelte-ivory",
-    "version": "0.2.4",
+    "version": "0.3.0",
     "keywords": [
         "svelte"
     ],
@@ -113,8 +113,8 @@
         "zod": "^4.1.13"
     },
     "peerDependencies": {
-        "@skeletonlabs/skeleton": "^3.1.1",
-        "@sveltejs/kit": "^2.48.0",
-        "svelte": "^5.43.0"
+        "@skeletonlabs/skeleton": "^4.0.0",
+        "@sveltejs/kit": "^2.49.5",
+        "svelte": "^5.46.4"
     }
 }

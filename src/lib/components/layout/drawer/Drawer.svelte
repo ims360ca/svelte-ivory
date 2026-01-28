@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import type { TransitionProps } from '$lib/types';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { X } from '@lucide/svelte';
     import type { Snippet } from 'svelte';
     import { fly } from 'svelte/transition';

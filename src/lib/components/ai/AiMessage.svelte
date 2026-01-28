@@ -5,7 +5,7 @@
 -->
 
 <script lang="ts">
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { ThumbsDown, ThumbsUp } from '@lucide/svelte';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';

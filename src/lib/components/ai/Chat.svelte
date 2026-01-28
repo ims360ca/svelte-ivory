@@ -6,7 +6,7 @@
 -->
 
 <script lang="ts" module>
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { tick, type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
     import AiMessage from './AiMessage.svelte';

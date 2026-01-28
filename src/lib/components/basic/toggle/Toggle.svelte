@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import type { IvoryComponent } from '$lib/types';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
 

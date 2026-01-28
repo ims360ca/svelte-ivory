@@ -5,7 +5,7 @@
 -->
 
 <script lang="ts">
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import DomPurify from 'dompurify';
     import { marked } from 'marked';
     import type { ClassValue } from 'svelte/elements';

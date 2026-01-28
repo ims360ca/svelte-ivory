@@ -1,7 +1,6 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
-    import { pseudoRandomId } from '$lib/utils/functions';
-    import { merge } from '$lib/utils/merge';
+    import { merge, pseudoRandomId } from '$lib/utils/functions';
     import type { RemoteFormField, RemoteFormFieldValue } from '@sveltejs/kit';
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';

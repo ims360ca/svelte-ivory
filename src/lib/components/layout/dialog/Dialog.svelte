@@ -1,7 +1,7 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent, TransitionProps } from '$lib/types';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { onMount, tick } from 'svelte';
     import type { MouseEventHandler } from 'svelte/elements';
     import { fade } from 'svelte/transition';

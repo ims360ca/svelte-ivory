@@ -1,6 +1,6 @@
 <script lang="ts">
     import { theme } from '$lib/theme.svelte';
-    import { merge } from '$lib/utils/merge';
+    import { merge } from '$lib/utils/functions';
     import { TriangleAlert } from '@lucide/svelte';
     import type { RemoteFormIssue } from '@sveltejs/kit';
     import type { ClassValue } from 'svelte/elements';
