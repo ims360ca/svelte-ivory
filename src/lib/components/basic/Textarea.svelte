@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { merge } from '@ims360/svelte-ivory/utils/functions';
+    import { merge } from '$lib/utils/functions';
     import type { ClassValue, HTMLAttributes } from 'svelte/elements';
 
     interface Props extends HTMLAttributes<HTMLTextAreaElement> {
