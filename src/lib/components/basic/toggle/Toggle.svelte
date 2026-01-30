@@ -4,11 +4,11 @@
     import type { Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
 
-    export interface ToggleProps extends IvoryComponent<HTMLElement> {
+    export type ToggleProps = IvoryComponent<HTMLElement> & {
         value?: boolean;
         class?: ClassValue;
         children?: Snippet;
-    }
+    };
 </script>
 
 <script lang="ts">

@@ -17,5 +17,6 @@ export {
 export { default as PasswordInput } from './PasswordInput.svelte';
 export { default as Select } from './select/Select.svelte';
 export { default as SelectOption } from './select/SelectOption.svelte';
+export { default as TextareaInput } from './TextareaInput.svelte';
 export { default as TextInput } from './TextInput.svelte';
 export { default as ToggleInput } from './ToggleInput.svelte';

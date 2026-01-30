@@ -7,7 +7,7 @@
     import type { ClassValue } from 'svelte/elements';
     import { scale } from 'svelte/transition';
 
-    export interface CheckboxProps extends IvoryComponent<HTMLElement> {
+    export type CheckboxProps = IvoryComponent<HTMLElement> & {
         class?: ClassValue;
         /** `checked` has prioriy over `partial` */
         checked?: boolean | null;
@@ -17,7 +17,7 @@
         /** if true, the onclick handler will not be called */
         disabled?: boolean;
         onclick?: () => void;
-    }
+    };
 </script>
 
 <!-- 
