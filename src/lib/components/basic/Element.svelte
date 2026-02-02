@@ -42,11 +42,11 @@
     }: ElementProps & { div?: HTMLElement } = $props();
 
     function isAnchor(props: ElementProps): props is AnchorAttributes {
-        return 'href' in props;
+        return 'href' in props && typeof props.href !== 'undefined';
     }
 
     function isButton(props: ElementProps): props is ButtonAttributes {
-        return 'onclick' in props || 'type' in props;
+        return ('onclick' in props && typeof props.onclick !== 'undefined') || 'type' in props;
     }
 </script>
 

@@ -3,6 +3,7 @@
     import { merge } from '$lib/utils/functions';
     import { type Snippet } from 'svelte';
     import type { ClassValue } from 'svelte/elements';
+    import Element from '../basic/Element.svelte';
     import type { ColumnConfig } from './columnController.svelte';
     import { getRowContext } from './Row.svelte';
     import { getTableContext } from './Table.svelte';
@@ -12,6 +13,7 @@
         /** If the type is incorrect pass the "row" property with the right type */
         children: Snippet;
         onclick?: (e: Event) => void | Promise<void>;
+        href?: string;
         /** Cannot be used with resizable columns*/
         ignoreWidth?: boolean;
         offsetNestingLevel?: number;
@@ -21,37 +23,38 @@
 <script lang="ts">
     let {
         class: clazz,
-        children,
         onclick,
+        href,
         ignoreWidth = false,
-        // ColumnConfig
-        resizable = true,
         offsetNestingLevel = 0,
+        // ColumnConfig
+        id,
+        width,
+        minWidth,
+        resizable = true,
+        header,
         ...props
     }: ColumnProps = $props();
 
     // Register the new column if this is the first table row that was rendered
     const tableContext = getTableContext();
-    const column = tableContext.registerColumn({ resizable, ...props });
+    const column = tableContext.registerColumn({ id, width, minWidth, resizable, header });
     const rowContext = getRowContext();
 
     const finalOnClick = $derived(onclick || rowContext.onclick);
-    const allowClicking = $derived(!!(onclick || rowContext.onclick));
-
-    const element = $derived.by(() => {
-        if (finalOnClick) return 'button';
-        if (rowContext.href) return 'a';
-        return 'div';
+    const finalHref = $derived.by(() => {
+        if (finalOnClick) return undefined;
+        return href || rowContext.href;
     });
 
     // passes updated props to the column
     $effect(() => {
-        column.updateConfig({ resizable, ...props });
+        column.updateConfig({ resizable, minWidth, id, header });
     });
 
     // this must be separate to the above effect, since otherwise the width would be reset on every scroll
     $effect(() => {
-        if (!resizable && typeof props.width !== 'undefined') column.width = props.width;
+        if (!resizable && typeof width !== 'undefined') column.width = width;
     });
 
     const widthStyle = $derived(
@@ -60,11 +63,10 @@
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<svelte:element
-    this={element}
-    onclick={allowClicking ? finalOnClick : undefined}
-    href={!allowClicking ? rowContext.href : undefined}
-    type={allowClicking ? 'button' : undefined}
+<Element
+    {...props}
+    onclick={finalOnClick}
+    href={finalHref}
     style={ignoreWidth ? '' : `width: ${widthStyle}`}
     class={merge([
         'box-border flex h-full shrink-0 flex-row items-center justify-start gap-1 truncate',
@@ -72,6 +74,4 @@
         theme.current.table?.column?.class,
         clazz
     ])}
->
-    {@render children()}
-</svelte:element>
+/>
