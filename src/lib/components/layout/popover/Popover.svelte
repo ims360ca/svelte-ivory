@@ -1,25 +1,28 @@
 <script lang="ts" module>
-    import { browser } from '$app/environment';
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
-    import { clickOutside } from '$lib/utils/attachments';
-    import {
-        autoPlacement,
-        autoUpdate,
-        computePosition,
-        flip,
-        shift,
-        type ComputePositionConfig
-    } from '@floating-ui/dom';
+    import { pseudoRandomId } from '$lib/utils/functions';
     import clsx from 'clsx';
     import { twMerge } from 'tailwind-merge';
 
     /** Possible placements for the popover */
-    export type PopoverPlacement = ComputePositionConfig['placement'];
+    export type PopoverPlacement =
+        | 'top'
+        | 'top-start'
+        | 'top-end'
+        | 'right'
+        | 'right-start'
+        | 'right-end'
+        | 'bottom'
+        | 'bottom-start'
+        | 'bottom-end'
+        | 'left'
+        | 'left-start'
+        | 'left-end';
 
     export interface PopoverProps extends IvoryComponent<HTMLDivElement> {
         /** The element the popover will be positioned relative to */
-        target: Element | undefined;
+        target: HTMLElement | undefined;
         /**
          * Where the popover should be positioned relative to the target.
          *
@@ -27,13 +30,7 @@
          */
         placement?: PopoverPlacement;
         /**
-         * Callback that is called when the user clicks outside the popover or the target element.
-         */
-        onClickOutside?: (e: MouseEvent) => void;
-        /**
          * Whether to place the popover automatically
-         *
-         * [Further reading](https://floating-ui.com/docs/autoPlacement)
          */
         autoplacement?: boolean;
     }
@@ -45,66 +42,139 @@
         style: externalStyle,
         target,
         placement = 'bottom-start',
-        onClickOutside = close,
         children,
         autoplacement,
+        popover = 'auto',
         ...rest
     }: PopoverProps = $props();
 
-    let style: string = $state('');
-    let popover: HTMLDivElement | undefined = $state();
+    let popoverEl: HTMLDivElement | undefined = $state();
+    const anchorName = `--${pseudoRandomId('anchor-')}`;
 
-    const postion = async (open: boolean) => {
-        if (!open || !popover || !browser || !target) return;
-        const { x, y } = await computePosition(target, popover, {
-            middleware: [shift(), ...(autoplacement ? [autoPlacement()] : [flip()])],
-            placement
-        });
-        style = `top: ${y}px; left: ${x}px;`;
+    const getStyles = (
+        placement: PopoverPlacement,
+        anchorName: string,
+        autoplacement?: boolean
+    ) => {
+        let styles = `position-anchor: ${anchorName}; margin: 0; inset: auto;`;
+        if (autoplacement) {
+            styles += ` position-try: flip-block, flip-inline;`;
+        }
+
+        switch (placement) {
+            case 'top':
+                return (
+                    styles +
+                    ` bottom: anchor(${anchorName} top); left: anchor(${anchorName} center); translate: -50% 0;`
+                );
+            case 'top-start':
+                return (
+                    styles +
+                    ` bottom: anchor(${anchorName} top); left: anchor(${anchorName} start);`
+                );
+            case 'top-end':
+                return (
+                    styles + ` bottom: anchor(${anchorName} top); right: anchor(${anchorName} end);`
+                );
+
+            case 'bottom':
+                return (
+                    styles +
+                    ` top: anchor(${anchorName} bottom); left: anchor(${anchorName} center); translate: -50% 0;`
+                );
+            case 'bottom-start':
+                return (
+                    styles +
+                    ` top: anchor(${anchorName} bottom); left: anchor(${anchorName} start);`
+                );
+            case 'bottom-end':
+                return (
+                    styles + ` top: anchor(${anchorName} bottom); right: anchor(${anchorName} end);`
+                );
+
+            case 'left':
+                return (
+                    styles +
+                    ` right: anchor(${anchorName} left); top: anchor(${anchorName} center); translate: 0 -50%;`
+                );
+            case 'left-start':
+                return (
+                    styles + ` right: anchor(${anchorName} left); top: anchor(${anchorName} top);`
+                );
+            case 'left-end':
+                return (
+                    styles +
+                    ` right: anchor(${anchorName} left); bottom: anchor(${anchorName} bottom);`
+                );
+
+            case 'right':
+                return (
+                    styles +
+                    ` left: anchor(${anchorName} right); top: anchor(${anchorName} center); translate: 0 -50%;`
+                );
+            case 'right-start':
+                return (
+                    styles + ` left: anchor(${anchorName} right); top: anchor(${anchorName} top);`
+                );
+            case 'right-end':
+                return (
+                    styles +
+                    ` left: anchor(${anchorName} right); bottom: anchor(${anchorName} bottom);`
+                );
+
+            default:
+                return (
+                    styles +
+                    ` top: anchor(${anchorName} bottom); left: anchor(${anchorName} start);`
+                );
+        }
     };
 
     let currentlyOpen = $state(false);
+    let style = $derived(getStyles(placement, anchorName, autoplacement));
 
-    let cleanup: () => void = () => {};
+    $effect(() => {
+        if (target) {
+            target.style.setProperty('anchor-name', anchorName);
+            return () => {
+                target.style.removeProperty('anchor-name');
+            };
+        }
+    });
+
+    $effect(() => {
+        if (!popoverEl) return;
+
+        const handleToggle = (e: ToggleEvent) => {
+            const newState = e.newState === 'open';
+            currentlyOpen = newState;
+        };
+
+        popoverEl.addEventListener('toggle', handleToggle);
+        return () => popoverEl?.removeEventListener('toggle', handleToggle);
+    });
+
     export function close() {
-        currentlyOpen = false;
-        cleanup();
+        popoverEl?.hidePopover();
     }
 
     export function open() {
-        currentlyOpen = true;
-        if (!target || !popover) return;
-        cleanup = autoUpdate(target, popover, () => postion(true));
+        if (popoverEl) popoverEl.showPopover();
     }
 
     export function toggle() {
-        currentlyOpen = !currentlyOpen;
+        if (currentlyOpen) close();
+        else open();
     }
 
+    // Now this is reactive!
     export function isOpen() {
         return currentlyOpen;
     }
-
-    // TODO: this is kinda hacky
-    $effect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        [popover, target];
-        postion(currentlyOpen);
-    });
 </script>
 
-<!-- 
-    @component
-    A popover, positions itself relative to a target element.
--->
-{#if currentlyOpen}
-    <div
-        class={twMerge(clsx('absolute', theme.current.popover?.class, clazz))}
-        style={style + ' ' + externalStyle}
-        bind:this={popover}
-        {@attach clickOutside({ callback: onClickOutside, target })}
-        {...rest}
-    >
+<div bind:this={popoverEl} {style} {popover} class="bg-transparent">
+    <div class={twMerge(clsx(theme.current.popover?.class, clazz))} style={externalStyle} {...rest}>
         {@render children?.()}
     </div>
-{/if}
+</div>

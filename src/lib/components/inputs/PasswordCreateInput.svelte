@@ -33,6 +33,8 @@
     style="min-width: {target?.getBoundingClientRect().width}px;"
     class="py-3"
     placement="top"
+    autoplacement
+    popover="manual"
 >
     <div class="bg-surface-50-950 flex w-full flex-col gap-2 rounded p-4 shadow-lg">
         {#each requirements as requirement (requirement.re)}

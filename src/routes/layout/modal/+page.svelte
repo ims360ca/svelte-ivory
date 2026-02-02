@@ -2,6 +2,7 @@
     import type { Variant } from '$lib';
     import { Toggle } from '$lib/components/basic/index';
     import { Modal, Popover } from '$lib/components/layout/index';
+    import Tooltip from '$lib/components/layout/tooltip/Tooltip.svelte';
     import { Toasts } from '$lib/components/toast';
 
     let modal = $state<Modal>();
@@ -46,7 +47,9 @@
     </button>
     <button class="btn" onclick={modal2?.open}> Open new modal </button>
 </Modal>
-<Modal bind:this={modal2} title="Modal" closeOnOutsideClick={false}>Content</Modal>
+<Modal bind:this={modal2} title="Modal" closeOnOutsideClick={false}>
+    <Tooltip tooltip="content">Content</Tooltip>
+</Modal>
 
 <button class="bg-error-400-600" bind:this={popoverButton} onclick={() => popover?.open()}>
     Open popover
