@@ -119,7 +119,7 @@
     }}
 >
     {#snippet children({ row, nestingLevel })}
-        <Column id="name" header="Name" offsetNestingLevel={nestingLevel}>
+        <Column id="name" header="Name" offsetNestingLevel={nestingLevel} width={300}>
             <p class="truncate">
                 {row.name}
             </p>

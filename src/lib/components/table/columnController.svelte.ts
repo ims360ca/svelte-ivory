@@ -40,7 +40,7 @@ export class ColumnController {
         if (typeof conf.minWidth !== 'undefined') {
             this.minWidth = conf.minWidth;
         } else {
-            this.minWidth = this.width * MINIMAL_WIDTH_MULTIPLIER;
+            this.minWidth = (conf.width ?? DEFAULT_WIDTH) * MINIMAL_WIDTH_MULTIPLIER;
         }
         const newResizable = conf.resizable ?? false;
         if (newResizable !== this.resizable) {
