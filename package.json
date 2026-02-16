@@ -1,6 +1,6 @@
 {
     "name": "@ims360/svelte-ivory",
-    "version": "0.3.8",
+    "version": "0.3.9",
     "keywords": [
         "svelte"
     ],
@@ -9,6 +9,10 @@
         "**/*.css"
     ],
     "type": "module",
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
