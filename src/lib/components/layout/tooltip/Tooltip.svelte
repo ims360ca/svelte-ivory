@@ -1,5 +1,4 @@
 <script lang="ts" module>
-    import { merge } from '$lib/utils/functions';
     import type { Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
     import Popover, { type PopoverPlacement } from '../popover/Popover.svelte';
@@ -42,7 +41,6 @@
     }: TooltipProps = $props();
 
     let target = $state<HTMLElement>();
-
     let popover = $state<Popover>();
 
     let currentTimeout: number;
@@ -79,15 +77,7 @@
     {@render children?.()}
 </svelte:element>
 
-<Popover
-    bind:this={popover}
-    {target}
-    {placement}
-    class={merge(
-        'bg-surface-50-950 max-w-96 -translate-y-0.5 rounded px-4 py-1 shadow-lg',
-        tooltipClass
-    )}
->
+<Popover bind:this={popover} {target} {placement} class={tooltipClass}>
     {#if typeof tooltip === 'string'}
         {tooltip}
     {:else}

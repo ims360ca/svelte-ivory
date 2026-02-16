@@ -40,11 +40,11 @@
     let {
         class: clazz,
         style: externalStyle,
-        target,
         placement = 'bottom-start',
-        children,
-        autoplacement,
+        autoplacement = true,
         popover = 'auto',
+        target,
+        children,
         ...rest
     }: PopoverProps = $props();
 
@@ -173,8 +173,12 @@
     }
 </script>
 
-<div bind:this={popoverEl} {style} {popover} class="bg-transparent">
-    <div class={twMerge(clsx(theme.current.popover?.class, clazz))} style={externalStyle} {...rest}>
-        {@render children?.()}
-    </div>
+<div
+    bind:this={popoverEl}
+    style="{style} {externalStyle}"
+    {popover}
+    class={twMerge(clsx('bg-transparent', theme.current.popover?.class, clazz))}
+    {...rest}
+>
+    {@render children?.()}
 </div>
