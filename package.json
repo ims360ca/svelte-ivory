@@ -13,6 +13,10 @@
         "access": "public",
         "provenance": true
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ims360ca/svelte-ivory.git"
+    },
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
