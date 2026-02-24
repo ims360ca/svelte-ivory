@@ -1,6 +1,6 @@
 <script lang="ts">
     import { ColorTheme, type ColorThemePreference } from '$lib/colorTheme.svelte';
-    import { merge } from '@ims360/svelte-ivory/utils/functions';
+    import { merge } from '$lib/utils/functions';
     import { Icon, Monitor, Moon, Sun } from '@lucide/svelte';
     import type { ClassValue } from 'svelte/elements';
 
