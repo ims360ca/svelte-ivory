@@ -7,4 +7,5 @@ export {
 } from './Element.svelte';
 export { default as MarkedText, type MarkedTextProps } from './MarkedText.svelte';
 export { default as Textarea } from './Textarea.svelte';
+export { default as ThemeSelect } from './ThemeSelect.svelte';
 export { default as Toggle, type ToggleProps } from './toggle/Toggle.svelte';
