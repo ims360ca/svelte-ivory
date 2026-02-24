@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
-import { cookie } from '@ims360/svelte-ivory/utils/functions';
 import type { Handle } from '@sveltejs/kit';
+import { cookie } from './utils/functions';
 
 const COOKIE_THEME_KEY = 'theme';
 
