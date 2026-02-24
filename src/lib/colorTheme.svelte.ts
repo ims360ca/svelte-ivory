@@ -23,8 +23,11 @@ class ThemeController {
         return this.currentTheme;
     }
 
-    get preference() {
-        return this.currentTheme;
+    get current() {
+        if (this.currentTheme === 'dark' || this.currentTheme === 'light') return this.currentTheme;
+        if (!browser) return 'light';
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        return prefersDark ? 'dark' : 'light';
     }
 
     set theme(value: ColorThemePreference) {
