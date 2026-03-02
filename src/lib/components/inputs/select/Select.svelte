@@ -2,6 +2,7 @@
     import { Popover } from '$lib/components/layout';
     import { ChevronDown } from '@lucide/svelte';
     import { createContext, type Snippet } from 'svelte';
+    import type { ClassValue } from 'svelte/elements';
     import Input, { type InputProps } from '../Input.svelte';
 
     export interface SelectContext {
@@ -16,9 +17,15 @@
     interface Props extends InputProps<string> {
         placeholder?: string;
         children: Snippet;
+        popoverClass?: ClassValue;
     }
 
-    let { placeholder = '', children, ...props }: Props = $props();
+    let {
+        placeholder = 'bg-surface-50-950 flex flex-col gap-2 rounded-container p-2 shadow',
+        children,
+        popoverClass,
+        ...props
+    }: Props = $props();
 
     let button = $state<HTMLButtonElement | undefined>();
     let buttonWidth = $state<number>(200);
@@ -62,7 +69,7 @@
 
 <Popover
     bind:this={popover}
-    class="bg-surface-50-950 mt-2 flex flex-col gap-2 rounded p-2 shadow"
+    class={popoverClass}
     style={`min-width: ${buttonWidth}px`}
     target={button}
 >
