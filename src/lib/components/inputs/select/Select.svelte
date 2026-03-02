@@ -57,7 +57,7 @@
         {/if}
         <ChevronDown class={['ml-auto transition-all', popover?.isOpen() && 'rotate-180']} />
     </button>
-    <input {...props.form.as('hidden', value)} />
+    <input class="hidden" {...props.form.as('text')} {value} />
 </Input>
 
 <Popover
