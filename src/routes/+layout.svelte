@@ -1,4 +1,5 @@
 <script lang="ts">
+    import ThemeSelect from '$lib/components/basic/ThemeSelect.svelte';
     import { ToastUI } from '$lib/components/toast';
     import type { Snippet } from 'svelte';
     import '../app.css';
@@ -21,6 +22,7 @@
         <NavLink href="/drawer">Drawer</NavLink>
         <NavLink href="/table">Table</NavLink>
         <NavLink href="/toast">Toast</NavLink>
+        <ThemeSelect />
     </NavBar>
     <main class="flex h-full grow flex-col gap-4 overflow-hidden p-4">
         {@render children()}

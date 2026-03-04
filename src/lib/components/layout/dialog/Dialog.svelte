@@ -1,12 +1,11 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
-    import type { IvoryComponent, TransitionProps } from '$lib/types';
+    import type { IvoryComponent } from '$lib/types';
     import { merge } from '$lib/utils/functions';
     import { onMount, tick } from 'svelte';
     import type { MouseEventHandler } from 'svelte/elements';
-    import { fade } from 'svelte/transition';
 
-    export interface DialogProps extends IvoryComponent<HTMLElement>, TransitionProps {
+    export interface DialogProps extends IvoryComponent<HTMLElement> {
         /** Gets called when the dialog requests to close (Escape, backdrop click) */
         onclose?: () => void;
     }
@@ -17,8 +16,6 @@
         class: clazz,
         onclose: close, // This is the prop from the parent
         children,
-        inTransition = (e) => fade(e, { duration: 200 }),
-        outTransition = (e) => fade(e, { duration: 200 }),
         ...rest
     }: DialogProps = $props();
 
@@ -61,13 +58,22 @@
     oncancel={requestClose}
     onclose={close}
     class={merge(
-        'h-full max-h-none w-screen max-w-full bg-transparent backdrop:bg-transparent',
+        'backdrop:bg-surface-800-200/30 h-full max-h-none w-screen max-w-full bg-transparent',
         theme.current.dialog?.class,
         clazz
     )}
-    in:inTransition
-    out:outTransition
     {...rest}
 >
     {@render children?.()}
 </dialog>
+
+<style>
+    dialog::backdrop {
+        animation: fade-in 200ms ease-out;
+    }
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+    }
+</style>

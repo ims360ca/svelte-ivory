@@ -8,9 +8,6 @@ export interface Theme {
     heading?: {
         class?: ClassValue;
     };
-    hiddenBackground?: {
-        class?: ClassValue;
-    };
     dialog?: {
         class?: ClassValue;
     };

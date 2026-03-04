@@ -1,6 +1,6 @@
 {
     "name": "@ims360/svelte-ivory",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "keywords": [
         "svelte"
     ],
@@ -21,10 +21,6 @@
         ".": {
             "types": "./dist/index.d.ts",
             "svelte": "./dist/index.js"
-        },
-        "./components/ai": {
-            "types": "./dist/components/ai/index.d.ts",
-            "svelte": "./dist/components/ai/index.js"
         },
         "./components/basic": {
             "types": "./dist/components/basic/index.d.ts",

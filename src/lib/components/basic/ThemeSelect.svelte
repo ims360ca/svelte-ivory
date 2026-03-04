@@ -5,7 +5,7 @@
     import type { ClassValue } from 'svelte/elements';
 
     type Props = {
-        class: ClassValue;
+        class?: ClassValue;
     };
 
     let { class: clazz }: Props = $props();

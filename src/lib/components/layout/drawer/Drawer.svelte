@@ -4,8 +4,8 @@
     import { X } from '@lucide/svelte';
     import type { Snippet } from 'svelte';
     import { fly } from 'svelte/transition';
-    import { HiddenBackground } from '..';
     import Heading from '../Heading.svelte';
+    import { Dialog } from '../dialog';
 
     export type DrawerPlacement = 'left' | 'right';
 
@@ -54,7 +54,7 @@
 </script>
 
 {#if currentlyOpen}
-    <HiddenBackground
+    <Dialog
         onclose={() => {
             if (closeOnOutsideClick) close();
         }}
@@ -67,8 +67,8 @@
                 clazz
             ])}
             onclick={(e) => e.stopPropagation()}
-            in:inTransition|global
-            out:outTransition|global
+            in:inTransition
+            out:outTransition
             {...rest}
         >
             {#if inner}
@@ -91,5 +91,5 @@
                 {@render children()}
             {/if}
         </div>
-    </HiddenBackground>
+    </Dialog>
 {/if}

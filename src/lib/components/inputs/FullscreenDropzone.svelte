@@ -2,7 +2,7 @@
     import { FileUp } from '@lucide/svelte';
     import type { Snippet } from 'svelte';
     import { scale } from 'svelte/transition';
-    import { HiddenBackground } from '../layout';
+    import { Dialog } from '../layout/dialog';
 
     export interface FullscreenDropzoneProps {
         ondrop: (files: File[]) => void;
@@ -64,9 +64,9 @@
 />
 
 {#if open}
-    <HiddenBackground class="flex items-center justify-center">
+    <Dialog class="flex items-center justify-center">
         {@render children()}
-    </HiddenBackground>
+    </Dialog>
 {/if}
 
 {#snippet defaultChildren()}

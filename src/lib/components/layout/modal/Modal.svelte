@@ -6,8 +6,9 @@
     import { X } from '@lucide/svelte';
     import { type Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
-    import { fade } from 'svelte/transition';
-    import { Heading, HiddenBackground } from '..';
+    import { scale } from 'svelte/transition';
+    import { Heading } from '..';
+    import { Dialog } from '../dialog';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
     export type ModalProps = TransitionProps & {
@@ -45,8 +46,9 @@
         variant,
         innerClass,
         inTransition = (e) =>
-            fade(e, {
-                duration: 200
+            scale(e, {
+                duration: 200,
+                start: 0.8
             }),
         outTransition = () => ({}),
         ...rest
@@ -81,7 +83,7 @@
 	A modal, comes with a title, close button and different variants per default.
 -->
 {#if currentlyOpen}
-    <HiddenBackground
+    <Dialog
         onclose={() => {
             if (closeOnOutsideClick) close();
         }}
@@ -143,5 +145,5 @@
                 </div>
             </div>
         {/if}
-    </HiddenBackground>
+    </Dialog>
 {/if}
