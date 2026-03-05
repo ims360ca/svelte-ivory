@@ -124,7 +124,7 @@
                 {row.name}
             </p>
         </Column>
-        <Column id="age" header="Age">
+        <Column id="age" header="Age" width={50} minWidth={50} resizable={false}>
             {row.age}
         </Column>
         <Column id="email">

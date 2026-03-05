@@ -36,6 +36,8 @@ export class ColumnController {
         if (typeof this.width === 'undefined') {
             const newWidth = typeof conf.width === 'undefined' ? DEFAULT_WIDTH : conf.width;
             this.width = newWidth;
+        } else {
+            this.width = conf.width ?? this.width;
         }
         if (typeof conf.minWidth !== 'undefined') {
             this.minWidth = conf.minWidth;

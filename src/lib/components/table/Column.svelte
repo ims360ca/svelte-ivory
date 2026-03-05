@@ -38,7 +38,23 @@
 
     // Register the new column if this is the first table row that was rendered
     const tableContext = getTableContext();
-    const column = tableContext.registerColumn({ id, width, minWidth, resizable, header });
+    const column = tableContext.registerColumn({
+        get id() {
+            return id;
+        },
+        get width() {
+            return width;
+        },
+        get minWidth() {
+            return minWidth;
+        },
+        get resizable() {
+            return resizable;
+        },
+        get header() {
+            return header;
+        }
+    });
     const rowContext = getRowContext();
 
     const finalOnClick = $derived(onclick || rowContext.onclick);
@@ -47,22 +63,11 @@
         return href || rowContext.href;
     });
 
-    // passes updated props to the column
-    $effect(() => {
-        column.updateConfig({ resizable, minWidth, id, header });
-    });
-
-    // this must be separate to the above effect, since otherwise the width would be reset on every scroll
-    $effect(() => {
-        if (!resizable && typeof width !== 'undefined') column.resize(width);
-    });
-
     const widthStyle = $derived(
         `calc(${column.width ?? 0}px - var(--spacing) * ${offsetNestingLevel * tableContext.nestingInset}) !important;`
     );
 </script>
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
 <Element
     {...props}
     onclick={finalOnClick}
