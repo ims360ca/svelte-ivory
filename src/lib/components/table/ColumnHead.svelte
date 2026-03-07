@@ -48,7 +48,7 @@
 </script>
 
 <div
-    class={merge('group flex shrink-0 flex-row justify-start', theme.current.table?.head)}
+    class={merge('group flex shrink-0 flex-row justify-start', theme.current.table?.head?.class)}
     bind:this={target}
     style="width: {column?.width ?? 0}px;"
 >
