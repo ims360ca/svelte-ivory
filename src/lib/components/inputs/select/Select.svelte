@@ -20,12 +20,7 @@
         popoverClass?: ClassValue;
     }
 
-    let {
-        placeholder = 'bg-surface-50-950 flex flex-col gap-2 rounded-container p-2 shadow',
-        children,
-        popoverClass,
-        ...props
-    }: Props = $props();
+    let { placeholder, children, popoverClass, ...props }: Props = $props();
 
     let button = $state<HTMLButtonElement | undefined>();
     let buttonWidth = $state<number>(200);

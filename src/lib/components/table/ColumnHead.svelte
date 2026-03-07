@@ -1,4 +1,6 @@
 <script lang="ts" module>
+    import { theme } from '$lib/theme.svelte';
+    import { merge } from '$lib/utils/functions';
     import { getContext, setContext, type Snippet } from 'svelte';
     import { resize } from '../../utils/attachments';
     import type { ColumnController } from './columnController.svelte';
@@ -46,7 +48,7 @@
 </script>
 
 <div
-    class={['group flex shrink-0 flex-row justify-start']}
+    class={merge('group flex shrink-0 flex-row justify-start', theme.current.table?.head)}
     bind:this={target}
     style="width: {column?.width ?? 0}px;"
 >

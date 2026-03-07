@@ -17,7 +17,14 @@ export interface Theme {
         };
     };
     table?: {
+        class?: ClassValue;
         column?: {
+            class?: ClassValue;
+        };
+        head?: {
+            class?: ClassValue;
+        };
+        row?: {
             class?: ClassValue;
         };
     };

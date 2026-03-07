@@ -1,4 +1,5 @@
 <script lang="ts" module>
+    import { theme } from '$lib/theme.svelte';
     import { merge } from '$lib/utils/functions';
     import { ChevronRight } from '@lucide/svelte';
     import { getContext, setContext, untrack, type Snippet } from 'svelte';
@@ -199,8 +200,12 @@
     bind:this={list}
     bind:b_scrollTop
     data={results.entries}
-    class={merge(['flex flex-col overflow-hidden border-transparent', clazz])}
-    rowClass={['pl-2 pr-4', rowClass]}
+    class={merge([
+        'flex flex-col overflow-hidden border-transparent',
+        theme.current.table?.class,
+        clazz
+    ])}
+    rowClass={merge('pl-2 pr-4', theme.current.table?.row, rowClass)}
     {rowHeight}
 >
     {#snippet header()}
