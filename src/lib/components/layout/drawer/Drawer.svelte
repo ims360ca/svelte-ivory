@@ -67,8 +67,8 @@
                 clazz
             ])}
             onclick={(e) => e.stopPropagation()}
-            in:inTransition
-            out:outTransition
+            in:inTransition|global
+            out:outTransition|global
             {...rest}
         >
             {#if inner}

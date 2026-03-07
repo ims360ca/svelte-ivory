@@ -45,6 +45,8 @@
         dragging = d;
         column.dragging = d;
     };
+
+    $inspect(column.width);
 </script>
 
 <div

@@ -1,4 +1,4 @@
-import type { Snippet } from 'svelte';
+import { type Snippet } from 'svelte';
 
 const DEFAULT_WIDTH = 250;
 export const MINIMAL_WIDTH_MULTIPLIER = 0.5;
@@ -36,8 +36,8 @@ export class ColumnController {
         if (typeof this.width === 'undefined') {
             const newWidth = typeof conf.width === 'undefined' ? DEFAULT_WIDTH : conf.width;
             this.width = newWidth;
-        } else {
-            this.width = conf.width ?? this.width;
+        } else if (!this.resizable) {
+            this.width = typeof conf.width === 'number' ? conf.width : this.width;
         }
         if (typeof conf.minWidth !== 'undefined') {
             this.minWidth = conf.minWidth;

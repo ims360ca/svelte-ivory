@@ -58,7 +58,7 @@
     oncancel={requestClose}
     onclose={close}
     class={merge(
-        'backdrop:bg-surface-800-200/30 h-full max-h-none w-screen max-w-full bg-transparent',
+        'backdrop:bg-surface-800-200/30 h-full max-h-none w-screen max-w-full overflow-hidden bg-transparent',
         theme.current.dialog?.class,
         clazz
     )}
