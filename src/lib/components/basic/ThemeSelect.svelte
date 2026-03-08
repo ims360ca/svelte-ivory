@@ -30,7 +30,7 @@
 </script>
 
 <div class={merge('border-surface-300-700 grid grid-cols-3 rounded-full border', clazz)}>
-    {#each options as { value, icon: Icon, ariaLabel }}
+    {#each options as { value, icon: Icon, ariaLabel }, index (index)}
         {@const selected = value === ColorTheme.theme}
         <button
             type="button"

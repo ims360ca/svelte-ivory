@@ -12,7 +12,7 @@
 
 <Input {...props}>
     {#snippet children(inputProps)}
-        {@const { name } = props.form.as?.('text')}
+        {@const { name } = props.form.as('text')}
         <TextArea
             {...inputProps}
             {name}

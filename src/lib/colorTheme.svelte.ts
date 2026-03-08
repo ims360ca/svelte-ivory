@@ -50,14 +50,14 @@ class ThemeController {
     /** Add to hook sequence to enable correct prerendering ot the theme */
     handle: Handle = ({ event, resolve }) => {
         const theme = event.cookies.get(COOKIE_THEME_KEY);
-        let isDark = false;
+        let dark;
         if (theme !== undefined && (theme as ColorThemePreference) !== 'system') {
-            isDark = theme === 'dark';
+            dark = theme === 'dark';
         } else {
-            isDark = event.request.headers.get('sec-ch-prefers-color-scheme') === 'dark';
+            dark = event.request.headers.get('sec-ch-prefers-color-scheme') === 'dark';
         }
 
-        if (!isDark) return resolve(event);
+        if (!dark) return resolve(event);
 
         return resolve(event, {
             transformPageChunk: ({ html }) => html.replace('class="', 'class="dark ')

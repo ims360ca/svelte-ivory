@@ -13,6 +13,14 @@
     "files.associations": {
         "*.css": "tailwindcss"
     },
+    "[json]": {
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.suggest.insertMode": "replace",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
     // "i18n-ally.displayLanguage": "de",
     // "i18n-ally.enabledFrameworks": ["svelte"],
     // "i18n-ally.extract.keygenStrategy": "random",
