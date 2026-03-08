@@ -58,14 +58,14 @@
         onclose={() => {
             if (closeOnOutsideClick) close();
         }}
+        class={[
+            'flex flex-row justify-start overflow-visible',
+            placement === 'left' && '',
+            placement === 'right' && 'justify-end'
+        ]}
     >
         <div
-            class={merge([
-                'bg-surface-50-950 absolute top-0 flex h-full flex-col gap-4 p-4',
-                placement === 'left' && 'left-0',
-                placement === 'right' && 'right-0',
-                clazz
-            ])}
+            class={merge(['bg-surface-50-950 flex h-full flex-col gap-4 p-4', clazz])}
             onclick={(e) => e.stopPropagation()}
             in:inTransition|global
             out:outTransition|global
