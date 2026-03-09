@@ -1,17 +1,15 @@
 <script lang="ts" module>
     import type { Variant } from '$lib';
     import { theme } from '$lib/theme.svelte';
-    import type { TransitionProps } from '$lib/types';
     import { merge } from '$lib/utils/functions';
     import { X } from '@lucide/svelte';
     import { type Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
-    import { scale } from 'svelte/transition';
     import { Heading } from '..';
     import { Dialog } from '../dialog';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
-    export type ModalProps = TransitionProps & {
+    export type ModalProps = {
         /** Class of the modal itself, does not apply to the inner div */
         class?: ClassValue;
         /** Class of the div wrapping the children */
@@ -45,12 +43,6 @@
         closeOnOutsideClick = true,
         variant,
         innerClass,
-        inTransition = (e) =>
-            scale(e, {
-                duration: 200,
-                start: 0.8
-            }),
-        outTransition = () => ({}),
         ...rest
     }: Props = $props();
 
@@ -84,59 +76,74 @@
     }}
     class={merge('flex h-full w-full flex-col items-center justify-center p-8 lg:p-12 xl:p-16')}
 >
-    {#if dialog?.isOpen()}
-        {#if modal}
-            <div {...rest} {onclick}>
-                {@render modal()}
+    {#if modal}
+        <div {...rest} {onclick} class="modal-content transition-all ease-in-out">
+            {@render modal()}
+        </div>
+    {:else}
+        <div
+            class={merge(
+                'modal-content bg-surface-50-950 flex max-h-full max-w-full flex-col overflow-hidden rounded transition-all ease-in-out',
+                theme.current.modal?.class,
+                clazz
+            )}
+            {...rest}
+            {onclick}
+        >
+            <div
+                class={[
+                    'flex flex-row items-center justify-between gap-4 px-4 py-3',
+                    !variant && 'pb-0',
+                    variant === 'primary' && 'preset-tonal-primary',
+                    variant === 'secondary' && 'preset-tonal-secondary',
+                    variant === 'tertiary' && 'preset-tonal-tertiary',
+                    variant === 'success' && 'preset-tonal-success',
+                    variant === 'warning' && 'preset-tonal-warning',
+                    variant === 'error' && 'preset-tonal-error',
+                    variant === 'surface' && 'preset-tonal-surface'
+                ]}
+            >
+                {#if title}
+                    <Heading class="flex grow flex-row items-center gap-4">
+                        {#if typeof title === 'function'}
+                            {@render title()}
+                        {:else}
+                            {title}
+                        {/if}
+                    </Heading>
+                {/if}
+                <button class="group ml-auto flex justify-end" type="button" onclick={close}>
+                    <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
+                </button>
             </div>
-        {:else}
             <div
                 class={merge(
-                    'bg-surface-50-950 flex max-h-full max-w-full flex-col overflow-hidden rounded',
-                    theme.current.modal?.class,
-                    clazz
+                    'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
+                    theme.current.modal?.innerClass,
+                    innerClass
                 )}
-                {...rest}
-                {onclick}
-                in:inTransition
-                out:outTransition
             >
-                <div
-                    class={[
-                        'flex flex-row items-center justify-between gap-4 px-4 py-3',
-                        !variant && 'pb-0',
-                        variant === 'primary' && 'preset-tonal-primary',
-                        variant === 'secondary' && 'preset-tonal-secondary',
-                        variant === 'tertiary' && 'preset-tonal-tertiary',
-                        variant === 'success' && 'preset-tonal-success',
-                        variant === 'warning' && 'preset-tonal-warning',
-                        variant === 'error' && 'preset-tonal-error',
-                        variant === 'surface' && 'preset-tonal-surface'
-                    ]}
-                >
-                    {#if title}
-                        <Heading class="flex grow flex-row items-center gap-4">
-                            {#if typeof title === 'function'}
-                                {@render title()}
-                            {:else}
-                                {title}
-                            {/if}
-                        </Heading>
-                    {/if}
-                    <button class="group ml-auto flex justify-end" type="button" onclick={close}>
-                        <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
-                    </button>
-                </div>
-                <div
-                    class={merge(
-                        'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
-                        theme.current.modal?.innerClass,
-                        innerClass
-                    )}
-                >
-                    {@render children?.()}
-                </div>
+                {@render children?.()}
             </div>
-        {/if}
+        </div>
     {/if}
 </Dialog>
+
+<style>
+    .modal-content {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    :global(dialog[open]) .modal-content {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    @starting-style {
+        :global(dialog[open]) .modal-content {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+    }
+</style>

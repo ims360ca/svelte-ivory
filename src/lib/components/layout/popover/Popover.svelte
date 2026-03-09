@@ -1,9 +1,7 @@
 <script lang="ts" module>
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
-    import { pseudoRandomId } from '$lib/utils/functions';
-    import clsx from 'clsx';
-    import { twMerge } from 'tailwind-merge';
+    import { merge, pseudoRandomId } from '$lib/utils/functions';
 
     /** Possible placements for the popover */
     export type PopoverPlacement =
@@ -177,7 +175,7 @@
     bind:this={popoverEl}
     style="{style} {externalStyle}"
     {popover}
-    class={twMerge(clsx('bg-transparent', theme.current.popover?.class, clazz))}
+    class={merge('bg-transparent not-open:hidden!', theme.current.popover?.class, clazz)}
     {...rest}
 >
     {@render children?.()}

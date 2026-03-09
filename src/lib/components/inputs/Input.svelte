@@ -65,7 +65,7 @@
             'group flex h-full grow flex-col overflow-hidden rounded border-2',
             hasIssues
                 ? 'bg-error-500/20 border-error-500'
-                : 'focus-within:border-primary-500 focus-within:hover:border-primary-500 border-surface-300-700/25 hover:border-surface-300-700/50 transition-[border-color] duration-300',
+                : 'focus-within:border-primary-500 focus-within:hover:border-primary-500 border-surface-300-700/25 hover:border-surface-300-700/50 transition-[border-color]',
             theme.current.input?.class?.(hasValue, hasIssues)
         )}
     >

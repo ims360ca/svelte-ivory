@@ -35,6 +35,9 @@ export interface Theme {
             class?: ClassValue;
         };
     };
+    drawer?: {
+        class?: ClassValue;
+    };
     popover?: {
         class?: ClassValue;
     };

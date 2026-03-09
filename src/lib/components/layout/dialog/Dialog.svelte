@@ -61,6 +61,33 @@
 </dialog>
 
 <style>
+    dialog {
+        transition:
+            display var(--tw-duration, var(--default-transition-duration)) allow-discrete,
+            overlay var(--tw-duration, var(--default-transition-duration)) allow-discrete;
+    }
+
+    /* Dialog backdrop fade-in animation */
+    dialog::backdrop {
+        opacity: 0;
+        transition:
+            display var(--tw-duration, var(--default-transition-duration)) allow-discrete,
+            overlay var(--tw-duration, var(--default-transition-duration)) allow-discrete,
+            opacity var(--tw-duration, var(--default-transition-duration))
+                cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    dialog[open]::backdrop {
+        opacity: 1;
+    }
+
+    /* Starting style for entry animation */
+    @starting-style {
+        dialog[open]::backdrop {
+            opacity: 0;
+        }
+    }
+
     dialog:not([open]):not(:popover-open) {
         display: none !important;
     }

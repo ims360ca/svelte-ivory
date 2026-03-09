@@ -18,7 +18,7 @@
 <svelte:element
     this={rest.onclick ? 'button' : 'div'}
     class={merge(
-        'group relative flex h-5 w-9 flex-row items-center rounded-full p-0.5 transition-colors duration-100',
+        'group relative flex h-5 w-9 flex-row items-center rounded-full p-0.5 transition-colors ',
         value ? 'bg-primary-500' : 'bg-surface-300-700',
         clazz
     )}
