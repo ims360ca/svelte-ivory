@@ -35,40 +35,33 @@
         ...rest
     }: DrawerProps = $props();
 
-    let currentlyOpen = $state(false);
-    export function close() {
-        currentlyOpen = false;
-    }
+    let dialog = $state<Dialog>();
 
-    export function open() {
-        currentlyOpen = true;
-    }
+    export const close = () => dialog?.close();
 
-    export function toggle() {
-        currentlyOpen = !currentlyOpen;
-    }
+    export const open = () => dialog?.open();
 
-    export function isOpen() {
-        return currentlyOpen;
-    }
+    export const isOpen = () => dialog?.isOpen();
+
+    export const toggle = () => {
+        if (isOpen()) close();
+        else open();
+    };
 </script>
 
-{#if currentlyOpen}
-    <Dialog
-        onclose={() => {
-            if (closeOnOutsideClick) close();
-        }}
-        class={[
-            'flex flex-row justify-start overflow-visible',
-            placement === 'left' && '',
-            placement === 'right' && 'justify-end'
-        ]}
-    >
+<Dialog
+    bind:this={dialog}
+    onclose={() => {
+        if (closeOnOutsideClick) close();
+    }}
+    class={['flex flex-row justify-start overflow-visible', placement === 'right' && 'justify-end']}
+>
+    {#if dialog?.isOpen()}
         <div
-            class={merge(['bg-surface-50-950 flex h-full flex-col gap-4 p-4', clazz])}
+            class={merge('bg-surface-50-950 flex h-full flex-col gap-4 p-4', clazz)}
             onclick={(e) => e.stopPropagation()}
-            in:inTransition|global
-            out:outTransition|global
+            in:inTransition
+            out:outTransition
             {...rest}
         >
             {#if inner}
@@ -91,5 +84,5 @@
                 {@render children()}
             {/if}
         </div>
-    </Dialog>
-{/if}
+    {/if}
+</Dialog>

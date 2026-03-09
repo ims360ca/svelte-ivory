@@ -54,23 +54,18 @@
         ...rest
     }: Props = $props();
 
-    let currentlyOpen = $state(false);
+    let dialog = $state<Dialog>();
 
-    export function close() {
-        currentlyOpen = false;
-    }
+    export const close = () => dialog?.close();
 
-    export function open() {
-        currentlyOpen = true;
-    }
+    export const open = () => dialog?.open();
 
-    export function toggle() {
-        currentlyOpen = !currentlyOpen;
-    }
+    export const isOpen = () => dialog?.isOpen();
 
-    export function isOpen() {
-        return currentlyOpen;
-    }
+    export const toggle = () => {
+        if (isOpen()) close();
+        else open();
+    };
 
     const onclick: MouseEventHandler<HTMLDivElement> = (e) => {
         e.stopPropagation();
@@ -82,31 +77,29 @@
 	@component
 	A modal, comes with a title, close button and different variants per default.
 -->
-{#if currentlyOpen}
-    <Dialog
-        onclose={() => {
-            if (closeOnOutsideClick) close();
-        }}
-        class={merge(
-            'flex h-full w-full flex-col items-center justify-center p-8 lg:p-12 xl:p-16',
-            theme.current.modal?.dialog?.class
-        )}
-    >
+<Dialog
+    bind:this={dialog}
+    onclose={() => {
+        if (closeOnOutsideClick) close();
+    }}
+    class={merge('flex h-full w-full flex-col items-center justify-center p-8 lg:p-12 xl:p-16')}
+>
+    {#if dialog?.isOpen()}
         {#if modal}
             <div {...rest} {onclick}>
                 {@render modal()}
             </div>
         {:else}
             <div
-                class={merge([
+                class={merge(
                     'bg-surface-50-950 flex max-h-full max-w-full flex-col overflow-hidden rounded',
                     theme.current.modal?.class,
                     clazz
-                ])}
+                )}
                 {...rest}
                 {onclick}
-                in:inTransition|global
-                out:outTransition|global
+                in:inTransition
+                out:outTransition
             >
                 <div
                     class={[
@@ -145,5 +138,5 @@
                 </div>
             </div>
         {/if}
-    </Dialog>
-{/if}
+    {/if}
+</Dialog>

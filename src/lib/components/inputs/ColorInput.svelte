@@ -7,9 +7,7 @@
 
 <Input {...props}>
     {#snippet children({ id, class: inputClass })}
-        <div
-            class={merge([inputClass, 'flex grow flex-row items-center justify-between gap-4 p-0'])}
-        >
+        <div class={merge(inputClass, 'flex grow flex-row items-center justify-between gap-4 p-0')}>
             <input
                 type="text"
                 bind:value={props.form.value, props.form.set}

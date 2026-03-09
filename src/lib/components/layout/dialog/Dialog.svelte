@@ -2,7 +2,6 @@
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import { merge } from '$lib/utils/functions';
-    import { onMount, tick } from 'svelte';
     import type { MouseEventHandler } from 'svelte/elements';
 
     export interface DialogProps extends IvoryComponent<HTMLElement> {
@@ -14,49 +13,43 @@
 <script lang="ts">
     let {
         class: clazz,
-        onclose: close, // This is the prop from the parent
+        onclose: onclose, // This is the prop from the parent
         children,
         ...rest
     }: DialogProps = $props();
 
     let dialog = $state<HTMLDialogElement>();
 
-    /**
-     * This function "requests" a close.
-     * It tries to stop the native close and lets the parent decide.
-     */
-    async function requestClose(event: Event) {
-        event.preventDefault(); // Stop the native close
-        event.stopPropagation();
-        close?.(); // Ask the parent to close
-        await tick();
-        await tick();
-        dialog?.showModal();
-    }
+    let currentlyOpen = $state(false);
 
-    onMount(() => {
-        if (dialog && !dialog.open) {
-            dialog.showModal();
-        }
-        return () => {
-            if (dialog && dialog.open) {
-                dialog.close();
-            }
-        };
-    });
+    export const open = () => {
+        dialog?.showModal();
+        currentlyOpen = true;
+    };
+
+    export const isOpen = () => currentlyOpen;
+
+    export const close = () => {
+        dialog?.close();
+        currentlyOpen = false;
+    };
 
     const handleBackdropClick: MouseEventHandler<HTMLElement> = (event) => {
-        if (event.target === dialog) {
-            requestClose(event);
-        }
+        if (event.target !== dialog) return;
+        onclose?.();
+    };
+
+    const handleClose = () => {
+        onclose?.();
+        currentlyOpen = false;
     };
 </script>
 
 <dialog
     bind:this={dialog}
     onclick={handleBackdropClick}
-    oncancel={requestClose}
-    onclose={close}
+    oncancel={handleClose}
+    onclose={handleClose}
     class={merge(
         'backdrop:bg-surface-800-200/30 h-full max-h-none w-screen max-w-full overflow-hidden bg-transparent',
         theme.current.dialog?.class,
@@ -68,12 +61,7 @@
 </dialog>
 
 <style>
-    dialog::backdrop {
-        animation: fade-in 200ms ease-out;
-    }
-    @keyframes fade-in {
-        from {
-            opacity: 0;
-        }
+    dialog:not([open]):not(:popover-open) {
+        display: none !important;
     }
 </style>

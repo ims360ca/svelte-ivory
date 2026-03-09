@@ -200,11 +200,11 @@
     bind:this={list}
     bind:b_scrollTop
     data={results.entries}
-    class={merge([
+    class={merge(
         'flex flex-col overflow-hidden border-transparent',
         theme.current.table?.class,
         clazz
-    ])}
+    )}
     rowClass={merge('pl-2 pr-4', theme.current.table?.row?.class, rowClass)}
     {rowHeight}
 >

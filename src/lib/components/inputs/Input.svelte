@@ -72,12 +72,12 @@
         {@render children({ class: inputClass, id, ...inputProps })}
         {#if label}
             <label
-                class={merge([
+                class={merge(
                     'pointer-events-none absolute cursor-text px-1 transition-all select-none group-focus-within:top-0 group-focus-within:left-0 group-focus-within:text-sm focus:cursor-default',
                     hasValue ? 'top-0 left-0 cursor-default text-sm' : 'top-10 left-3',
                     hasIssues ? 'text-error-500' : 'text-surface-700-300',
                     theme.current.input?.label?.class?.(hasValue, hasIssues)
-                ])}
+                )}
                 for={id}
             >
                 {label}

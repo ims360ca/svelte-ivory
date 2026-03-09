@@ -73,10 +73,10 @@
     onclick={finalOnClick}
     href={finalHref}
     style={ignoreWidth ? '' : `width: ${widthStyle}`}
-    class={merge([
+    class={merge(
         'box-border flex h-full shrink-0 flex-row items-center justify-start gap-1 truncate',
         column.width !== 0 && 'border-r-[calc(var(--spacing)*2)] border-transparent',
         theme.current.table?.column?.class,
         clazz
-    ])}
+    )}
 />

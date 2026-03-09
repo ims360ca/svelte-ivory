@@ -26,7 +26,7 @@
     }: Props<T> = $props();
 
     const finalRowClass = $derived(
-        merge(['flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowClass])
+        merge('flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowClass)
     );
 
     let viewportReactivity = $state(0);
@@ -92,7 +92,7 @@
     });
 </script>
 
-<div class={merge(['scroll relative flex grow flex-col overflow-hidden border-inherit', clazz])}>
+<div class={merge('scroll relative flex grow flex-col overflow-hidden border-inherit', clazz)}>
     {#if header}
         <div class="h-fit w-full border-inherit">
             <div
