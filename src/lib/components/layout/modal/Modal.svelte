@@ -132,7 +132,7 @@
 <style>
     .modal-content {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.97);
     }
 
     :global(dialog[open]) .modal-content {
@@ -143,7 +143,7 @@
     @starting-style {
         :global(dialog[open]) .modal-content {
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.97);
         }
     }
 </style>
