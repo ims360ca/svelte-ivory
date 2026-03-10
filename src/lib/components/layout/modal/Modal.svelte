@@ -32,14 +32,14 @@
 <script lang="ts">
     interface Props extends ModalProps {
         /** If you don't want the title and close button to be included you can overwrite the default modal */
-        modal?: Snippet;
+        inner?: Snippet;
     }
 
     let {
         class: clazz = 'flex flex-col',
         title,
         children,
-        modal,
+        inner,
         closeOnOutsideClick = true,
         variant,
         innerClass,
@@ -49,9 +49,7 @@
     let dialog = $state<Dialog>();
 
     export const close = () => dialog?.close();
-
     export const open = () => dialog?.open();
-
     export const isOpen = () => dialog?.isOpen();
 
     export const toggle = () => {
@@ -74,11 +72,11 @@
     onclose={() => {
         if (closeOnOutsideClick) close();
     }}
-    class={merge('flex h-full w-full flex-col items-center justify-center p-8 lg:p-12 xl:p-16')}
+    class="flex h-full w-full flex-col items-center justify-center p-2 sm:p-4 md:p-8 lg:p-12 xl:p-16"
 >
-    {#if modal}
-        <div {...rest} {onclick} class="modal-content transition-all ease-in-out">
-            {@render modal()}
+    {#if inner}
+        <div {...rest} {onclick} class={merge('modal-content transition-all ease-in-out', clazz)}>
+            {@render inner()}
         </div>
     {:else}
         <div
