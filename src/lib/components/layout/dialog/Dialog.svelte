@@ -74,6 +74,8 @@
             display var(--tw-duration, var(--default-transition-duration)) allow-discrete,
             overlay var(--tw-duration, var(--default-transition-duration)) allow-discrete,
             opacity var(--tw-duration, var(--default-transition-duration))
+                cubic-bezier(0.16, 1, 0.3, 1),
+            backdrop-filter var(--tw-duration, var(--default-transition-duration))
                 cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -85,6 +87,7 @@
     @starting-style {
         dialog[open]::backdrop {
             opacity: 0;
+            backdrop-filter: blur(0);
         }
     }
 
