@@ -77,7 +77,7 @@
     {@render children?.()}
 </svelte:element>
 
-<Popover bind:this={popover} {target} {placement} class={tooltipClass}>
+<Popover bind:this={popover} popover="hint" {target} {placement} class={tooltipClass}>
     {#if typeof tooltip === 'string'}
         {tooltip}
     {:else}
