@@ -132,12 +132,10 @@
     let style = $derived(getStyles(placement, anchorName, autoplacement));
 
     $effect(() => {
-        if (target) {
-            target.style.setProperty('anchor-name', anchorName);
-            return () => {
-                target.style.removeProperty('anchor-name');
-            };
-        }
+        if (target) target.style.setProperty('anchor-name', anchorName);
+        return () => {
+            target?.style.removeProperty('anchor-name');
+        };
     });
 
     $effect(() => {
