@@ -31,7 +31,7 @@
         <Checkbox {checked} />
         {label}
     </button>
-    <input class="hidden" {...form.as('checkbox')} {checked} />
+    <input class="hidden" {...form.as('checkbox')} />
     {#if description}
         <p class="text-surface-700-300">{description}</p>
     {/if}
