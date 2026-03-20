@@ -44,7 +44,9 @@
     let popover = $state<Popover>();
 
     let currentTimeout: number;
-    function onmouseenter() {
+    function onpointerenter(e: PointerEvent) {
+        if (e.pointerType === 'touch') return;
+
         clearTimeout(currentTimeout);
         if (timeout === 0) {
             popover?.open();
@@ -55,7 +57,9 @@
         }
     }
 
-    function onmouseleave() {
+    function onpointerleave(e: PointerEvent) {
+        if (e.pointerType === 'touch') return;
+
         clearTimeout(currentTimeout);
         popover?.close();
     }
@@ -71,8 +75,8 @@
     {...rest}
     {href}
     bind:this={target}
-    {onmouseenter}
-    {onmouseleave}
+    {onpointerenter}
+    {onpointerleave}
 >
     {@render children?.()}
 </svelte:element>

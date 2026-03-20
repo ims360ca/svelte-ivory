@@ -10,7 +10,7 @@
     export type DrawerProps = {
         class?: string;
         title?: string | Snippet;
-        children: Snippet;
+        children?: Snippet;
         placement?: DrawerPlacement;
         closeOnOutsideClick?: boolean;
         /** Overwrites entire content of the drawer */
@@ -76,7 +76,7 @@
                     <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
                 </button>
             </div>
-            {@render children()}
+            {@render children?.()}
         {/if}
     </div>
 </Dialog>
