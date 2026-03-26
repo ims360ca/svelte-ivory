@@ -19,6 +19,7 @@
         onclick?: (row: T) => void;
         href?: (row: T) => string | undefined;
         rowHeight?: number;
+        virtualized?: boolean;
         /** Renders the rows */
         children?: Snippet<[{ row: T; nestingLevel?: number; index: number }]>;
         rowClass?: ClassValue;
@@ -75,7 +76,8 @@
         nestingInset = 4,
         b_columns: externalColumns = $bindable(),
         b_scrollTop = $bindable(),
-        search
+        search,
+        virtualized = true
     }: TableProps<T> = $props();
 
     let columns = $state<ColumnController[]>(externalColumns ?? []);
@@ -207,6 +209,7 @@
     )}
     rowClass={merge('pl-2 pr-4', theme.current.table?.row?.class, rowClass)}
     {rowHeight}
+    {virtualized}
 >
     {#snippet header()}
         <div

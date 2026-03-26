@@ -12,6 +12,7 @@
         rowHeight: number;
         overscan?: number;
         rowClass?: ClassValue;
+        virtualized?: boolean;
     };
 
     let {
@@ -22,7 +23,8 @@
         b_scrollTop = $bindable(),
         rowHeight,
         overscan = 2,
-        rowClass
+        rowClass,
+        virtualized = true
     }: Props<T> = $props();
 
     const finalRowClass = $derived(
@@ -49,11 +51,18 @@
         }
     }
 
-    const start = $derived(Math.max(0, Math.floor(scroll_top / rowHeight) - overscan));
+    const start = $derived.by(() => {
+        if (!virtualized) return 0;
+        return Math.max(0, Math.floor(scroll_top / rowHeight) - overscan);
+    });
 
-    const end = $derived(
-        Math.min(data.length, Math.ceil((scroll_top + viewport_height) / rowHeight) + overscan)
-    );
+    const end = $derived.by(() => {
+        if (!virtualized) return data.length;
+        return Math.min(
+            data.length,
+            Math.ceil((scroll_top + viewport_height) / rowHeight) + overscan
+        );
+    });
 
     const visible = $derived(
         data.slice(start, end).map((data, i) => {
@@ -61,8 +70,14 @@
         })
     );
 
-    const top = $derived(start * rowHeight);
-    const bottom = $derived((data.length - end) * rowHeight);
+    const top = $derived.by(() => {
+        if (!virtualized) return 0;
+        return start * rowHeight;
+    });
+    const bottom = $derived.by(() => {
+        if (!virtualized) return 0;
+        return (data.length - end) * rowHeight;
+    });
 
     async function onscroll() {
         if (!viewport) {

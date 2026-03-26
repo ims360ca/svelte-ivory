@@ -117,6 +117,7 @@
             return row.name.toLowerCase().includes(search.toLowerCase());
         }
     }}
+    virtualized={false}
 >
     {#snippet children({ row, nestingLevel })}
         <Column id="name" header="Name" offsetNestingLevel={nestingLevel} width={300}>
