@@ -1,9 +1,7 @@
 <script lang="ts" module>
-    import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import { merge } from '$lib/utils/functions';
     import { Check, type Icon as LucideIcon, Minus } from '@lucide/svelte';
-    import clsx from 'clsx';
     import type { ClassValue } from 'svelte/elements';
     import { scale } from 'svelte/transition';
 
@@ -41,19 +39,16 @@
         innerClass,
         style
     }: { icon?: typeof LucideIcon; innerClass?: string; style?: string } = $derived.by(() => {
-        const overwrittenClass =
-            theme.current.checkbox?.class &&
-            clsx(theme.current.checkbox?.class?.(!!checked, !!partial));
-        if (!checked && !partial) return { innerClass: overwrittenClass ?? 'border-surface-500' };
+        if (!checked && !partial) return { innerClass: 'border-surface-500' };
         if (checked)
             return {
                 icon: Check,
-                innerClass: overwrittenClass ?? 'bg-primary-500 border-primary-500 text-surface-50'
+                innerClass: 'bg-primary-500 border-primary-500 text-surface-50'
             };
         if (partial)
             return {
                 icon: Minus,
-                innerClass: overwrittenClass ?? 'border-primary-700 text-primary-500'
+                innerClass: 'border-primary-700 text-primary-500'
             };
         return {};
     });

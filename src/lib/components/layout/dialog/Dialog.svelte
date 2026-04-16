@@ -2,21 +2,13 @@
     import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import { merge } from '$lib/utils/functions';
-    import type { MouseEventHandler } from 'svelte/elements';
+    import type { EventHandler, MouseEventHandler } from 'svelte/elements';
 
-    export interface DialogProps extends IvoryComponent<HTMLElement> {
-        /** Gets called when the dialog requests to close (Escape, backdrop click) */
-        onclose?: () => void;
-    }
+    export type DialogProps = IvoryComponent<HTMLDialogElement>;
 </script>
 
 <script lang="ts">
-    let {
-        class: clazz,
-        onclose: onclose, // This is the prop from the parent
-        children,
-        ...rest
-    }: DialogProps = $props();
+    let { children, ...props }: DialogProps = $props();
 
     let dialog = $state<HTMLDialogElement>();
 
@@ -34,28 +26,35 @@
         currentlyOpen = false;
     };
 
-    const handleBackdropClick: MouseEventHandler<HTMLElement> = (event) => {
+    const onclick: MouseEventHandler<HTMLDialogElement> = (event) => {
         if (event.target !== dialog) return;
-        onclose?.();
+        if (props.onclick) props.onclick(event);
+        else close();
     };
 
-    const handleClose = () => {
-        onclose?.();
+    const onclose: EventHandler<Event, HTMLDialogElement> = (event) => {
+        props.onclose?.(event);
+        currentlyOpen = false;
+    };
+
+    const oncancel: EventHandler<Event, HTMLDialogElement> = (event) => {
+        if (props.oncancel) props.oncancel(event);
+        else props.onclose?.(event);
         currentlyOpen = false;
     };
 </script>
 
 <dialog
     bind:this={dialog}
-    onclick={handleBackdropClick}
-    oncancel={handleClose}
-    onclose={handleClose}
+    {...props}
+    {oncancel}
+    {onclose}
+    {onclick}
     class={merge(
         'backdrop:bg-surface-800-200/30 h-full max-h-none w-screen max-w-full overflow-hidden bg-transparent',
         theme.current.dialog?.class,
-        clazz
+        props.class
     )}
-    {...rest}
 >
     {@render children?.()}
 </dialog>

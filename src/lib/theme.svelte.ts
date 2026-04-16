@@ -2,43 +2,7 @@ import type { RemoteFormIssue } from '@sveltejs/kit';
 import type { ClassValue } from 'svelte/elements';
 
 export interface Theme {
-    checkbox?: {
-        class?: (checked: boolean, partial: boolean) => ClassValue;
-    };
-    heading?: {
-        class?: ClassValue;
-    };
     dialog?: {
-        class?: ClassValue;
-    };
-    tabs?: {
-        tab?: {
-            class?: (active: boolean) => ClassValue;
-        };
-    };
-    table?: {
-        class?: ClassValue;
-        column?: {
-            class?: ClassValue;
-        };
-        head?: {
-            class?: ClassValue;
-        };
-        row?: {
-            class?: ClassValue;
-        };
-    };
-    modal?: {
-        class?: ClassValue;
-        innerClass?: ClassValue;
-        dialog?: {
-            class?: ClassValue;
-        };
-    };
-    drawer?: {
-        class?: ClassValue;
-    };
-    popover?: {
         class?: ClassValue;
     };
     input?: {

@@ -20,7 +20,7 @@
     let popover = $state<Popover>();
     let target = $state<HTMLElement>();
 
-    const value = $derived(props.form.value());
+    const value = $derived(props.form.value() ?? '');
 </script>
 
 <div bind:this={target} class={['bg-inherit ', clazz]}>

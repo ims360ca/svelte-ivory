@@ -1,30 +1,17 @@
 <script lang="ts" module>
-    import type { Variant } from '$lib';
-    import { theme } from '$lib/theme.svelte';
+    import type { IvoryComponent } from '$lib/types';
     import { merge } from '$lib/utils/functions';
-    import { X } from '@lucide/svelte';
     import { type Snippet } from 'svelte';
     import type { ClassValue, MouseEventHandler } from 'svelte/elements';
-    import { Heading } from '..';
-    import { Dialog } from '../dialog';
+    import { Dialog, type DialogProps } from '../dialog';
 
     /** Props for the modal, expose if you overwrite the defaults in a custom component */
-    export type ModalProps = {
+    export type ModalProps = IvoryComponent<HTMLDivElement> & {
         /** Class of the modal itself, does not apply to the inner div */
         class?: ClassValue;
-        /** Class of the div wrapping the children */
-        innerClass?: ClassValue;
+        dialog?: DialogProps;
         /** Content of the modal */
         children?: Snippet;
-        /**
-         * If `true` the modal will not close when clicking outside of it
-         *
-         * Defaults to `true`
-         * */
-        closeOnOutsideClick?: boolean;
-        /** Variant of the modal, applies styling to the header */
-        variant?: Variant;
-        title?: string | Snippet;
         onclick?: MouseEventHandler<HTMLDivElement>;
     };
 </script>
@@ -35,16 +22,7 @@
         inner?: Snippet;
     }
 
-    let {
-        class: clazz = 'flex flex-col',
-        title,
-        children,
-        inner,
-        closeOnOutsideClick = true,
-        variant,
-        innerClass,
-        ...rest
-    }: Props = $props();
+    let { children, dialog: dialogProps = {}, ...props }: Props = $props();
 
     let dialog = $state<Dialog>();
 
@@ -59,72 +37,29 @@
 
     const onclick: MouseEventHandler<HTMLDivElement> = (e) => {
         e.stopPropagation();
-        rest.onclick?.(e);
+        props.onclick?.(e);
     };
 </script>
 
 <!-- 
 	@component
-	A modal, comes with a title, close button and different variants per default.
+	A modal inside a dialog element
 -->
 <Dialog
     bind:this={dialog}
-    onclose={() => {
-        if (closeOnOutsideClick) close();
-    }}
-    class="flex h-full w-full flex-col items-center justify-center p-2 sm:p-4 md:p-8 lg:p-12 xl:p-16"
+    {...dialogProps}
+    class={merge(
+        'flex h-full w-full flex-col items-center justify-center p-2 sm:p-4 md:p-8 lg:p-12 xl:p-16',
+        dialogProps?.class
+    )}
 >
-    {#if inner}
-        <div {...rest} {onclick} class={merge('modal-content transition-all ease-in-out', clazz)}>
-            {@render inner()}
-        </div>
-    {:else}
-        <div
-            class={merge(
-                'modal-content bg-surface-50-950 flex max-h-full max-w-full flex-col overflow-hidden rounded transition-all ease-in-out',
-                theme.current.modal?.class,
-                clazz
-            )}
-            {...rest}
-            {onclick}
-        >
-            <div
-                class={[
-                    'flex flex-row items-center justify-between gap-4 px-4 py-3',
-                    !variant && 'pb-0',
-                    variant === 'primary' && 'preset-tonal-primary',
-                    variant === 'secondary' && 'preset-tonal-secondary',
-                    variant === 'tertiary' && 'preset-tonal-tertiary',
-                    variant === 'success' && 'preset-tonal-success',
-                    variant === 'warning' && 'preset-tonal-warning',
-                    variant === 'error' && 'preset-tonal-error',
-                    variant === 'surface' && 'preset-tonal-surface'
-                ]}
-            >
-                {#if title}
-                    <Heading class="flex grow flex-row items-center gap-4">
-                        {#if typeof title === 'function'}
-                            {@render title()}
-                        {:else}
-                            {title}
-                        {/if}
-                    </Heading>
-                {/if}
-                <button class="group ml-auto flex justify-end" type="button" onclick={close}>
-                    <X class="h-full w-auto transition-[stroke-width] group-hover:stroke-3" />
-                </button>
-            </div>
-            <div
-                class={merge(
-                    'flex grow flex-col gap-4 overflow-hidden bg-inherit p-4 pt-3',
-                    theme.current.modal?.innerClass,
-                    innerClass
-                )}
-            >
-                {@render children?.()}
-            </div>
-        </div>
-    {/if}
+    <div
+        {...props}
+        {onclick}
+        class={merge('modal-content transition-all ease-in-out', props.class)}
+    >
+        {@render children?.()}
+    </div>
 </Dialog>
 
 <style>

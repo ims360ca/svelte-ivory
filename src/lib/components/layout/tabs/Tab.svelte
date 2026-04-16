@@ -1,6 +1,5 @@
 <script lang="ts" module>
     import { page } from '$app/state';
-    import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import { merge, pseudoRandomId } from '$lib/utils/functions';
     import { onMount, type Snippet } from 'svelte';
@@ -52,7 +51,6 @@
     this={href ? 'a' : 'button'}
     class={merge(
         'btn flex h-fit w-fit shrink-0 items-center justify-center px-0 text-xl font-bold select-none',
-        theme.current.tabs?.tab?.class?.(selected),
         typeof clazz === 'function' ? clazz(selected) : clazz
     )}
     onclick={href

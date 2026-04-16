@@ -1,3 +1,4 @@
+import type { Variant } from '$lib';
 import { pseudoRandomId } from '$lib/utils/functions';
 import type { Icon } from '@lucide/svelte';
 
@@ -7,7 +8,7 @@ export interface ToastSettings {
     timeout?: number;
     hideDismiss?: boolean;
     icon?: typeof Icon;
-    variant: 'info' | 'success' | 'warning' | 'error';
+    variant: Variant;
 }
 
 interface Toast extends ToastSettings {
@@ -19,7 +20,7 @@ const TOAST_DEFAULTS: ToastSettings = {
     message: 'Missing Toast Message',
     autohide: true,
     timeout: 3000,
-    variant: 'info'
+    variant: 'primary'
 };
 
 class ToastStore {

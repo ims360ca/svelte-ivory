@@ -1,9 +1,8 @@
 <script lang="ts" module>
-    import { theme } from '$lib/theme.svelte';
     import { merge } from '$lib/utils/functions';
     import { ChevronRight } from '@lucide/svelte';
     import { getContext, setContext, untrack, type Snippet } from 'svelte';
-    import type { ClassValue } from 'svelte/elements';
+    import type { ClassValue, HTMLAttributes } from 'svelte/elements';
     import { SvelteSet } from 'svelte/reactivity';
     import ColumnComponent from './Column.svelte';
     import { ColumnController, type ColumnConfig } from './columnController.svelte';
@@ -22,8 +21,8 @@
         virtualized?: boolean;
         /** Renders the rows */
         children?: Snippet<[{ row: T; nestingLevel?: number; index: number }]>;
-        rowClass?: ClassValue;
-        headerClass?: ClassValue;
+        row?: HTMLAttributes<HTMLDivElement>;
+        header?: HTMLAttributes<HTMLDivElement>;
         search?: {
             term: string;
             matches: (row: T) => boolean;
@@ -67,8 +66,8 @@
         class: clazz,
         data,
         children: passedChildren,
-        rowClass = 'hover:bg-surface-950-50/10 transition-colors',
-        headerClass,
+        row,
+        header: headerProps,
         rowHeight = 64,
         onclick,
         href,
@@ -202,20 +201,17 @@
     bind:this={list}
     bind:b_scrollTop
     data={results.entries}
-    class={merge(
-        'flex flex-col overflow-hidden border-transparent',
-        theme.current.table?.class,
-        clazz
-    )}
-    rowClass={merge('pl-2 pr-4', theme.current.table?.row?.class, rowClass)}
+    class={merge('flex flex-col overflow-hidden border-transparent', clazz)}
+    {row}
     {rowHeight}
     {virtualized}
 >
     {#snippet header()}
         <div
+            {...headerProps}
             class={merge(
                 'flex w-fit min-w-full flex-row border-b border-inherit pr-4 pl-2',
-                headerClass
+                headerProps?.class
             )}
         >
             {#if results.someHaveChildren}

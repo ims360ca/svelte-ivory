@@ -1,5 +1,4 @@
 <script lang="ts" module>
-    import { theme } from '$lib/theme.svelte';
     import type { IvoryComponent } from '$lib/types';
     import { merge, pseudoRandomId } from '$lib/utils/functions';
 
@@ -173,7 +172,7 @@
     bind:this={popoverEl}
     style="{style} {externalStyle}"
     {popover}
-    class={merge('bg-transparent not-open:hidden!', theme.current.popover?.class, clazz)}
+    class={merge('bg-transparent not-open:hidden!', clazz)}
     {...rest}
 >
     {@render children?.()}

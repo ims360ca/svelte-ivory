@@ -1,7 +1,7 @@
 <script lang="ts" generics="T extends { id: string }">
     import { merge } from '$lib/utils/functions';
     import { onMount, tick, untrack, type Snippet } from 'svelte';
-    import type { ClassValue } from 'svelte/elements';
+    import type { ClassValue, HTMLAttributes } from 'svelte/elements';
 
     type Props<T> = {
         class?: ClassValue;
@@ -11,7 +11,7 @@
         b_scrollTop?: number;
         rowHeight: number;
         overscan?: number;
-        rowClass?: ClassValue;
+        row?: HTMLAttributes<HTMLDivElement>;
         virtualized?: boolean;
     };
 
@@ -23,12 +23,12 @@
         b_scrollTop = $bindable(),
         rowHeight,
         overscan = 2,
-        rowClass,
+        row: rowProps,
         virtualized = true
     }: Props<T> = $props();
 
     const finalRowClass = $derived(
-        merge('flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowClass)
+        merge('flex w-full shrink-0 grow flex-row items-center overflow-hidden', rowProps?.class)
     );
 
     let viewportReactivity = $state(0);
@@ -131,7 +131,11 @@
                 style="padding-top: {top}px; padding-bottom: {bottom}px; min-width: max(100%, {header_width}px) !important;"
             >
                 {#each visible as row, i (row.data.id)}
-                    <div class={finalRowClass} style="height: {rowHeight}px !important;">
+                    <div
+                        {...rowProps}
+                        class={finalRowClass}
+                        style="height: {rowHeight}px !important; {rowProps?.style}"
+                    >
                         {@render children({
                             row: row.data,
                             domIndex: i,

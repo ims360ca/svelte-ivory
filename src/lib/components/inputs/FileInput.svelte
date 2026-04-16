@@ -27,7 +27,10 @@
     function add(files: File[]) {
         const value = rest.form.value();
         if (Array.isArray(value)) {
-            rest.form.set([...value.filter((f) => !files.includes(f)), ...Array.from(files || [])]);
+            rest.form.set([
+                ...value.filter((f) => f && !files.includes(f)),
+                ...Array.from(files || [])
+            ]);
         } else {
             rest.form.set((files[0] ?? undefined) as File);
         }
@@ -81,7 +84,7 @@
                 <div class="flex h-full w-full flex-col items-center justify-center gap-2 p-4">
                     {#if files && files.length > 0}
                         <div class="flex flex-row items-center gap-4">
-                            {#each files as file (file)}
+                            {#each files.filter((f) => !!f) as file (file)}
                                 {@render fileRender(file)}
                             {/each}
                         </div>
