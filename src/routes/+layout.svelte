@@ -1,6 +1,5 @@
 <script lang="ts">
     import ThemeSelect from '$lib/components/basic/ThemeSelect.svelte';
-    import { ToastUI } from '$lib/components/toast';
     import type { Snippet } from 'svelte';
     import '../app.css';
     import NavBar from './NavBar.svelte';
@@ -28,5 +27,3 @@
         {@render children()}
     </main>
 </div>
-
-<ToastUI />

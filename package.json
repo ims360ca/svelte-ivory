@@ -34,10 +34,6 @@
             "types": "./dist/components/table/index.d.ts",
             "svelte": "./dist/components/table/index.js"
         },
-        "./components/toast": {
-            "types": "./dist/components/toast/index.d.ts",
-            "svelte": "./dist/components/toast/index.js"
-        },
         "./components/inputs": {
             "types": "./dist/components/inputs/index.d.ts",
             "svelte": "./dist/components/inputs/index.js"

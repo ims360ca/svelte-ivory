@@ -1,8 +1,8 @@
 <script lang="ts" module>
+    import { Toasts } from '$lib';
     import Toggle from '$lib/components/basic/toggle/Toggle.svelte';
     import Column from '$lib/components/table/Column.svelte';
     import Table from '$lib/components/table/Table.svelte';
-    import { Toasts } from '$lib/components/toast';
     import { Mail } from '@lucide/svelte';
 
     interface Row {

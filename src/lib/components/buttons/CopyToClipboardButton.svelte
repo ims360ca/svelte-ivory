@@ -1,8 +1,8 @@
 <script lang="ts" module>
+    import { Toasts } from '$lib';
     import type { IvoryComponent } from '$lib/types';
     import { Copy } from '@lucide/svelte';
     import type { ClassValue } from 'svelte/elements';
-    import { Toasts } from '../toast';
 
     export interface CopyToClipboardButtonProps extends IvoryComponent<HTMLButtonElement> {
         text: string;

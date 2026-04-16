@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { Toasts } from '$lib';
     import { Toggle } from '$lib/components/basic';
     import { Tooltip } from '$lib/components/layout';
-    import { Toasts } from '$lib/components/toast';
     import { Bath } from '@lucide/svelte';
 
     function onClick() {

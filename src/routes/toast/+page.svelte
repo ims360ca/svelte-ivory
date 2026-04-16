@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Toasts } from '$lib/components/toast';
+    import { Toasts } from '$lib';
     import { ShowerHead } from '@lucide/svelte';
 </script>
 

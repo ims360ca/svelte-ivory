@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { Toasts } from '$lib';
     import { Modal, Popover } from '$lib/components/layout/index';
     import Tooltip from '$lib/components/layout/tooltip/Tooltip.svelte';
-    import { Toasts } from '$lib/components/toast';
 
     let modal = $state<Modal>();
     let modal2 = $state<Modal>();
