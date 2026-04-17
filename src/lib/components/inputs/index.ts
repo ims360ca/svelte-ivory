@@ -1,7 +1,7 @@
 export { default as CheckboxInput } from './CheckboxInput.svelte';
 export { default as ColorInput } from './ColorInput.svelte';
 export { default as DateInput } from './DateInput.svelte';
-export { default as EmailInput } from './EmailInput.svelte';
+export { default as EmailInput, type EmailInputProps } from './EmailInput.svelte';
 export { default as FileInput, type FileInputProps } from './FileInput.svelte';
 export {
     default as FullscreenDropzone,
