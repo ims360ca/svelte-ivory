@@ -1,5 +1,4 @@
 <script lang="ts" module>
-    import { page } from '$app/state';
     import type { IvoryComponent } from '$lib/types';
     import { merge, pseudoRandomId } from '$lib/utils/functions';
     import { onMount, type Snippet } from 'svelte';
@@ -33,7 +32,7 @@
         if (typeof active === 'boolean') {
             return active;
         } else if (href) {
-            return page.url.pathname.startsWith(href);
+            return window.location.href.startsWith(href);
         } else if (tabs && tabs.selectedTab === tabId) {
             return true;
         } else {
