@@ -24,7 +24,7 @@
 </script>
 
 <div bind:this={target} class={['bg-inherit ', clazz]}>
-    <PasswordInput {...props} newPassword onfocusin={popover?.open} onfocusout={popover?.close} />
+    <PasswordInput {...props} onfocusin={popover?.open} onfocusout={popover?.close} />
 </div>
 
 <Popover

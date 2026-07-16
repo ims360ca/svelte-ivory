@@ -17,12 +17,7 @@
 </script>
 
 <script lang="ts">
-    interface Props extends ModalProps {
-        /** If you don't want the title and close button to be included you can overwrite the default modal */
-        inner?: Snippet;
-    }
-
-    let { children, dialog: dialogProps = {}, ...props }: Props = $props();
+    let { children, dialog: dialogProps = {}, ...props }: ModalProps = $props();
 
     let dialog = $state<Dialog>();
 

@@ -8,8 +8,8 @@
     const value = $derived(form.value());
 </script>
 
-<div class={['flex flex-col gap-2', clazz]} {...props}>
-    <input {...form.as('checkbox')} class="hidden" />
+<div class={['flex flex-col gap-2', clazz]}>
+    <input {...form.as('checkbox')} class="hidden" {...props} />
     <button
         type="button"
         class="flex flex-row items-center gap-2"
