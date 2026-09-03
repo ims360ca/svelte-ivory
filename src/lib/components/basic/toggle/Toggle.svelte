@@ -8,6 +8,7 @@
         value?: boolean;
         class?: ClassValue;
         children?: Snippet;
+        onclick?: () => void;
     };
 </script>
 
