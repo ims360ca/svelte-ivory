@@ -6,7 +6,7 @@
 </script>
 
 <Input {...props}>
-    {#snippet children({ id, class: inputClass })}
+    {#snippet children({ id, class: inputClass, ...inputProps })}
         <div class={merge(inputClass, 'flex grow flex-row items-center justify-between gap-4 p-0')}>
             <input
                 type="text"
@@ -17,6 +17,7 @@
                 class={['h-full rounded', INPUT_UNSET_OUTLINE]}
                 {id}
                 {...props.form.as('color')}
+                {...inputProps}
             />
         </div>
     {/snippet}
