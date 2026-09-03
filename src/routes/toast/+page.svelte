@@ -31,7 +31,7 @@
     class="btn preset-filled-primary-500 w-96"
     onclick={() => {
         Toasts.trigger({
-            variant: 'info',
+            variant: 'primary',
             message: 'triggered toast',
             icon: ShowerHead
         });

@@ -3,20 +3,18 @@
     import { merge, pseudoRandomId } from '$lib/utils/functions';
     import type { RemoteFormField, RemoteFormFieldValue } from '@sveltejs/kit';
     import type { Snippet } from 'svelte';
-    import type { ClassValue } from 'svelte/elements';
+    import type { HTMLAttributes } from 'svelte/elements';
     import { slide } from 'svelte/transition';
     import FormIssues from './issues/FormIssues.svelte';
 
-    interface CommonProps {
-        id?: string;
-        class?: ClassValue;
-        style?: string;
+    export interface InputProps<T extends RemoteFormFieldValue> extends Omit<
+        HTMLAttributes<HTMLInputElement>,
+        'children'
+    > {
+        form: RemoteFormField<T>;
         label?: string;
         disabled?: boolean;
-    }
-
-    export interface InputProps<T extends RemoteFormFieldValue> extends CommonProps {
-        form: RemoteFormField<T>;
+        fixTitle?: boolean;
     }
 
     export const INPUT_UNSET_OUTLINE =
@@ -24,10 +22,8 @@
 </script>
 
 <script lang="ts" generics="T extends RemoteFormFieldValue">
-    interface Props<K extends RemoteFormFieldValue> extends CommonProps {
-        children: Snippet<[{ class: string; id: string; disabled?: boolean }]>;
-        fixTitle?: boolean;
-        form: Pick<RemoteFormField<K>, 'value' | 'issues'>;
+    interface Props<K extends RemoteFormFieldValue> extends InputProps<K> {
+        children: Snippet<[HTMLAttributes<HTMLInputElement>]>;
     }
 
     let {
