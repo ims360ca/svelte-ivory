@@ -1,10 +1,11 @@
-import { browser } from '$app/environment';
 import type { Handle } from '@sveltejs/kit';
 import { cookie } from './utils/functions';
 
 const COOKIE_THEME_KEY = 'theme';
 
 export type ColorThemePreference = 'system' | 'light' | 'dark';
+
+const browser = typeof window !== 'undefined';
 
 class ThemeController {
     private currentTheme = $state<ColorThemePreference>('system');

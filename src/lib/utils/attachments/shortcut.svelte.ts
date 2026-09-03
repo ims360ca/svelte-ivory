@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import type { Attachment } from 'svelte/attachments';
 import { pseudoRandomId } from '../functions';
 
@@ -9,6 +8,8 @@ export interface ShortcutParams {
     code: string;
     callback: () => void;
 }
+
+const browser = typeof window !== 'undefined';
 
 // eslint-disable-next-line svelte/prefer-svelte-reactivity
 const callbacks: Map<string, IdShortcutParams[]> = new Map();
