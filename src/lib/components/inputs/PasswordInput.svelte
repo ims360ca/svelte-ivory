@@ -12,6 +12,6 @@
 
 <Input {...props}>
     {#snippet children(inputProps)}
-        <input {...inputProps} {...props.form.as?.('password')} {onfocusin} {onfocusout} />
+        <input {...inputProps} {...props.field.as?.('password')} {onfocusin} {onfocusout} />
     {/snippet}
 </Input>

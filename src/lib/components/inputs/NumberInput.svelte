@@ -12,6 +12,6 @@
 
 <InputBase {...props}>
     {#snippet children(inputProps)}
-        <input {...inputProps} {...props.form.as?.('number')} {min} {max} {step} />
+        <input {...inputProps} {...props.field.as?.('number')} {min} {max} {step} />
     {/snippet}
 </InputBase>

@@ -27,12 +27,12 @@
     let popover = $state<Popover>();
     let selectedSnippet = $state<Snippet>();
 
-    const value = $derived(props.form.value());
+    const value = $derived(props.field.value());
 
     function select(newValue: string, snippet: Snippet) {
         selectedSnippet = snippet;
         if (newValue === value) return;
-        props.form.set(newValue);
+        props.field.set(newValue);
         popover?.close();
     }
 
@@ -59,7 +59,7 @@
         {/if}
         <ChevronDown class={['ml-auto transition-all', popover?.isOpen() && 'rotate-180']} />
     </button>
-    <input class="hidden" {...props.form.as('text')} {value} />
+    <input class="hidden" {...props.field.as('text')} {value} />
 </Input>
 
 <Popover

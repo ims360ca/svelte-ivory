@@ -3,22 +3,22 @@
     import type { InputProps } from './Input.svelte';
     import FormIssues from './issues/FormIssues.svelte';
 
-    let { form, class: clazz, label, ...props }: InputProps<boolean> = $props();
+    let { field, class: clazz, label, ...props }: InputProps<boolean> = $props();
 
-    const value = $derived(form.value());
+    const value = $derived(field.value());
 </script>
 
 <div class={['flex flex-col gap-2', clazz]}>
-    <input {...form.as('checkbox')} class="hidden" {...props} />
+    <input {...field.as('checkbox')} class="hidden" {...props} />
     <button
         type="button"
         class="flex flex-row items-center gap-2"
         onclick={() => {
-            form.set(!value);
+            field.set(!value);
         }}
     >
         <Toggle {value} />
         {label}
     </button>
-    <FormIssues issues={form.issues()} />
+    <FormIssues issues={field.issues()} />
 </div>

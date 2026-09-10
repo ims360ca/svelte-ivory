@@ -11,7 +11,7 @@
         HTMLAttributes<HTMLInputElement>,
         'children'
     > {
-        form: RemoteFormField<T>;
+        field: RemoteFormField<T>;
         label?: string;
         disabled?: boolean;
         fixTitle?: boolean;
@@ -32,7 +32,7 @@
         label,
         id = pseudoRandomId(),
         children,
-        form,
+        field,
         fixTitle,
         ...inputProps
     }: Props<T> = $props();
@@ -40,11 +40,11 @@
     const inputClass = `bg-transparent grow h-14 transition-all peer m-[1px] px-4 py-3 text-lg ${INPUT_UNSET_OUTLINE}`;
 
     const hasIssues = $derived.by(() => {
-        const i = form.issues?.();
+        const i = field.issues?.();
         return i && i.length > 0;
     });
 
-    const hasValue = $derived(!!fixTitle || !!form.value?.());
+    const hasValue = $derived(!!fixTitle || !!field.value?.());
 </script>
 
 <div
@@ -80,7 +80,7 @@
             </label>
         {/if}
     </div>
-    {#if form.issues?.()}
+    {#if field.issues?.()}
         <div class="h-fit w-full">
             <div
                 class={merge(
@@ -89,7 +89,7 @@
                 )}
                 transition:slide
             >
-                <FormIssues issues={form.issues?.()} class="my-0.5 pr-2 first:mt-1 last:mb-1" />
+                <FormIssues issues={field.issues?.()} class="my-0.5 pr-2 first:mt-1 last:mb-1" />
             </div>
         </div>
     {/if}

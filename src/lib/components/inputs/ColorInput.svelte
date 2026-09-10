@@ -10,13 +10,13 @@
         <div class={merge(inputClass, 'flex grow flex-row items-center justify-between gap-4 p-0')}>
             <input
                 type="text"
-                bind:value={props.form.value, props.form.set}
+                bind:value={props.field.value, props.field.set}
                 class={['flex h-full grow items-center bg-transparent pl-2', INPUT_UNSET_OUTLINE]}
             />
             <input
                 class={['h-full rounded', INPUT_UNSET_OUTLINE]}
                 {id}
-                {...props.form.as('color')}
+                {...props.field.as('color')}
                 {...inputProps}
             />
         </div>

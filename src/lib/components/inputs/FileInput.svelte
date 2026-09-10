@@ -25,28 +25,28 @@
     }
 
     function add(files: File[]) {
-        const value = rest.form.value();
+        const value = rest.field.value();
         if (Array.isArray(value)) {
-            rest.form.set([
+            rest.field.set([
                 ...value.filter((f) => f && !files.includes(f)),
                 ...Array.from(files || [])
             ]);
         } else {
-            rest.form.set((files[0] ?? undefined) as File);
+            rest.field.set((files[0] ?? undefined) as File);
         }
     }
 
     function remove(file: File) {
-        const value = rest.form.value();
+        const value = rest.field.value();
         if (Array.isArray(value)) {
-            rest.form.set(value.filter((e) => e !== file));
+            rest.field.set(value.filter((e) => e !== file));
         } else {
-            rest.form.set(undefined as unknown as File);
+            rest.field.set(undefined as unknown as File);
         }
     }
 
     const files = $derived.by(() => {
-        const value = rest.form.value();
+        const value = rest.field.value();
         if (Array.isArray(value)) {
             return value;
         } else {
@@ -54,7 +54,7 @@
         }
     });
 
-    const formAttributes = $derived(rest.form.as(multiple ? 'file multiple' : 'file'));
+    const formAttributes = $derived(rest.field.as(multiple ? 'file multiple' : 'file'));
 </script>
 
 <Input {...rest} fixTitle>

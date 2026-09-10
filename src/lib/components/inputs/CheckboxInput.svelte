@@ -11,9 +11,9 @@
         onclick?: () => void;
     }
 
-    let { class: clazz = '', label, description, onclick, disabled, form }: Props = $props();
+    let { class: clazz = '', label, description, onclick, disabled, field }: Props = $props();
 
-    const { set, issues, value } = $derived(form);
+    const { set, issues, value } = $derived(field);
 
     const checked = $derived(value());
 </script>
@@ -31,7 +31,7 @@
         <Checkbox {checked} />
         {label}
     </button>
-    <input class="hidden" {...form.as('checkbox')} />
+    <input class="hidden" {...field.as('checkbox')} />
     {#if description}
         <p class="text-surface-700-300">{description}</p>
     {/if}

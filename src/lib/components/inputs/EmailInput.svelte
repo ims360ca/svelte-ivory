@@ -13,6 +13,6 @@
 
 <Input {...props}>
     {#snippet children(inputProps)}
-        <input {...inputProps} {...props.form.as?.('email')} {autocomplete} autocapitalize="off" />
+        <input {...inputProps} {...props.field.as?.('email')} {autocomplete} autocapitalize="off" />
     {/snippet}
 </Input>

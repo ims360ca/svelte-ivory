@@ -6,6 +6,6 @@
 
 <Input {...props}>
     {#snippet children(inputProps)}
-        <input {...inputProps} {...props.form.as?.('date')} />
+        <input {...inputProps} {...props.field.as?.('date')} />
     {/snippet}
 </Input>

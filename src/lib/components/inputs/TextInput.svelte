@@ -11,6 +11,6 @@
 
 <Input {...props}>
     {#snippet children(inputProps)}
-        <input {...inputProps} {...props.form.as?.('text')} bind:this={inputElement} />
+        <input {...inputProps} {...props.field.as?.('text')} bind:this={inputElement} />
     {/snippet}
 </Input>
