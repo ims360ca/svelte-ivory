@@ -57,7 +57,7 @@
     const formAttributes = $derived(rest.field.as(multiple ? 'file multiple' : 'file'));
 </script>
 
-<Input {...rest} fixTitle>
+<Input {...rest} fixLabel>
     {#snippet children({ id })}
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div

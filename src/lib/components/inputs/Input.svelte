@@ -14,7 +14,7 @@
         field: RemoteFormField<T>;
         label?: string;
         disabled?: boolean;
-        fixTitle?: boolean;
+        fixLabel?: boolean;
     }
 
     export const INPUT_UNSET_OUTLINE =
@@ -33,7 +33,7 @@
         id = pseudoRandomId(),
         children,
         field,
-        fixTitle,
+        fixLabel,
         ...inputProps
     }: Props<T> = $props();
 
@@ -44,7 +44,7 @@
         return i && i.length > 0;
     });
 
-    const hasValue = $derived(!!fixTitle || !!field.value?.());
+    const hasValue = $derived(!!fixLabel || !!field.value?.());
 </script>
 
 <div
