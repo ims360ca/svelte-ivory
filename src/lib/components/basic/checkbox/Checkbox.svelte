@@ -1,7 +1,7 @@
 <script lang="ts" module>
     import type { IvoryComponent } from '$lib/types';
     import { merge } from '$lib/utils/functions';
-    import { Check, type Icon as LucideIcon, Minus } from '@lucide/svelte';
+    import { Check, type LucideIcon, Minus } from '@lucide/svelte';
     import type { ClassValue } from 'svelte/elements';
     import { scale } from 'svelte/transition';
 
@@ -38,7 +38,7 @@
         icon: Icon,
         innerClass,
         style
-    }: { icon?: typeof LucideIcon; innerClass?: string; style?: string } = $derived.by(() => {
+    }: { icon?: LucideIcon; innerClass?: string; style?: string } = $derived.by(() => {
         if (!checked && !partial) return { innerClass: 'border-surface-500' };
         if (checked)
             return {

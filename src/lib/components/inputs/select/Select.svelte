@@ -11,16 +11,14 @@
     }
 
     export const [getSelectContext, setSelectContext] = createContext<SelectContext>();
-</script>
-
-<script lang="ts">
-    interface Props extends InputProps<string> {
-        placeholder?: string;
+    export interface SelectProps extends InputProps<string> {
         children: Snippet;
         popoverClass?: ClassValue;
     }
+</script>
 
-    let { placeholder, children, popoverClass, ...props }: Props = $props();
+<script lang="ts">
+    let { placeholder, children, popoverClass, ...props }: SelectProps = $props();
 
     let button = $state<HTMLButtonElement | undefined>();
     let buttonWidth = $state<number>(200);

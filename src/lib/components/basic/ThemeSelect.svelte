@@ -1,7 +1,7 @@
 <script lang="ts">
     import { ColorTheme, type ColorThemePreference } from '$lib/colorTheme.svelte';
     import { merge } from '$lib/utils/functions';
-    import { Icon, Monitor, Moon, Sun } from '@lucide/svelte';
+    import { Monitor, Moon, Sun, type LucideIcon } from '@lucide/svelte';
     import type { ClassValue } from 'svelte/elements';
 
     type Props = {
@@ -10,7 +10,7 @@
 
     let { class: clazz }: Props = $props();
 
-    const options: { icon: typeof Icon; value: ColorThemePreference; ariaLabel: string }[] = [
+    const options: { icon: LucideIcon; value: ColorThemePreference; ariaLabel: string }[] = [
         {
             value: 'system',
             icon: Monitor,
